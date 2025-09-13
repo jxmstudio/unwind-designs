@@ -1,0 +1,180 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { useCart } from "@/lib/cart-context";
+import Link from "next/link";
+import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
+
+import { type Product } from "@/lib/products";
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export function ProductCard({ product }: ProductCardProps) {
+  const { addItem } = useCart();
+  const { isDisabled, safeAnimation } = useReducedMotionSafe();
+  const {
+    name,
+    price,
+    originalPrice,
+    rating,
+    reviewCount,
+    isOnSale,
+    salePercentage,
+    category
+  } = product;
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      image: product.images[0] || '',
+      category: product.category
+    });
+  };
+
+  return (
+    <motion.div 
+      className="group bg-cream-400 rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 overflow-hidden border border-borderNeutral hover:border-brown-300"
+      whileHover={{ 
+        y: isDisabled ? 0 : -4,
+        transition: { duration: safeAnimation.duration || 0.3 }
+      }}
+      whileTap={{ 
+        scale: isDisabled ? 1 : 0.98,
+        transition: { duration: 0.1 }
+      }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, /* ease: "easeOut" */ }}
+    >
+      {/* Image Container */}
+      <div className="relative aspect-square overflow-hidden bg-cream-300">
+        <div 
+          className="w-full h-full bg-gradient-to-br from-cream-200 to-cream-300 flex items-center justify-center"
+          style={{
+            backgroundImage: product.images[0] ? `url(${product.images[0]})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
+          {/* Placeholder if no image */}
+          {!product.images[0] && (
+            <div className="text-textPrimary/80 text-sm text-center px-4">
+              {category || 'Product Image'}
+            </div>
+          )}
+        </div>
+        
+        {/* Sale Badge */}
+        {isOnSale && salePercentage && (
+          <Badge className="absolute top-3 left-3 bg-brown-500 text-white font-semibold border-0">
+            -{salePercentage}%
+          </Badge>
+        )}
+        
+        {/* Quick Actions */}
+        <motion.div 
+          className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ opacity: 1, scale: 1 }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-10 h-10 p-0 bg-cream-400/90 hover:bg-cream-400 text-textPrimary hover:text-brown-500 rounded-full shadow-soft"
+            >
+              <Heart size={16} />
+            </Button>
+          </motion.div>
+        </motion.div>
+        
+        {/* Add to Cart Overlay */}
+        <motion.div 
+          className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+        >
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileHover={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Button
+              onClick={handleAddToCart}
+              className="bg-brown-500 hover:bg-darkBrown text-white font-semibold px-4 py-2 rounded-xl shadow-medium transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 text-xs"
+            >
+              <ShoppingCart size={14} className="mr-1" />
+              Add to Cart
+            </Button>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Product Info */}
+      <div className="p-4">
+        {/* Rating */}
+        <div className="flex items-center gap-1 mb-2">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                size={14}
+                className={`${
+                  i < Math.floor(rating)
+                    ? "text-yellow-400 fill-current"
+                    : "text-cream-200"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-xs text-textPrimary/80 ml-1">
+            ({reviewCount})
+          </span>
+        </div>
+
+        {/* Product Name */}
+        <h3 className="text-sm font-medium text-textPrimary mb-2 line-clamp-2 group-hover:text-brown-500 transition-colors">
+          {name}
+        </h3>
+
+        {/* Price */}
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg font-bold text-brown-500">
+            ${price.toFixed(2)}
+          </span>
+          {originalPrice && originalPrice > price && (
+            <span className="text-sm text-textPrimary/80 line-through">
+              ${originalPrice.toFixed(2)}
+            </span>
+          )}
+        </div>
+
+        {/* Quick View Button */}
+        <Link href={`/product/${product.id}`}>
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button
+              variant="outline"
+              className="w-full border-brown-500 text-brown-500 hover:bg-brown-500 hover:border-brown-500 hover:text-white font-semibold transition-colors"
+            >
+              View Details
+            </Button>
+          </motion.div>
+        </Link>
+      </div>
+    </motion.div>
+  );
+}

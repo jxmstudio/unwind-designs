@@ -1,0 +1,14 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle for the icon -->
+  <circle cx="20" cy="20" r="18" fill="#5c4630" stroke="#b29982" stroke-width="2"/>
+  
+  <!-- Van/4x4 icon -->
+  <rect x="12" y="16" width="16" height="8" rx="2" fill="#eee7d4"/>
+  <rect x="14" y="18" width="3" height="4" fill="#5c4630"/>
+  <rect x="23" y="18" width="3" height="4" fill="#5c4630"/>
+  <rect x="16" y="14" width="8" height="2" fill="#d4c0a8"/>
+  
+  <!-- Text -->
+  <text x="45" y="16" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#3c2f25">UNWIND</text>
+  <text x="45" y="28" font-family="system-ui, sans-serif" font-size="10" font-weight="400" fill="#7a6754">DESIGNS</text>
+</svg>
