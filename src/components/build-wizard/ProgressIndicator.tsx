@@ -29,7 +29,7 @@ export function ProgressIndicator({ steps, currentStep, isDisabled }: ProgressIn
               <div className="flex flex-col items-center flex-shrink-0">
                 <m.div
                   className={`
-                    w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium border-2 transition-all duration-300
+                    w-12 h-12 rounded-full flex items-center justify-center text-body-small font-medium border-2 transition-all duration-300
                     ${isCompleted 
                       ? 'bg-brown-500 border-brown-500 text-white' 
                       : isCurrent 
@@ -52,7 +52,7 @@ export function ProgressIndicator({ steps, currentStep, isDisabled }: ProgressIn
                 {/* Step Info */}
                 <div className="mt-3 text-center">
                   <m.div
-                    className={`text-sm font-medium transition-colors duration-300 ${
+                    className={`text-body-small font-medium transition-colors duration-300 ${
                       isCurrent ? 'text-brown-500' : isCompleted ? 'text-textPrimary' : 'text-textSecondary'
                     }`}
                     initial={isDisabled ? {} : { opacity: 0, y: 10 }}
@@ -62,7 +62,7 @@ export function ProgressIndicator({ steps, currentStep, isDisabled }: ProgressIn
                     {step.title}
                   </m.div>
                   <m.div
-                    className={`text-xs mt-1 transition-colors duration-300 ${
+                    className={`text-caption mt-1 transition-colors duration-300 ${
                       isCurrent ? 'text-brown-400' : 'text-textSecondary'
                     }`}
                     initial={isDisabled ? {} : { opacity: 0, y: 10 }}

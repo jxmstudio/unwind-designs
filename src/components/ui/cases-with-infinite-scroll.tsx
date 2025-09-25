@@ -40,7 +40,7 @@ function Case() {
               {Array.from({ length: 15 }).map((_, index) => (
                 <CarouselItem className="basis-1/4 lg:basis-1/6" key={index}>
                   <div className="flex rounded-md aspect-square bg-muted items-center justify-center p-6">
-                    <span className="text-sm">Logo {index + 1}</span>
+                    <span className="text-body-small">Logo {index + 1}</span>
                   </div>
                 </CarouselItem>
               ))}

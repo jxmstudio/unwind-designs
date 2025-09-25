@@ -137,11 +137,11 @@ export function Step2Configuration() {
                   >
                     <CardContent className="p-4 text-center">
                       <div className="text-2xl mb-2">{vehicle.icon}</div>
-                      <div className="text-sm font-medium text-textPrimary">
+                      <div className="text-body-small font-medium text-textPrimary">
                         {vehicle.title}
                       </div>
                       {vehicle.popular && (
-                        <Badge className="mt-1 bg-brown-100 text-brown-700 text-xs">
+                        <Badge className="mt-1 bg-brown-100 text-brown-700 text-caption">
                           Popular
                         </Badge>
                       )}
@@ -153,7 +153,7 @@ export function Step2Configuration() {
           </div>
           {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
           {errors.step2?.vehicleType && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-red-500 text-body-small mt-2">
               {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
               {errors.step2.vehicleType.message}
             </p>
@@ -188,12 +188,12 @@ export function Step2Configuration() {
                       <h4 className="font-semibold text-textPrimary mb-2">
                         {fridge.title}
                       </h4>
-                      <p className="text-sm text-textSecondary mb-3">
+                      <p className="text-body-small text-textSecondary mb-3">
                         {fridge.description}
                       </p>
                       <div className="space-y-1">
                         {fridge.benefits.map((benefit, idx) => (
-                          <div key={idx} className="text-xs text-brown-600 flex items-center">
+                          <div key={idx} className="text-caption text-brown-600 flex items-center">
                             <div className="w-1 h-1 bg-brown-400 rounded-full mr-2"></div>
                             {benefit}
                           </div>
@@ -240,7 +240,7 @@ export function Step2Configuration() {
                         border: finish.color === '#FFFFFF' ? '1px solid #e5e7eb' : 'none'
                       }}
                     ></div>
-                    <div className="text-xs text-center font-medium text-textPrimary">
+                    <div className="text-caption text-center font-medium text-textPrimary">
                       {finish.title}
                     </div>
                   </div>
@@ -256,7 +256,7 @@ export function Step2Configuration() {
             <Plus className="w-5 h-5 mr-2 text-brown-500" />
             Additional Features
           </h3>
-          <p className="text-sm text-textSecondary mb-4">
+          <p className="text-body-small text-textSecondary mb-4">
             Select any additional features you&apos;re interested in (optional)
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -284,7 +284,7 @@ export function Step2Configuration() {
                         </div>
                       )}
                       <div className="text-2xl mb-2">{feature.icon}</div>
-                      <div className="text-sm font-medium text-textPrimary">
+                      <div className="text-body-small font-medium text-textPrimary">
                         {feature.title}
                       </div>
                     </CardContent>

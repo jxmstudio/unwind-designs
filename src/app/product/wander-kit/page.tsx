@@ -1,12 +1,12 @@
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { TroopyPackDetail } from "@/components/products/TroopyPackDetail";
+import { EnhancedKitPage } from "@/components/products/EnhancedKitPage";
 
 export default function WanderKitPage() {
   const kitData = {
     kitSlug: "wander-kit",
     kitName: "Wander Kit",
-    kitDescription: "Our budget-friendly flat pack solution for Toyota Troopcarriers. Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.",
+    kitDescription: "Our budget-friendly flat pack solution for Toyota Troopcarriers. Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available. Coming Soon!",
     kitFeatures: [
       "Multiple fridge configuration options",
       "Three finish choices available", 
@@ -25,14 +25,18 @@ export default function WanderKitPage() {
       "Weight": "45-48kg",
       "Storage Volume": "160-180L total internal storage"
     },
-    kitImage: "/products/wander-general-1.jpg"
+    kitImage: "/brand/wandertroop1.jpg", // Using Wander image
+    kitTagline: "Budget-Friendly Adventure Kit",
+    kitPrice: 3750,
+    kitRating: 4.6,
+    kitReviewCount: 45
   };
 
   return (
     <div className="min-h-screen bg-cream-400">
       <Navigation />
-      <main className="pt-20">
-        <TroopyPackDetail {...kitData} />
+      <main>
+        <EnhancedKitPage {...kitData} />
       </main>
       <Footer />
     </div>

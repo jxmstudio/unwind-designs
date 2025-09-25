@@ -12,7 +12,7 @@ export function AnnouncementBar() {
     <div className="bg-gradient-to-r from-darkBrown to-brown-800 text-white px-4 py-4 text-center relative shadow-medium">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
         {/* Contact Info */}
-        <div className="flex items-center gap-3 text-sm sm:text-base">
+        <div className="flex items-center gap-3 text-body-small sm:text-body">
           <span className="text-cream-200 font-medium">For accurate lead times on orders:</span>
           <a 
             href="mailto:Info@unwinddesigns.com.au" 

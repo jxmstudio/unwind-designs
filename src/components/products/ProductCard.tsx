@@ -72,7 +72,7 @@ export function ProductCard({
           ) : (
             <div className="text-center text-textPrimary/80">
               <div className="text-4xl mb-2">🚐</div>
-              <p className="text-sm font-medium">{product.category}</p>
+              <p className="text-body-small font-medium">{product.category}</p>
             </div>
           )}
         </div>
@@ -135,7 +135,7 @@ export function ProductCard({
               onClick={handleQuickView}
               variant="secondary"
               size="sm"
-              className="bg-white text-brown-500 hover:bg-brown-500 hover:text-white border-0 shadow-lg text-xs px-3 py-2 font-semibold"
+              className="bg-white text-brown-500 hover:bg-brown-500 hover:text-white border-0 shadow-lg text-caption px-3 py-2 font-semibold"
             >
               <Eye className="w-3 h-3 mr-1" />
               Quick View
@@ -160,12 +160,12 @@ export function ProductCard({
       {/* Enhanced Content */}
       <div className="p-6 space-y-4">
         {/* Category */}
-        <p className="text-xs text-accent-600 uppercase tracking-wider font-semibold">
+        <p className="text-caption text-accent-600 uppercase tracking-wider font-semibold">
           {product.category}
         </p>
 
         {/* Name */}
-        <h3 className="font-semibold text-textPrimary text-sm leading-tight group-hover:text-accent-600 transition-colors duration-200">
+        <h3 className="font-semibold text-textPrimary text-body-small leading-tight group-hover:text-accent-600 transition-colors duration-200">
           {product.name}
         </h3>
 
@@ -184,7 +184,7 @@ export function ProductCard({
               />
             ))}
           </div>
-          <span className="text-xs text-textPrimary/80 font-medium">
+          <span className="text-caption text-textPrimary/80 font-medium">
             ({product.reviewCount})
           </span>
         </div>
@@ -196,13 +196,13 @@ export function ProductCard({
               ${product.price.toFixed(2)}
             </span>
             {product.compareAtPrice && (
-              <span className="text-sm text-textPrimary/80 line-through">
+              <span className="text-body-small text-textPrimary/80 line-through">
                 ${product.compareAtPrice.toFixed(2)}
               </span>
             )}
           </div>
           {savings > 0 && (
-            <p className="text-sm text-error-600 font-semibold">
+            <p className="text-body-small text-error-600 font-semibold">
               Save {savingsPercentage}%!
             </p>
           )}
@@ -210,14 +210,20 @@ export function ProductCard({
 
         {/* Enhanced Actions */}
         <div className="flex gap-3 pt-2">
-          <Button
-            onClick={handleAddToCart}
-            size="default"
-            className="flex-1 bg-accent-500 hover:bg-accent-600 text-white rounded-lg shadow-soft hover:shadow-medium transition-all duration-200"
-          >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Add to Cart
-          </Button>
+          {product.comingSoon ? (
+            <div className="flex-1 bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-400 text-yellow-900 font-semibold py-3 rounded-lg text-center">
+              <div className="text-sm">🚀 Coming Soon</div>
+            </div>
+          ) : (
+            <Button
+              onClick={handleAddToCart}
+              size="default"
+              className="flex-1 bg-accent-500 hover:bg-accent-600 text-white rounded-lg shadow-soft hover:shadow-medium transition-all duration-200"
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Add to Cart
+            </Button>
+          )}
         </div>
       </div>
 

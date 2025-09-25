@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Star, CheckCircle, Wrench, Shield, Truck } from "lucide-react";
 import { getTroopyPackBySlug, FlatPackProduct, ComponentProduct } from "@/data/products";
+import { useCart } from "@/lib/cart-context";
 import Link from "next/link";
 
 interface TroopyPackDetailProps {
@@ -25,6 +26,7 @@ export function TroopyPackDetail({
   kitSpecifications
 }: TroopyPackDetailProps) {
   const [selectedVariant, setSelectedVariant] = useState<FlatPackProduct | ComponentProduct | null>(null);
+  const { addItem } = useCart();
   const products = getTroopyPackBySlug(kitSlug);
   
   // Set default selected variant to the first product
@@ -36,11 +38,24 @@ export function TroopyPackDetail({
     setSelectedVariant(product);
   };
 
+  const handleAddToCart = () => {
+    if (selectedVariant && !selectedVariant.comingSoon) {
+      addItem({
+        id: selectedVariant.id,
+        name: selectedVariant.name,
+        price: selectedVariant.price,
+        image: selectedVariant.images[0] || '',
+        category: selectedVariant.category,
+        shortDescription: selectedVariant.shortDescription
+      });
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="mb-8">
-        <div className="flex items-center space-x-2 text-sm text-textPrimary/60">
+        <div className="flex items-center space-x-2 text-body-small text-textPrimary/60">
           <Link href="/flat-packs" className="hover:text-accent-600">Flat Packs</Link>
           <span>/</span>
           <span className="text-textPrimary">{kitName}</span>
@@ -106,17 +121,17 @@ export function TroopyPackDetail({
                 >
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-textPrimary text-sm">
+                      <h4 className="font-semibold text-textPrimary text-body-small">
                         {'finish' in product ? product.finish : ''} {'fridgeType' in product ? product.fridgeType : ''}
                       </h4>
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-caption">
                         {'kitType' in product ? product.kitType : 'Kit'}
                       </Badge>
                     </div>
                     <div className="text-lg font-bold text-textPrimary">
                       ${product.price.toLocaleString()}
                     </div>
-                    <div className="text-xs text-textPrimary/60 mt-1">
+                    <div className="text-caption text-textPrimary/60 mt-1">
                       {product.inStock ? 'In Stock' : 'Out of Stock'}
                     </div>
                   </CardContent>
@@ -133,7 +148,7 @@ export function TroopyPackDetail({
                   <div className="text-3xl font-bold text-textPrimary">
                     ${selectedVariant.price.toLocaleString()}
                   </div>
-                  <div className="text-textPrimary/60 text-sm">
+                  <div className="text-textPrimary/60 text-body-small">
                     {'finish' in selectedVariant ? selectedVariant.finish : ''} {'fridgeType' in selectedVariant ? selectedVariant.fridgeType : ''}
                   </div>
                 </div>
@@ -143,17 +158,26 @@ export function TroopyPackDetail({
               </div>
               
               <div className="space-y-3">
-                <Button 
-                  className="w-full bg-accent-500 hover:bg-accent-600 text-white font-semibold py-3 rounded-xl"
-                  disabled={!selectedVariant.inStock}
-                >
-                  Add to Cart
-                </Button>
+                {selectedVariant.comingSoon ? (
+                  <div className="w-full bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-400 text-yellow-900 font-semibold py-4 rounded-xl text-center">
+                    <div className="text-lg">🚀 Coming Soon</div>
+                    <div className="text-sm mt-1">We're putting the finishing touches on this kit</div>
+                  </div>
+                ) : (
+                  <Button 
+                    className="w-full bg-accent-500 hover:bg-accent-600 text-white font-semibold py-3 rounded-xl"
+                    disabled={!selectedVariant.inStock}
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </Button>
+                )}
                 <Button 
                   variant="outline" 
                   className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white font-semibold py-3 rounded-xl"
+                  disabled={selectedVariant.comingSoon}
                 >
-                  Configure & Buy
+                  {selectedVariant.comingSoon ? 'Coming Soon' : 'Configure & Buy'}
                 </Button>
               </div>
             </div>
@@ -191,7 +215,7 @@ export function TroopyPackDetail({
                   <Wrench className="w-6 h-6 text-accent-600" />
                   <h3 className="text-lg font-semibold text-textPrimary">Easy Assembly</h3>
                 </div>
-                <p className="text-textPrimary/80 text-sm">
+                <p className="text-textPrimary/80 text-body-small">
                   Tool-free assembly system with detailed instructions. Most kits can be assembled in 4-8 hours.
                 </p>
               </div>
@@ -201,7 +225,7 @@ export function TroopyPackDetail({
                   <Shield className="w-6 h-6 text-accent-600" />
                   <h3 className="text-lg font-semibold text-textPrimary">Warranty</h3>
                 </div>
-                <p className="text-textPrimary/80 text-sm">
+                <p className="text-textPrimary/80 text-body-small">
                   {selectedVariant?.warranty || '2-5 years'} warranty depending on kit type. Professional installation included with Premium kits.
                 </p>
               </div>
@@ -211,7 +235,7 @@ export function TroopyPackDetail({
                   <Truck className="w-6 h-6 text-accent-600" />
                   <h3 className="text-lg font-semibold text-textPrimary">Shipping</h3>
                 </div>
-                <p className="text-textPrimary/80 text-sm">
+                <p className="text-textPrimary/80 text-body-small">
                   Free shipping on all Troopy Packs. Professional installation available in select areas.
                 </p>
               </div>
@@ -244,11 +268,11 @@ export function TroopyPackDetail({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h4 className="font-semibold text-textPrimary mb-2">Standard Delivery</h4>
-                  <p className="text-textPrimary/80 text-sm">5-10 business days</p>
+                  <p className="text-textPrimary/80 text-body-small">5-10 business days</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-textPrimary mb-2">Express Delivery</h4>
-                  <p className="text-textPrimary/80 text-sm">2-3 business days (+$50)</p>
+                  <p className="text-textPrimary/80 text-body-small">2-3 business days (+$50)</p>
                 </div>
               </div>
             </div>
@@ -269,14 +293,14 @@ export function TroopyPackDetail({
               <div className="space-y-4">
                 {[5, 4, 3, 2, 1].map((rating) => (
                   <div key={rating} className="flex items-center space-x-4">
-                    <span className="text-sm font-medium text-textPrimary w-8">{rating}</span>
+                    <span className="text-body-small font-medium text-textPrimary w-8">{rating}</span>
                     <div className="flex-1 bg-cream-200 rounded-full h-2">
                       <div 
                         className="bg-yellow-400 h-2 rounded-full" 
                         style={{ width: `${Math.random() * 100}%` }}
                       />
                     </div>
-                    <span className="text-sm text-textPrimary/60 w-8">{(Math.random() * 50).toFixed(0)}</span>
+                    <span className="text-body-small text-textPrimary/60 w-8">{(Math.random() * 50).toFixed(0)}</span>
                   </div>
                 ))}
               </div>

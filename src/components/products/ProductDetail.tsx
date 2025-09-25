@@ -25,7 +25,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
       price: product.price,
       originalPrice: product.originalPrice,
       image: product.images[0] || '',
-      category: product.category
+      category: product.category,
+      shortDescription: product.shortDescription
     });
   };
 
@@ -38,7 +39,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       {/* Breadcrumb */}
-      <nav className="text-sm text-textPrimary/80 mb-8">
+      <nav className="text-body-small text-textPrimary/80 mb-8">
         <span>Home</span>
         <span className="mx-2">/</span>
         <span>Shop</span>
@@ -163,14 +164,14 @@ export function ProductDetail({ product }: ProductDetailProps) {
               {product.features.slice(0, 6).map((feature, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span className="text-sm text-textPrimary/80">{feature}</span>
+                  <span className="text-body-small text-textPrimary/80">{feature}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Stock Status */}
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-4 text-body-small">
             <div className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${product.inStock ? 'bg-green-500' : 'bg-red-500'}`} />
               <span className={product.inStock ? 'text-green-600' : 'text-red-600'}>
@@ -187,7 +188,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
           {/* Add to Cart Section */}
           <div className="space-y-4 p-6 bg-cream-300 rounded-xl border border-borderNeutral">
             <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-textPrimary">Quantity:</label>
+              <label className="text-body-small font-medium text-textPrimary">Quantity:</label>
               <div className="flex items-center border border-borderNeutral rounded-lg bg-cream-400">
                 <button
                   onClick={() => handleQuantityChange(quantity - 1)}
@@ -228,15 +229,15 @@ export function ProductDetail({ product }: ProductDetailProps) {
             <div className="grid grid-cols-3 gap-4 pt-4 border-t border-borderNeutral">
               <div className="text-center">
                 <Truck className="w-6 h-6 text-brown-500 mx-auto mb-2" />
-                <p className="text-xs text-textPrimary/80">Free Shipping</p>
+                <p className="text-caption text-textPrimary/80">Free Shipping</p>
               </div>
               <div className="text-center">
                 <Shield className="w-6 h-6 text-brown-500 mx-auto mb-2" />
-                <p className="text-xs text-textPrimary/80">{product.warranty} Warranty</p>
+                <p className="text-caption text-textPrimary/80">{product.warranty} Warranty</p>
               </div>
               <div className="text-center">
                 <Clock className="w-6 h-6 text-brown-500 mx-auto mb-2" />
-                <p className="text-xs text-textPrimary/80">Fast Delivery</p>
+                <p className="text-caption text-textPrimary/80">Fast Delivery</p>
               </div>
             </div>
           </div>

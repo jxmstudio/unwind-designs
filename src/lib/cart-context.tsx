@@ -10,6 +10,7 @@ export interface CartItem {
   image: string;
   quantity: number;
   category?: string;
+  shortDescription?: string;
 }
 
 interface ShippingQuote {
@@ -203,7 +204,7 @@ interface CartContextType {
   toggleCart: () => void;
   closeCart: () => void;
   setShippingAddress: (address: ShippingState['address']) => void;
-  getShippingQuotes: () => Promise<void>;
+  getShippingQuotes: (address?: ShippingState['address']) => Promise<void>;
   selectShippingQuote: (quote: ShippingQuote | null) => void;
 }
 
@@ -258,9 +259,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'SET_SHIPPING_ADDRESS', payload: address });
   };
 
-  const getShippingQuotes = async () => {
-    if (!state.shipping.address || state.items.length === 0) {
-      return;
+  const getShippingQuotes = async (address?: ShippingState['address']) => {
+    const shippingAddress = address || state.shipping.address;
+    
+    if (!shippingAddress || state.items.length === 0) {
+      console.log('Cannot get shipping quotes:', { 
+        hasAddress: !!shippingAddress, 
+        itemCount: state.items.length 
+      });
+      return null;
     }
 
     dispatch({ type: 'SET_SHIPPING_LOADING', payload: true });
@@ -277,13 +284,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         price: item.price,
       }));
 
+      console.log('Requesting shipping quotes for:', {
+        deliveryAddress: shippingAddress,
+        items: cartItems,
+        totalValue: state.total,
+      });
+
       const response = await fetch('/api/shipping/quote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          deliveryAddress: state.shipping.address,
+          deliveryAddress: shippingAddress,
           items: cartItems,
           totalValue: state.total,
         }),
@@ -294,11 +307,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
 
       const data = await response.json();
+      console.log('Shipping API response:', data);
 
       if (data.success && data.quotes) {
         dispatch({ type: 'SET_SHIPPING_QUOTES', payload: data.quotes });
+        // Auto-select the first quote
+        if (data.quotes.length > 0) {
+          dispatch({ type: 'SELECT_SHIPPING_QUOTE', payload: data.quotes[0] });
+        }
+        return data.quotes;
       } else {
         dispatch({ type: 'SET_SHIPPING_ERROR', payload: data.error || 'Failed to get shipping quotes' });
+        return null;
       }
     } catch (error) {
       console.error('Shipping quote error:', error);
@@ -306,6 +326,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         type: 'SET_SHIPPING_ERROR', 
         payload: error instanceof Error ? error.message : 'Failed to get shipping quotes' 
       });
+      return null;
     }
   };
 

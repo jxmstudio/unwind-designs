@@ -87,7 +87,7 @@ export function SuccessStep() {
                   </div>
                   <div>
                     <div className="font-medium text-textPrimary">Email Confirmation</div>
-                    <div className="text-sm text-textSecondary">
+                    <div className="text-body-small text-textSecondary">
                       You&apos;ll receive an email confirmation within a few minutes
                     </div>
                   </div>
@@ -98,7 +98,7 @@ export function SuccessStep() {
                   </div>
                   <div>
                     <div className="font-medium text-textPrimary">Personal Consultation</div>
-                    <div className="text-sm text-textSecondary">
+                    <div className="text-body-small text-textSecondary">
                       Our team will contact you within 24 hours to discuss your project
                     </div>
                   </div>
@@ -109,7 +109,7 @@ export function SuccessStep() {
                   </div>
                   <div>
                     <div className="font-medium text-textPrimary">Custom Quote</div>
-                    <div className="text-sm text-textSecondary">
+                    <div className="text-body-small text-textSecondary">
                       We&apos;ll prepare a detailed quote tailored to your specific requirements
                     </div>
                   </div>
@@ -126,7 +126,7 @@ export function SuccessStep() {
               <h3 className="text-lg font-semibold text-textPrimary mb-3">
                 Need immediate assistance?
               </h3>
-              <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-textSecondary">
+              <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-body-small text-textSecondary">
                 <div className="flex items-center space-x-2">
                   <Phone className="w-4 h-4 text-brown-500" />
                   <span>0417 362 209</span>
@@ -162,7 +162,7 @@ export function SuccessStep() {
 
         {/* Additional Note */}
         <m.div variants={isDisabled ? {} : staggerItem} className="mt-8">
-          <p className="text-xs text-textSecondary">
+          <p className="text-caption text-textSecondary">
             Reference #: {Date.now().toString(36).toUpperCase()}
           </p>
         </m.div>

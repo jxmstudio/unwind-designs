@@ -63,7 +63,7 @@ export function Step4Contact() {
                 <m.div variants={isDisabled ? {} : staggerItem}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="firstName" className="flex items-center mb-2 text-sm font-medium text-textPrimary">
+                      <Label htmlFor="firstName" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                         <User className="w-4 h-4 mr-2 text-brown-500" />
                         First Name
                       </Label>
@@ -75,14 +75,14 @@ export function Step4Contact() {
                       />
                       {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                       {errors.step4?.firstName && (
-                        <p className="text-red-500 text-sm mt-1">
+                        <p className="text-red-500 text-body-small mt-1">
                           {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                           {errors.step4.firstName.message}
                         </p>
                       )}
                     </div>
                     <div>
-                      <Label htmlFor="lastName" className="flex items-center mb-2 text-sm font-medium text-textPrimary">
+                      <Label htmlFor="lastName" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                         Last Name
                       </Label>
                       <Input
@@ -93,7 +93,7 @@ export function Step4Contact() {
                       />
                       {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                       {errors.step4?.lastName && (
-                        <p className="text-red-500 text-sm mt-1">
+                        <p className="text-red-500 text-body-small mt-1">
                           {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                           {errors.step4.lastName.message}
                         </p>
@@ -104,7 +104,7 @@ export function Step4Contact() {
 
                 {/* Email */}
                 <m.div variants={isDisabled ? {} : staggerItem}>
-                  <Label htmlFor="email" className="flex items-center mb-2 text-sm font-medium text-textPrimary">
+                  <Label htmlFor="email" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <Mail className="w-4 h-4 mr-2 text-brown-500" />
                     Email Address
                   </Label>
@@ -117,7 +117,7 @@ export function Step4Contact() {
                   />
                   {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                   {errors.step4?.email && (
-                    <p className="text-red-500 text-sm mt-1">
+                    <p className="text-red-500 text-body-small mt-1">
                       {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                       {errors.step4.email.message}
                     </p>
@@ -126,7 +126,7 @@ export function Step4Contact() {
 
                 {/* Phone */}
                 <m.div variants={isDisabled ? {} : staggerItem}>
-                  <Label htmlFor="phone" className="flex items-center mb-2 text-sm font-medium text-textPrimary">
+                  <Label htmlFor="phone" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <Phone className="w-4 h-4 mr-2 text-brown-500" />
                     Phone Number
                   </Label>
@@ -139,7 +139,7 @@ export function Step4Contact() {
                   />
                   {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                   {errors.step4?.phone && (
-                    <p className="text-red-500 text-sm mt-1">
+                    <p className="text-red-500 text-body-small mt-1">
                       {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                       {errors.step4.phone.message}
                     </p>
@@ -148,7 +148,7 @@ export function Step4Contact() {
 
                 {/* Location */}
                 <m.div variants={isDisabled ? {} : staggerItem}>
-                  <Label htmlFor="location" className="flex items-center mb-2 text-sm font-medium text-textPrimary">
+                  <Label htmlFor="location" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <MapPin className="w-4 h-4 mr-2 text-brown-500" />
                     Location
                   </Label>
@@ -160,7 +160,7 @@ export function Step4Contact() {
                   />
                   {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                   {errors.step4?.location && (
-                    <p className="text-red-500 text-sm mt-1">
+                    <p className="text-red-500 text-body-small mt-1">
                       {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                       {errors.step4.location.message}
                     </p>
@@ -169,7 +169,7 @@ export function Step4Contact() {
 
                 {/* Message */}
                 <m.div variants={isDisabled ? {} : staggerItem}>
-                  <Label htmlFor="message" className="flex items-center mb-2 text-sm font-medium text-textPrimary">
+                  <Label htmlFor="message" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <MessageSquare className="w-4 h-4 mr-2 text-brown-500" />
                     Additional Message (Optional)
                   </Label>
@@ -195,10 +195,10 @@ export function Step4Contact() {
                         className="mt-1"
                       />
                       <div className="flex-1">
-                        <Label htmlFor="marketingConsent" className="text-sm font-medium text-textPrimary cursor-pointer">
+                        <Label htmlFor="marketingConsent" className="text-body-small font-medium text-textPrimary cursor-pointer">
                           Stay updated with build tips and special offers
                         </Label>
-                        <p className="text-xs text-textSecondary mt-1">
+                        <p className="text-caption text-textSecondary mt-1">
                           We&apos;ll occasionally send you helpful fitout tips, new product updates, and special offers. 
                           You can unsubscribe at any time. We never share your information.
                         </p>
@@ -209,7 +209,7 @@ export function Step4Contact() {
 
                 {/* Privacy Notice */}
                 <m.div variants={isDisabled ? {} : staggerItem}>
-                  <div className="text-xs text-textSecondary text-center p-4 bg-gray-50 rounded-lg">
+                  <div className="text-caption text-textSecondary text-center p-4 bg-gray-50 rounded-lg">
                     <p>
                       By submitting this form, you agree to our{" "}
                       <a href="/policies/privacy" className="text-brown-600 hover:text-brown-700 underline">

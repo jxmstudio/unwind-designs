@@ -115,7 +115,7 @@ export function NewsletterCard() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute -bottom-8 left-0 flex items-center gap-2 text-red-300 text-sm"
+                  className="absolute -bottom-8 left-0 flex items-center gap-2 text-red-300 text-body-small"
                 >
                   <AlertCircle className="w-4 h-4" />
                   Please enter a valid email address
@@ -146,7 +146,7 @@ export function NewsletterCard() {
           </motion.form>
 
           <motion.p 
-            className="text-sm text-cream-300/80 mt-6"
+            className="text-body-small text-cream-300/80 mt-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}

@@ -98,7 +98,7 @@ function FormLabel({
       data-slot="form-label"
       data-error={!!error}
       className={cn(
-        "text-sm font-medium text-textPrimary",
+        "text-body-small font-medium text-textPrimary",
         "data-[error=true]:text-error-600",
         className
       )}
@@ -133,7 +133,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="form-description"
       id={formDescriptionId}
-      className={cn("text-sm text-textSecondary leading-relaxed", className)}
+      className={cn("text-body-small text-textSecondary leading-relaxed", className)}
       {...props}
     />
   )
@@ -151,7 +151,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn("text-sm text-error-600 font-medium", className)}
+      className={cn("text-body-small text-error-600 font-medium", className)}
       {...props}
     >
       {body}

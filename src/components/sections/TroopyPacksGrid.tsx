@@ -25,7 +25,7 @@ export function TroopyPacksGrid() {
     "wander-kit": {
       name: "Wander Kit",
       tagline: "Budget-Friendly Adventure",
-      description: "Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.",
+      description: "Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available. Coming Soon!",
       startingPrice: 3750,
       features: [
         "Multiple fridge configuration options",
@@ -35,14 +35,14 @@ export function TroopyPacksGrid() {
         "Slide-out storage drawers",
         "Built-in power management"
       ],
-      badge: "Budget",
-      badgeColor: "bg-green-100 text-green-800",
+      badge: "Coming Soon",
+      badgeColor: "bg-yellow-100 text-yellow-800",
       image: "/products/wander-general-1.jpg"
     },
     "roam-kit": {
       name: "Roam Kit", 
-      tagline: "Most Popular Choice",
-      description: "Enhanced hardware, LED lighting, and premium finishes. Perfect balance of features and value for extended adventures.",
+      tagline: "Coming Soon",
+      description: "Enhanced hardware, LED lighting, and premium finishes. Perfect balance of features and value for extended adventures. Coming Soon!",
       startingPrice: 6700,
       features: [
         "Enhanced soft-close drawer systems",
@@ -52,8 +52,8 @@ export function TroopyPacksGrid() {
         "Heavy-duty mounting hardware",
         "Quick-connect electrical system"
       ],
-      badge: "Most Popular",
-      badgeColor: "bg-blue-100 text-blue-800",
+      badge: "Coming Soon",
+      badgeColor: "bg-yellow-100 text-yellow-800",
       image: "/products/roam-general-1.jpg"
     },
     "premium-kit": {
@@ -123,7 +123,7 @@ export function TroopyPacksGrid() {
                     >
                       <div className="text-center text-textPrimary/70">
                         <div className="text-6xl mb-2">🚐</div>
-                        <p className="text-sm font-medium">{kit.name}</p>
+                        <p className="text-body-small font-medium">{kit.name}</p>
                       </div>
                     </m.div>
                     <m.div 
@@ -149,7 +149,7 @@ export function TroopyPacksGrid() {
                         <p className="text-accent-600 font-medium mb-3">
                           {kit.tagline}
                         </p>
-                        <p className="text-textPrimary/70 text-sm leading-relaxed">
+                        <p className="text-textPrimary/70 text-body-small leading-relaxed">
                           {kit.description}
                         </p>
                       </m.div>
@@ -178,7 +178,7 @@ export function TroopyPacksGrid() {
                               </m.div>
                             ))}
                           </div>
-                          <span className="text-sm text-textPrimary/60 ml-2">
+                          <span className="text-body-small text-textPrimary/60 ml-2">
                             {products.length > 0 ? products[0].rating : 4.7} rating
                           </span>
                         </div>
@@ -188,7 +188,7 @@ export function TroopyPacksGrid() {
                         variants={textReveal}
                         className="mb-8"
                       >
-                        <h4 className="text-sm font-semibold text-textPrimary mb-3">
+                        <h4 className="text-body-small font-semibold text-textPrimary mb-3">
                           Key Features:
                         </h4>
                         <m.ul 
@@ -199,7 +199,7 @@ export function TroopyPacksGrid() {
                             <m.li 
                               key={i} 
                               variants={staggerItem}
-                              className="flex items-start text-sm text-textPrimary/80"
+                              className="flex items-start text-body-small text-textPrimary/80"
                             >
                               <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                               {feature}
@@ -230,7 +230,7 @@ export function TroopyPacksGrid() {
                         variants={textReveal}
                         className="mt-6 pt-6 border-t border-borderNeutral"
                       >
-                        <p className="text-xs text-textPrimary/60 text-center">
+                        <p className="text-caption text-textPrimary/60 text-center">
                           {products.length} configuration{products.length !== 1 ? 's' : ''} available
                         </p>
                       </m.div>

@@ -1,12 +1,54 @@
 "use client";
 
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, MapPin, Truck, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useCart } from "@/lib/cart-context";
+import { useState } from "react";
 import Link from "next/link";
+import { useAddressAutocomplete } from "@/hooks/useAddressAutocomplete";
 
 export function CartPageContent() {
-  const { state, removeItem, updateQuantity, clearCart } = useCart();
+  // Force cache bust - v4 - ${Date.now()} - ${Math.random()}
+  const { 
+    state, 
+    removeItem, 
+    updateQuantity, 
+    clearCart, 
+    setShippingAddress, 
+    getShippingQuotes, 
+    selectShippingQuote 
+  } = useCart();
+  
+  const [shippingAddressForm, setShippingAddressForm] = useState({
+    street: '',
+    city: '',
+    state: '',
+    postcode: '',
+    country: 'Australia'
+  });
+
+  // Order options state
+  const [orderOptions, setOrderOptions] = useState({
+    paymentSurcharge: '',
+    shippingInsurance: '',
+    specialInstructions: ''
+  });
+
+  // Autocomplete for suburb/city
+  const suburbAutocomplete = useAddressAutocomplete({
+    type: 'suburb',
+    state: shippingAddressForm.state
+  });
+
+  // Ensure shippingAddressForm is always defined
+  if (!shippingAddressForm) {
+    console.error('shippingAddressForm state is undefined - this should not happen');
+  }
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -19,6 +61,34 @@ export function CartPageContent() {
 
   const handleCheckout = () => {
     window.location.href = '/checkout';
+  };
+
+  const handleAddressChange = (field: string, value: string) => {
+    // Defensive check to ensure setShippingAddressForm is defined
+    if (!setShippingAddressForm) {
+      console.error('setShippingAddressForm is not defined');
+      return;
+    }
+    setShippingAddressForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleGetQuotes = async () => {
+    // Defensive check to ensure shippingAddressForm is defined
+    if (!shippingAddressForm) {
+      console.error('shippingAddressForm is not defined');
+      return;
+    }
+    
+    console.log('Getting shipping quotes for:', shippingAddressForm);
+    
+    if (!shippingAddressForm?.street || !shippingAddressForm?.city || !shippingAddressForm?.state || !shippingAddressForm?.postcode) {
+      alert('Please fill in all address fields');
+      return;
+    }
+    
+    setShippingAddress(shippingAddressForm);
+    const quotes = await getShippingQuotes(shippingAddressForm);
+    console.log('Shipping quotes result:', quotes);
   };
 
   if (state.items.length === 0) {
@@ -60,7 +130,7 @@ export function CartPageContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           <div className="bg-cream-400 rounded-2xl p-6 shadow-soft border border-borderNeutral">
             <h2 className="text-xl font-semibold text-textPrimary mb-6">Cart Items</h2>
             
@@ -79,7 +149,7 @@ export function CartPageContent() {
                         className="w-full h-full object-cover rounded-lg"
                       />
                     ) : (
-                      <span className="text-xs text-textSecondary text-center">
+                      <span className="text-caption text-textSecondary text-center">
                         {item.category || 'Image'}
                       </span>
                     )}
@@ -96,7 +166,7 @@ export function CartPageContent() {
                     
                     {/* Quantity Controls */}
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-textPrimary">Quantity:</span>
+                      <span className="text-body-small font-medium text-textPrimary">Quantity:</span>
                       <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
@@ -153,6 +223,218 @@ export function CartPageContent() {
               </Button>
             </div>
           </div>
+
+          {/* Shipping Address & Quotes */}
+          <Card className="shadow-soft border border-borderNeutral">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="w-10 h-10 bg-brown-100 rounded-full flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-brown-600" />
+                </div>
+                Shipping Address & Options
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="street">Street Address</Label>
+                  <Input
+                    id="street"
+                    value={shippingAddressForm?.street || ''}
+                    onChange={(e) => handleAddressChange('street', e.target.value)}
+                    placeholder="Enter street address"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="city">City/Suburb</Label>
+                  <div className="relative">
+                    <Input
+                      id="city"
+                      value={suburbAutocomplete.query}
+                      onChange={(e) => suburbAutocomplete.setQuery(e.target.value)}
+                      placeholder="Start typing suburb name..."
+                      maxLength={30}
+                    />
+                    
+                    {/* Autocomplete dropdown */}
+                    {suburbAutocomplete.results.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                        {suburbAutocomplete.results.map((result, index) => (
+                          <div
+                            key={`${result.value}-${index}`}
+                            className="px-3 py-2 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0"
+                            onClick={() => {
+                              setShippingAddressForm(prev => ({
+                                ...prev,
+                                city: result.suburb,
+                                state: result.state,
+                                postcode: result.postcode
+                              }));
+                              suburbAutocomplete.clearResults();
+                            }}
+                          >
+                            <div className="font-medium">{result.label}</div>
+                            <div className="text-sm text-gray-500">{result.description}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {suburbAutocomplete.isLoading && (
+                      <div className="absolute right-3 top-3">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {shippingAddressForm?.city?.length || 0}/30 characters
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state">State</Label>
+                  <Input
+                    id="state"
+                    value={shippingAddressForm?.state || ''}
+                    disabled
+                    className="bg-gray-100"
+                    placeholder="Auto-filled from suburb"
+                  />
+                  <p className="text-xs text-gray-500">
+                    Auto-populated from suburb selection
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="postcode">Postcode</Label>
+                  <Input
+                    id="postcode"
+                    value={shippingAddressForm?.postcode || ''}
+                    disabled
+                    className="bg-gray-100"
+                    placeholder="Auto-filled from suburb"
+                  />
+                  <p className="text-xs text-gray-500">
+                    Auto-populated from suburb selection
+                  </p>
+                </div>
+              </div>
+              
+              <Button 
+                onClick={handleGetQuotes}
+                disabled={state.shipping.loading}
+                className="w-full bg-brown-500 hover:bg-darkBrown text-cream-400"
+              >
+                {state.shipping.loading ? 'Getting Quotes...' : 'Get Shipping Quotes'}
+              </Button>
+
+              {/* Shipping Quotes */}
+              {state.shipping.quotes.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-textPrimary">Select Shipping Method:</h3>
+                  {state.shipping.quotes.map((quote, index) => (
+                    <div
+                      key={index}
+                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                        state.shipping.selectedQuote === quote
+                          ? 'border-brown-500 bg-brown-50'
+                          : 'border-borderNeutral hover:border-brown-300'
+                      }`}
+                      onClick={() => selectShippingQuote(quote)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="font-medium text-textPrimary">{quote.service}</div>
+                          <div className="text-sm text-textSecondary">
+                            {quote.deliveryDays} business days • {quote.carrier || 'Standard carrier'}
+                          </div>
+                        </div>
+                        <div className="text-lg font-semibold text-brown-500">
+                          ${quote.price.toFixed(2)}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {state.shipping.error && (
+                <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                  {state.shipping.error}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Order Options */}
+          <Card className="shadow-soft border border-borderNeutral">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="w-10 h-10 bg-brown-100 rounded-full flex items-center justify-center">
+                  <Truck className="w-5 h-5 text-brown-600" />
+                </div>
+                Order Options
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Order Special Instructions */}
+              <div className="space-y-2">
+                <Label htmlFor="specialInstructions">Order Special Instructions</Label>
+                <Textarea
+                  id="specialInstructions"
+                  value={orderOptions.specialInstructions}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setOrderOptions(prev => ({ ...prev, specialInstructions: e.target.value }))}
+                  placeholder="Any special instructions for your order..."
+                  className="min-h-[100px] resize-y"
+                />
+              </div>
+
+              {/* Payment Surcharge */}
+              <div className="space-y-2">
+                <Label htmlFor="paymentSurcharge" className="flex items-center gap-2">
+                  Payment Surcharge *
+                  <HelpCircle className="w-4 h-4 text-gray-400" />
+                </Label>
+                <Select
+                  value={orderOptions.paymentSurcharge}
+                  onValueChange={(value) => setOrderOptions(prev => ({ ...prev, paymentSurcharge: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="-- Please select --" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No Surcharge</SelectItem>
+                    <SelectItem value="credit-card">Credit Card Fee (2.5%)</SelectItem>
+                    <SelectItem value="paypal">PayPal Fee (3.5%)</SelectItem>
+                    <SelectItem value="bank-transfer">Bank Transfer (No Fee)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Shipping Insurance */}
+              <div className="space-y-2">
+                <Label htmlFor="shippingInsurance" className="flex items-center gap-2">
+                  Shipping Insurance *
+                  <HelpCircle className="w-4 h-4 text-gray-400" />
+                </Label>
+                <Select
+                  value={orderOptions.shippingInsurance}
+                  onValueChange={(value) => setOrderOptions(prev => ({ ...prev, shippingInsurance: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="-- Please select --" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">NO INSURANCE - I UNDERSTAND THE RISKS</SelectItem>
+                    <SelectItem value="basic">Basic Insurance - $50.00</SelectItem>
+                    <SelectItem value="standard">Standard Insurance - $119.00</SelectItem>
+                    <SelectItem value="premium">Premium Insurance - $250.00</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-gray-500">
+                  Terms and conditions apply. Please read before checkout.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Order Summary */}
@@ -167,8 +449,43 @@ export function CartPageContent() {
               </div>
               <div className="flex justify-between text-textSecondary">
                 <span>Shipping</span>
-                <span className="text-green-600">Free</span>
+                <span>
+                  {state.shipping.selectedQuote 
+                    ? `$${state.shipping.selectedQuote.price.toFixed(2)}`
+                    : 'Not calculated'
+                  }
+                </span>
               </div>
+              {state.shipping.selectedQuote && (
+                <div className="text-sm text-textSecondary">
+                  {state.shipping.selectedQuote.service} 
+                  ({state.shipping.selectedQuote.deliveryDays} business days)
+                </div>
+              )}
+              {/* Payment Surcharge */}
+              {orderOptions.paymentSurcharge && orderOptions.paymentSurcharge !== 'none' && (
+                <div className="flex justify-between text-textSecondary">
+                  <span>Payment Surcharge</span>
+                  <span>
+                    {orderOptions.paymentSurcharge === 'credit-card' && `${(state.total * 0.025).toFixed(2)}`}
+                    {orderOptions.paymentSurcharge === 'paypal' && `${(state.total * 0.035).toFixed(2)}`}
+                    {orderOptions.paymentSurcharge === 'bank-transfer' && '$0.00'}
+                  </span>
+                </div>
+              )}
+
+              {/* Shipping Insurance */}
+              {orderOptions.shippingInsurance && orderOptions.shippingInsurance !== 'none' && (
+                <div className="flex justify-between text-textSecondary">
+                  <span>Shipping Insurance</span>
+                  <span>
+                    {orderOptions.shippingInsurance === 'basic' && '$50.00'}
+                    {orderOptions.shippingInsurance === 'standard' && '$119.00'}
+                    {orderOptions.shippingInsurance === 'premium' && '$250.00'}
+                  </span>
+                </div>
+              )}
+
               <div className="flex justify-between text-textSecondary">
                 <span>Tax</span>
                 <span>Calculated at checkout</span>
@@ -176,7 +493,29 @@ export function CartPageContent() {
               <div className="border-t border-borderNeutral pt-4">
                 <div className="flex justify-between text-xl font-bold text-textPrimary">
                   <span>Total</span>
-                  <span>${state.total.toFixed(2)}</span>
+                  <span>
+                    ${(() => {
+                      let total = state.total + (state.shipping.selectedQuote?.price || 0);
+                      
+                      // Add payment surcharge
+                      if (orderOptions.paymentSurcharge === 'credit-card') {
+                        total += state.total * 0.025;
+                      } else if (orderOptions.paymentSurcharge === 'paypal') {
+                        total += state.total * 0.035;
+                      }
+                      
+                      // Add shipping insurance
+                      if (orderOptions.shippingInsurance === 'basic') {
+                        total += 50;
+                      } else if (orderOptions.shippingInsurance === 'standard') {
+                        total += 119;
+                      } else if (orderOptions.shippingInsurance === 'premium') {
+                        total += 250;
+                      }
+                      
+                      return total.toFixed(2);
+                    })()}
+                  </span>
                 </div>
               </div>
             </div>
@@ -188,7 +527,7 @@ export function CartPageContent() {
               Proceed to Checkout
             </Button>
 
-            <p className="text-xs text-textSecondary text-center mt-4">
+            <p className="text-caption text-textSecondary text-center mt-4">
               Secure checkout powered by Stripe
             </p>
           </div>

@@ -145,10 +145,10 @@ export function WanderKitPageEnhanced({ config, configurations }: WanderKitPageE
                             {bullet.icon}
                           </div>
                           <div>
-                            <div className="font-medium text-textPrimary text-sm">
+                            <div className="font-medium text-textPrimary text-body-small">
                               {bullet.title}
                             </div>
-                            <div className="text-xs text-textSecondary mt-1">
+                            <div className="text-caption text-textSecondary mt-1">
                               {bullet.description}
                             </div>
                           </div>
@@ -164,10 +164,10 @@ export function WanderKitPageEnhanced({ config, configurations }: WanderKitPageE
                 <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-0 shadow-sm rounded-2xl overflow-hidden">
                   <CardContent className="p-6">
                     <div className="text-4xl mb-3">⭐</div>
-                    <blockquote className="text-sm text-textPrimary mb-4 italic">
+                    <blockquote className="text-body-small text-textPrimary mb-4 italic">
                       &quot;The Wander Kit was perfect for our budget and weekend trips. Easy to install and everything we needed for comfortable camping.&quot;
                     </blockquote>
-                    <div className="text-xs text-textSecondary">
+                    <div className="text-caption text-textSecondary">
                       — Sarah & Mike, Wander Kit owners
                     </div>
                   </CardContent>
@@ -181,7 +181,7 @@ export function WanderKitPageEnhanced({ config, configurations }: WanderKitPageE
                     <h3 className="text-lg font-semibold text-textPrimary mb-2">
                       {config.sidebar.helpSection.title}
                     </h3>
-                    <p className="text-sm text-textSecondary mb-4">
+                    <p className="text-body-small text-textSecondary mb-4">
                       {config.sidebar.helpSection.description}
                     </p>
                     <div className="space-y-3">
@@ -211,10 +211,10 @@ export function WanderKitPageEnhanced({ config, configurations }: WanderKitPageE
               <m.div variants={isDisabled ? {} : staggerItem}>
                 <Card className="bg-white border-0 shadow-sm rounded-2xl">
                   <CardContent className="p-6">
-                    <h3 className="text-sm font-semibold text-textPrimary mb-4">
+                    <h3 className="text-body-small font-semibold text-textPrimary mb-4">
                       Need immediate help?
                     </h3>
-                    <div className="space-y-3 text-sm">
+                    <div className="space-y-3 text-body-small">
                       <div className="flex items-center gap-3">
                         <Phone className="w-4 h-4 text-brown-500" />
                         <span className="text-textSecondary">0417 362 209</span>

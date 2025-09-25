@@ -112,7 +112,7 @@ export function GalleryPreview({ items }: GalleryPreviewProps) {
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-full text-body-small font-medium transition-all duration-200 ${
                   selectedCategory === 'all' 
                     ? 'bg-brown-500 text-white' 
                     : 'bg-cream-400 text-textSecondary hover:bg-brown-100'
@@ -124,7 +124,7 @@ export function GalleryPreview({ items }: GalleryPreviewProps) {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-full text-body-small font-medium transition-all duration-200 ${
                     selectedCategory === category 
                       ? 'bg-brown-500 text-white' 
                       : 'bg-cream-400 text-textSecondary hover:bg-brown-100'
@@ -166,9 +166,9 @@ export function GalleryPreview({ items }: GalleryPreviewProps) {
                     ) : (
                       <div className="text-center text-textSecondary">
                         <div className="text-4xl mb-2">📸</div>
-                        <p className="text-sm font-medium">{item.category}</p>
+                        <p className="text-body-small font-medium">{item.category}</p>
                         {item.kit && (
-                          <p className="text-xs text-textSecondary">{item.kit} Kit</p>
+                          <p className="text-caption text-textSecondary">{item.kit} Kit</p>
                         )}
                       </div>
                     )}
@@ -177,12 +177,12 @@ export function GalleryPreview({ items }: GalleryPreviewProps) {
                   {/* Enhanced Badges */}
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
                     {item.isFeatured && (
-                      <div className="px-2 py-1 bg-brown-500 text-white text-xs rounded-full font-medium">
+                      <div className="px-2 py-1 bg-brown-500 text-white text-caption rounded-full font-medium">
                         Featured
                       </div>
                     )}
                     {item.isPopular && (
-                      <div className="px-2 py-1 bg-yellow-500 text-white text-xs rounded-full font-medium flex items-center gap-1">
+                      <div className="px-2 py-1 bg-yellow-500 text-white text-caption rounded-full font-medium flex items-center gap-1">
                         <Star className="w-3 h-3 fill-current" />
                         Popular
                       </div>
@@ -194,14 +194,14 @@ export function GalleryPreview({ items }: GalleryPreviewProps) {
                   
                   {/* Enhanced Caption */}
                   <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-sm font-medium mb-1">
+                    <h3 className="text-body-small font-medium mb-1">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-white/90 line-clamp-2">
+                    <p className="text-caption text-white/90 line-clamp-2">
                       {item.description}
                     </p>
                     {item.buildTime && item.buildTime !== 'N/A' && item.buildTime !== 'TBD' && (
-                      <div className="flex items-center gap-1 mt-1 text-xs text-white/80">
+                      <div className="flex items-center gap-1 mt-1 text-caption text-white/80">
                         <Clock className="w-3 h-3" />
                         <span>{item.buildTime}</span>
                       </div>
@@ -313,7 +313,7 @@ export function GalleryPreview({ items }: GalleryPreviewProps) {
             <div className="mt-4 text-center text-white">
               <h3 className="text-xl font-semibold mb-2">{selectedImage.title}</h3>
               <p className="text-lg text-white/95">{selectedImage.description}</p>
-              <p className="text-sm text-white/90 mt-2">
+              <p className="text-body-small text-white/90 mt-2">
                 {currentIndex + 1} of {displayItems.length}
               </p>
             </div>

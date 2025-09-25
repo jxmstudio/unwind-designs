@@ -114,7 +114,7 @@ export function FrequentlyBoughtTogether({ addOns, onAddToCart }: FrequentlyBoug
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-textPrimary text-sm mb-1 truncate">
+                    <h4 className="font-semibold text-textPrimary text-body-small mb-1 truncate">
                       {product.name}
                     </h4>
                     <p className="text-lg font-bold text-accent-600">
@@ -157,7 +157,7 @@ export function FrequentlyBoughtTogether({ addOns, onAddToCart }: FrequentlyBoug
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-sm text-textPrimary/70">Subtotal for {selectedCount} item{selectedCount !== 1 ? 's' : ''}</p>
+              <p className="text-body-small text-textPrimary/70">Subtotal for {selectedCount} item{selectedCount !== 1 ? 's' : ''}</p>
               <p className="text-2xl font-bold text-textPrimary">
                 ${subtotal.toFixed(2)}
               </p>

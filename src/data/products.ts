@@ -44,8 +44,11 @@ export {
 // Import allUpsellProducts for use in this file
 import { allUpsellProducts, UpsellProduct, getUpsellCategories } from './upsells';
 
+// Import test products
+import { testProducts, TestProduct, getTestProductBySlug, getTestProductById } from './test-products';
+
 // Union type for all products
-export type Product = FlatPackProduct | UpsellProduct | ComponentProduct;
+export type Product = FlatPackProduct | UpsellProduct | ComponentProduct | TestProduct;
 
 // New Product Interface for Components and Accessories
 export interface ComponentProduct {
@@ -57,7 +60,7 @@ export interface ComponentProduct {
   originalPrice?: number;
   images: string[];
   videoUrl?: string;
-  category: 'Panels' | 'Flooring' | 'Accessories' | 'Plumbing' | 'Complete Kits';
+  category: 'Panels' | 'Flooring' | 'Accessories' | 'Plumbing' | 'Complete Kits' | 'Ventilation' | 'Compressors' | 'Water Systems' | 'Sound Deadening' | 'Utility Panels' | 'DIY Build' | 'Fridges' | 'Water Heaters' | 'Bathroom' | 'Hardware';
   subcategory: string;
   tags: string[];
   features: string[];
@@ -70,6 +73,7 @@ export interface ComponentProduct {
   weight: number;
   compatibility: string[]; // Which vehicles/kits this works with
   isPopular?: boolean;
+  comingSoon?: boolean; // New field for products not yet available
   installationRequired: boolean;
   warranty: string;
   assemblyTime?: string;
@@ -172,8 +176,9 @@ export const generalFlatPackProducts: ComponentProduct[] = [
     assemblyTime: "6-8 hours", 
     sku: "RK-GENERAL-001",
     slug: "roam-troopy-flat-pack",
-    inStock: true,
-    stockQuantity: 18,
+    inStock: false,
+    stockQuantity: 0,
+    comingSoon: true,
     rating: 4.8,
     reviewCount: 267,
     badges: ["Most Popular", "Enhanced Features"],
@@ -488,20 +493,333 @@ export const plumbingProducts: ComponentProduct[] = [
   }
 ];
 
+// Ventilation Products
+export const ventilationProducts: ComponentProduct[] = [
+  {
+    id: "troopy-utility-vent",
+    name: "Troopy Utility Vent (Ark Earth)",
+    description: "High-quality utility vent designed specifically for Toyota Troopcarriers. Provides excellent ventilation while maintaining weather protection.",
+    shortDescription: "Professional utility vent for Troopcarriers",
+    price: 85.00,
+    images: ["/products/utility-vent-1.jpg", "/products/utility-vent-2.jpg"],
+    category: "Ventilation",
+    subcategory: "Utility Vents",
+    tags: ["Ventilation", "Troopcarrier", "Weather Resistant", "Professional"],
+    features: [
+      "Weather-resistant construction",
+      "Easy installation design",
+      "Durable materials",
+      "Professional finish",
+      "Troopcarrier specific fit",
+      "Long-lasting performance"
+    ],
+    specifications: {
+      "Material": "High-grade plastic with metal components",
+      "Size": "Standard Troopcarrier fit",
+      "Installation": "Screw-on mounting",
+      "Weather Rating": "IP65",
+      "Compatibility": "Toyota Troopcarrier"
+    },
+    dimensions: {
+      length: 20,
+      width: 15,
+      height: 5
+    },
+    weight: 0.8,
+    compatibility: ["Toyota Troopcarrier"],
+    installationRequired: true,
+    warranty: "2 years",
+    assemblyTime: "15 minutes",
+    sku: "VENT-001",
+    slug: "troopy-utility-vent",
+    inStock: true,
+    stockQuantity: 25,
+    rating: 4.6,
+    reviewCount: 42,
+    badges: ["Professional Grade"],
+    shipClass: "standard",
+    upsells: ["troopy-side-panels"],
+    isTroopyPack: false,
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-01-15")
+  }
+];
+
+// Compressor Products
+export const compressorProducts: ComponentProduct[] = [
+  {
+    id: "arb-twin-compressor-bracket",
+    name: "ARB Twin Compressor Bracket (Ark Earth)",
+    description: "Heavy-duty mounting bracket for ARB twin air compressors. Designed for secure installation in Toyota Troopcarriers with easy access for maintenance.",
+    shortDescription: "Heavy-duty ARB compressor mounting bracket",
+    price: 120.00,
+    images: ["/products/arb-bracket-1.jpg", "/products/arb-bracket-2.jpg"],
+    category: "Compressors",
+    subcategory: "Mounting Brackets",
+    tags: ["Compressor", "ARB", "Mounting", "Heavy Duty", "Professional"],
+    features: [
+      "Heavy-duty construction",
+      "ARB twin compressor compatible",
+      "Secure mounting system",
+      "Easy maintenance access",
+      "Professional installation",
+      "Durable materials"
+    ],
+    specifications: {
+      "Material": "Powder-coated steel",
+      "Compatibility": "ARB Twin Compressor",
+      "Installation": "Vehicle-specific mounting",
+      "Weight Capacity": "Up to 15kg",
+      "Finish": "Black powder coat"
+    },
+    dimensions: {
+      length: 30,
+      width: 20,
+      height: 8
+    },
+    weight: 2.5,
+    compatibility: ["Toyota Troopcarrier", "ARB Twin Compressor"],
+    installationRequired: true,
+    warranty: "3 years",
+    assemblyTime: "45 minutes",
+    sku: "ARB-BRACKET-001",
+    slug: "arb-twin-compressor-bracket",
+    inStock: true,
+    stockQuantity: 15,
+    rating: 4.8,
+    reviewCount: 28,
+    badges: ["Heavy Duty", "Professional"],
+    shipClass: "standard",
+    upsells: ["arb-twin-compressor"],
+    isTroopyPack: false,
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-01-15")
+  }
+];
+
+// Water Tank Products
+export const waterTankProducts: ComponentProduct[] = [
+  {
+    id: "62l-stainless-water-tank",
+    name: "62L Stainless Steel Water Tank",
+    description: "High-quality stainless steel water tank with 62L capacity. Perfect for extended adventures with durable construction and easy maintenance.",
+    shortDescription: "62L stainless steel water tank",
+    price: 450.00,
+    images: ["/products/62l-tank-1.jpg", "/products/62l-tank-2.jpg"],
+    category: "Water Systems",
+    subcategory: "Water Tanks",
+    tags: ["Water Tank", "Stainless Steel", "62L", "Durable", "Professional"],
+    features: [
+      "Stainless steel construction",
+      "62L capacity",
+      "Easy maintenance",
+      "Durable design",
+      "Professional grade",
+      "Long-lasting performance"
+    ],
+    specifications: {
+      "Material": "304 Stainless Steel",
+      "Capacity": "62 Liters",
+      "Dimensions": "400mm x 300mm x 500mm",
+      "Weight": "8.5kg",
+      "Fittings": "Standard BSP threads"
+    },
+    dimensions: {
+      length: 40,
+      width: 30,
+      height: 50
+    },
+    weight: 8.5,
+    compatibility: ["Toyota Troopcarrier", "All flat pack kits"],
+    installationRequired: true,
+    warranty: "5 years",
+    assemblyTime: "2 hours",
+    sku: "TANK-62L-001",
+    slug: "62l-stainless-water-tank",
+    inStock: true,
+    stockQuantity: 12,
+    rating: 4.7,
+    reviewCount: 35,
+    badges: ["Professional Grade", "Stainless Steel"],
+    shipClass: "oversized",
+    upsells: ["water-pump-40psi", "shower-outlet"],
+    isTroopyPack: false,
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-01-15")
+  },
+  {
+    id: "90l-troopy-water-tank",
+    name: "90L Troopy Water Tank",
+    description: "Large capacity 90L water tank designed specifically for Toyota Troopcarriers. Provides ample water storage for extended adventures.",
+    shortDescription: "90L water tank for Troopcarriers",
+    price: 680.00,
+    images: ["/products/90l-tank-1.jpg", "/products/90l-tank-2.jpg"],
+    category: "Water Systems",
+    subcategory: "Water Tanks",
+    tags: ["Water Tank", "90L", "Troopcarrier", "Large Capacity", "Professional"],
+    features: [
+      "90L large capacity",
+      "Troopcarrier specific design",
+      "Heavy-duty construction",
+      "Easy installation",
+      "Professional grade",
+      "Extended adventure ready"
+    ],
+    specifications: {
+      "Material": "Food-grade plastic",
+      "Capacity": "90 Liters",
+      "Dimensions": "500mm x 400mm x 450mm",
+      "Weight": "12kg",
+      "Compatibility": "Toyota Troopcarrier"
+    },
+    dimensions: {
+      length: 50,
+      width: 40,
+      height: 45
+    },
+    weight: 12.0,
+    compatibility: ["Toyota Troopcarrier"],
+    installationRequired: true,
+    warranty: "3 years",
+    assemblyTime: "3 hours",
+    sku: "TANK-90L-001",
+    slug: "90l-troopy-water-tank",
+    inStock: true,
+    stockQuantity: 8,
+    rating: 4.8,
+    reviewCount: 22,
+    badges: ["Large Capacity", "Professional"],
+    shipClass: "oversized",
+    upsells: ["90l-plumbing-kit", "water-pump-40psi"],
+    isTroopyPack: false,
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-01-15")
+  }
+];
+
+// Sound Deadening Products
+export const soundDeadeningProducts: ComponentProduct[] = [
+  {
+    id: "mass-noise-liner",
+    name: "Car Builders Mass Noise Liner",
+    description: "Professional mass noise liner for effective sound deadening. Reduces road noise and improves cabin acoustics in Toyota Troopcarriers.",
+    shortDescription: "Professional mass noise liner",
+    price: 95.00,
+    images: ["/products/mass-liner-1.jpg", "/products/mass-liner-2.jpg"],
+    category: "Sound Deadening",
+    subcategory: "Mass Liners",
+    tags: ["Sound Deadening", "Mass Liner", "Noise Reduction", "Professional"],
+    features: [
+      "Effective noise reduction",
+      "Easy installation",
+      "Professional grade",
+      "Durable materials",
+      "Improved acoustics",
+      "Long-lasting performance"
+    ],
+    specifications: {
+      "Material": "Butyl rubber with aluminum",
+      "Thickness": "2mm",
+      "Coverage": "1 square meter",
+      "Weight": "2.5kg per sheet",
+      "Installation": "Self-adhesive"
+    },
+    dimensions: {
+      length: 100,
+      width: 100,
+      height: 0.2
+    },
+    weight: 2.5,
+    compatibility: ["Toyota Troopcarrier", "All vehicles"],
+    installationRequired: true,
+    warranty: "2 years",
+    assemblyTime: "1 hour per sheet",
+    sku: "MASS-LINER-001",
+    slug: "mass-noise-liner",
+    inStock: true,
+    stockQuantity: 20,
+    rating: 4.5,
+    reviewCount: 48,
+    badges: ["Professional Grade"],
+    shipClass: "standard",
+    upsells: ["troopy-sound-pack"],
+    isTroopyPack: false,
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-01-15")
+  },
+  {
+    id: "troopy-sound-pack",
+    name: "Carbuilders Troopy Sound Deadening Pack",
+    description: "Complete sound deadening pack specifically designed for Toyota Troopcarriers. Includes all materials needed for professional sound insulation.",
+    shortDescription: "Complete Troopcarrier sound deadening pack",
+    price: 280.00,
+    images: ["/products/sound-pack-1.jpg", "/products/sound-pack-2.jpg"],
+    category: "Sound Deadening",
+    subcategory: "Complete Packs",
+    tags: ["Sound Deadening", "Complete Pack", "Troopcarrier", "Professional"],
+    features: [
+      "Complete sound deadening solution",
+      "Troopcarrier specific design",
+      "Professional installation guide",
+      "All materials included",
+      "Effective noise reduction",
+      "Easy installation"
+    ],
+    specifications: {
+      "Contents": "Mass liner, foam, adhesive",
+      "Coverage": "Complete Troopcarrier",
+      "Materials": "Professional grade",
+      "Installation": "DIY friendly",
+      "Compatibility": "Toyota Troopcarrier"
+    },
+    dimensions: {
+      length: 60,
+      width: 40,
+      height: 10
+    },
+    weight: 8.0,
+    compatibility: ["Toyota Troopcarrier"],
+    installationRequired: true,
+    warranty: "2 years",
+    assemblyTime: "4-6 hours",
+    sku: "SOUND-PACK-001",
+    slug: "troopy-sound-pack",
+    inStock: true,
+    stockQuantity: 15,
+    rating: 4.7,
+    reviewCount: 31,
+    badges: ["Complete Pack", "Professional"],
+    shipClass: "oversized",
+    upsells: ["mass-noise-liner"],
+    isTroopyPack: false,
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-01-15")
+  }
+];
+
 // Combined new component products
 export const allComponentProducts: ComponentProduct[] = [
   ...generalFlatPackProducts,
   ...sidePanelProducts,
   ...flooringProducts,
   ...accessoryProducts,
-  ...plumbingProducts
+  ...plumbingProducts,
+  ...ventilationProducts,
+  ...compressorProducts,
+  ...waterTankProducts,
+  ...soundDeadeningProducts
 ];
 
-// Combined ALL products (flat packs + upsells + components)
+// Import additional products
+import { allAdditionalProducts } from './additional-products';
+
+// Combined ALL products (flat packs + upsells + components + test products + additional products)
 export const allProducts = [
   ...allFlatPacks,
   ...allUpsellProducts,
-  ...allComponentProducts
+  ...allComponentProducts,
+  ...allAdditionalProducts,
+  ...testProducts
 ];
 
 // Helper functions for component products
@@ -534,11 +852,14 @@ export function getAnyProductById(id: string): Product | undefined {
   return allProducts.find((product: Product) => product.id === id);
 }
 
-export function getAnyProductBySlug(slug: string): FlatPackProduct | ComponentProduct | undefined {
+export function getAnyProductBySlug(slug: string): FlatPackProduct | ComponentProduct | TestProduct | undefined {
   const flatPack = getFlatPackBySlug(slug);
   if (flatPack) return flatPack;
   
-  return getComponentBySlug(slug);
+  const component = getComponentBySlug(slug);
+  if (component) return component;
+  
+  return getTestProductBySlug(slug);
 }
 
 export function getAllProductCategories(): string[] {

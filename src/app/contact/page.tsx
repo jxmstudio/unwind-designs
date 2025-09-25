@@ -10,7 +10,7 @@ export default function ContactPage() {
       <main className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-3xl font-bold text-textPrimary mb-4">Contact Us</h1>
-          <p className="text-base text-textSecondary mb-8">
+          <p className="text-body text-textSecondary mb-8">
             Get in touch to discuss your van or 4x4 fitout project.
           </p>
           
@@ -20,7 +20,7 @@ export default function ContactPage() {
               
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-textPrimary mb-2">
+                  <label className="block text-body-small font-medium text-textPrimary mb-2">
                     Name
                   </label>
                   <Input 
@@ -31,7 +31,7 @@ export default function ContactPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-textPrimary mb-2">
+                  <label className="block text-body-small font-medium text-textPrimary mb-2">
                     Email
                   </label>
                   <Input 
@@ -42,7 +42,7 @@ export default function ContactPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-textPrimary mb-2">
+                  <label className="block text-body-small font-medium text-textPrimary mb-2">
                     Message
                   </label>
                   <textarea 
@@ -67,8 +67,8 @@ export default function ContactPage() {
                     <span className="text-brown-500">📧</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Email</h3>
-                    <p className="text-textSecondary text-sm">Info@unwinddesigns.com.au</p>
+                    <h3 className="text-body-small font-medium text-textPrimary">Email</h3>
+                    <p className="text-textSecondary text-body-small">Info@unwinddesigns.com.au</p>
                   </div>
                 </div>
                 
@@ -77,8 +77,8 @@ export default function ContactPage() {
                     <span className="text-brown-500">📞</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Phone</h3>
-                    <p className="text-textSecondary text-sm">0417 362 209</p>
+                    <h3 className="text-body-small font-medium text-textPrimary">Phone</h3>
+                    <p className="text-textSecondary text-body-small">0417 362 209</p>
                   </div>
                 </div>
                 
@@ -87,8 +87,8 @@ export default function ContactPage() {
                     <span className="text-brown-500">🌏</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Service Area</h3>
-                    <p className="text-textSecondary text-sm">Australia Wide</p>
+                    <h3 className="text-body-small font-medium text-textPrimary">Service Area</h3>
+                    <p className="text-textSecondary text-body-small">Australia Wide</p>
                   </div>
                 </div>
                 
@@ -97,8 +97,8 @@ export default function ContactPage() {
                     <span className="text-brown-500">⏰</span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Response Time</h3>
-                    <p className="text-textSecondary text-sm">Within 24 hours</p>
+                    <h3 className="text-body-small font-medium text-textPrimary">Response Time</h3>
+                    <p className="text-textSecondary text-body-small">Within 24 hours</p>
                   </div>
                 </div>
               </div>

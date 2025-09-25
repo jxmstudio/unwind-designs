@@ -1,6 +1,6 @@
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { TroopyPackDetail } from "@/components/products/TroopyPackDetail";
+import { EnhancedKitPage } from "@/components/products/EnhancedKitPage";
 
 export default function PremiumKitPage() {
   const kitData = {
@@ -25,14 +25,18 @@ export default function PremiumKitPage() {
       "Weight": "70-73kg",
       "Storage Volume": "260-280L total internal storage"
     },
-    kitImage: "/products/premium-general-1.jpg"
+    kitImage: "/brand/Roam1.webp", // Using Roam1 as placeholder - replace with actual Premium images when available
+    kitTagline: "Ultimate Luxury Adventure Kit",
+    kitPrice: 8950,
+    kitRating: 4.9,
+    kitReviewCount: 89
   };
 
   return (
     <div className="min-h-screen bg-cream-400">
       <Navigation />
-      <main className="pt-20">
-        <TroopyPackDetail {...kitData} />
+      <main>
+        <EnhancedKitPage {...kitData} />
       </main>
       <Footer />
     </div>

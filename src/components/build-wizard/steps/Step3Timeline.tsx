@@ -145,14 +145,14 @@ export function Step3Timeline() {
                   >
                     <CardContent className="p-4 text-center">
                       {timeline.popular && (
-                        <Badge className="mb-2 bg-brown-100 text-brown-700 text-xs">
+                        <Badge className="mb-2 bg-brown-100 text-brown-700 text-caption">
                           Popular
                         </Badge>
                       )}
                       <div className="font-semibold text-textPrimary mb-1">
                         {timeline.title}
                       </div>
-                      <div className="text-xs text-textSecondary">
+                      <div className="text-caption text-textSecondary">
                         {timeline.subtitle}
                       </div>
                     </CardContent>
@@ -163,7 +163,7 @@ export function Step3Timeline() {
           </div>
           {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
           {errors.step3?.timeline && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-red-500 text-body-small mt-2">
               {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
               {errors.step3.timeline.message}
             </p>
@@ -200,17 +200,17 @@ export function Step3Timeline() {
                           <div className="font-semibold text-textPrimary">
                             {budget.title}
                           </div>
-                          <div className="text-sm text-brown-600">
+                          <div className="text-body-small text-brown-600">
                             {budget.subtitle}
                           </div>
                         </div>
                         {budget.popular && (
-                          <Badge className="bg-brown-100 text-brown-700 text-xs">
+                          <Badge className="bg-brown-100 text-brown-700 text-caption">
                             Popular
                           </Badge>
                         )}
                       </div>
-                      <p className="text-xs text-textSecondary">
+                      <p className="text-caption text-textSecondary">
                         {budget.description}
                       </p>
                     </CardContent>
@@ -221,7 +221,7 @@ export function Step3Timeline() {
           </div>
           {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
           {errors.step3?.budget && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-red-500 text-body-small mt-2">
               {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
               {errors.step3.budget.message}
             </p>
@@ -256,7 +256,7 @@ export function Step3Timeline() {
                       <div className="flex items-center justify-between mb-3">
                         <div className="text-2xl">{installation.icon}</div>
                         {installation.popular && (
-                          <Badge className="bg-brown-100 text-brown-700 text-xs">
+                          <Badge className="bg-brown-100 text-brown-700 text-caption">
                             Popular
                           </Badge>
                         )}
@@ -264,12 +264,12 @@ export function Step3Timeline() {
                       <h4 className="font-semibold text-textPrimary mb-1">
                         {installation.title}
                       </h4>
-                      <p className="text-sm text-textSecondary mb-3">
+                      <p className="text-body-small text-textSecondary mb-3">
                         {installation.subtitle}
                       </p>
                       <div className="space-y-1">
                         {installation.benefits.map((benefit, idx) => (
-                          <div key={idx} className="text-xs text-brown-600 flex items-center">
+                          <div key={idx} className="text-caption text-brown-600 flex items-center">
                             <div className="w-1 h-1 bg-brown-400 rounded-full mr-2"></div>
                             {benefit}
                           </div>
@@ -283,7 +283,7 @@ export function Step3Timeline() {
           </div>
           {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
           {errors.step3?.installationPreference && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-red-500 text-body-small mt-2">
               {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
               {errors.step3.installationPreference.message}
             </p>

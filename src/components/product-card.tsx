@@ -8,7 +8,8 @@ import { useCart } from "@/lib/cart-context";
 import Link from "next/link";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 
-import { type Product } from "@/lib/products";
+import { type Product } from "@/lib/product-utils";
+import { formatPrice, isProductPurchasable } from "@/lib/product-utils";
 
 interface ProductCardProps {
   product: Product;
@@ -25,17 +26,23 @@ export function ProductCard({ product }: ProductCardProps) {
     reviewCount,
     isOnSale,
     salePercentage,
-    category
+    category,
+    comingSoon
   } = product;
 
+  const isPurchasable = isProductPurchasable(product);
+
   const handleAddToCart = () => {
+    if (!isPurchasable) return;
+    
     addItem({
       id: product.id,
       name: product.name,
       price: product.price,
       originalPrice: product.originalPrice,
       image: product.images[0] || '',
-      category: product.category
+      category: product.category,
+      shortDescription: product.shortDescription
     });
   };
 
@@ -66,7 +73,7 @@ export function ProductCard({ product }: ProductCardProps) {
         >
           {/* Placeholder if no image */}
           {!product.images[0] && (
-            <div className="text-textPrimary/80 text-sm text-center px-4">
+            <div className="text-textPrimary/80 text-body-small text-center px-4">
               {category || 'Product Image'}
             </div>
           )}
@@ -99,7 +106,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </motion.div>
         </motion.div>
         
-        {/* Add to Cart Overlay */}
+        {/* Add to Cart Overlay or Coming Soon Badge */}
         <motion.div 
           className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
           initial={{ opacity: 0 }}
@@ -110,13 +117,19 @@ export function ProductCard({ product }: ProductCardProps) {
             whileHover={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.2 }}
           >
-            <Button
-              onClick={handleAddToCart}
-              className="bg-brown-500 hover:bg-darkBrown text-white font-semibold px-4 py-2 rounded-xl shadow-medium transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 text-xs"
-            >
-              <ShoppingCart size={14} className="mr-1" />
-              Add to Cart
-            </Button>
+            {!isPurchasable ? (
+              <div className="bg-amber-500 text-white font-semibold px-4 py-2 rounded-xl shadow-medium transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 text-caption">
+                {comingSoon ? 'Coming Soon' : 'Unavailable'}
+              </div>
+            ) : (
+              <Button
+                onClick={handleAddToCart}
+                className="bg-brown-500 hover:bg-darkBrown text-white font-semibold px-4 py-2 rounded-xl shadow-medium transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 text-caption"
+              >
+                <ShoppingCart size={14} className="mr-1" />
+                Add to Cart
+              </Button>
+            )}
           </motion.div>
         </motion.div>
       </div>
@@ -138,30 +151,37 @@ export function ProductCard({ product }: ProductCardProps) {
               />
             ))}
           </div>
-          <span className="text-xs text-textPrimary/80 ml-1">
+          <span className="text-caption text-textPrimary/80 ml-1">
             ({reviewCount})
           </span>
         </div>
 
         {/* Product Name */}
-        <h3 className="text-sm font-medium text-textPrimary mb-2 line-clamp-2 group-hover:text-brown-500 transition-colors">
+        <h3 className="text-body-small font-medium text-textPrimary mb-2 line-clamp-2 group-hover:text-brown-500 transition-colors">
           {name}
         </h3>
+
+        {/* Status Badge */}
+        {!isPurchasable && (
+          <Badge className="bg-amber-500 text-white font-semibold border-0 mb-2 text-caption">
+            {comingSoon ? 'Coming Soon' : 'Unavailable'}
+          </Badge>
+        )}
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg font-bold text-brown-500">
-            ${price.toFixed(2)}
+            {formatPrice(price)}
           </span>
           {originalPrice && originalPrice > price && (
-            <span className="text-sm text-textPrimary/80 line-through">
-              ${originalPrice.toFixed(2)}
+            <span className="text-body-small text-textPrimary/80 line-through">
+              {formatPrice(originalPrice)}
             </span>
           )}
         </div>
 
         {/* Quick View Button */}
-        <Link href={`/product/${product.id}`}>
+        <Link href={`/products/${product.slug}`}>
           <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

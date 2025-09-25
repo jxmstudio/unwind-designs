@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Unwind Designs Product Scraper",
+  "version": "1.0",
+  "description": "Scrape product data from any e-commerce site for Unwind Designs",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Scrape Products"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

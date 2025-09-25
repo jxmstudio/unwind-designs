@@ -88,10 +88,10 @@ export function TroopyPromo() {
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-brown-200 rounded-full mb-4">
                       <Package className="w-6 h-6 text-brown-600" />
                     </div>
-                    <h3 className="text-base font-semibold text-textPrimary mb-2">Wander Kit</h3>
-                    <p className="text-xs text-textSecondary mb-3">Budget-friendly option</p>
+                    <h3 className="text-body font-semibold text-textPrimary mb-2">Wander Kit</h3>
+                    <p className="text-caption text-textSecondary mb-3">Budget-friendly option</p>
                     <div className="text-lg font-bold text-brown-500 mb-2">From $3,750</div>
-                    <div className="text-xs text-textSecondary">Perfect for weekend adventures</div>
+                    <div className="text-caption text-textSecondary">Perfect for weekend adventures</div>
                   </div>
                 </div>
               </Link>
@@ -100,7 +100,7 @@ export function TroopyPromo() {
               <Link href="/flat-packs" className="block">
                 <div className="bg-cream-300 rounded-xl p-6 hover:bg-cream-200 transition-all duration-200 border-2 border-brown-400 h-full relative">
                   <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-brown-500 text-white text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1">
+                    <div className="bg-brown-500 text-white text-caption px-3 py-1 rounded-full font-medium flex items-center gap-1">
                       <Star className="w-3 h-3 fill-current" />
                       Most Popular
                     </div>
@@ -109,10 +109,10 @@ export function TroopyPromo() {
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-brown-400 rounded-full mb-4">
                       <Package className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-base font-semibold text-textPrimary mb-2">Roam Kit</h3>
-                    <p className="text-xs text-textSecondary mb-3">Enhanced features for extended adventures</p>
+                    <h3 className="text-body font-semibold text-textPrimary mb-2">Roam Kit</h3>
+                    <p className="text-caption text-textSecondary mb-3">Enhanced features for extended adventures</p>
                     <div className="text-lg font-bold text-brown-500 mb-2">From $6,700</div>
-                    <div className="text-xs text-textSecondary">Most popular choice</div>
+                    <div className="text-caption text-textSecondary">Most popular choice</div>
                   </div>
                 </div>
               </Link>
@@ -124,10 +124,10 @@ export function TroopyPromo() {
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-500 rounded-full mb-4">
                       <Package className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-base font-semibold text-textPrimary mb-2">Premium Kit</h3>
-                    <p className="text-xs text-textSecondary mb-3">Ultimate luxury and functionality</p>
+                    <h3 className="text-body font-semibold text-textPrimary mb-2">Premium Kit</h3>
+                    <p className="text-caption text-textSecondary mb-3">Ultimate luxury and functionality</p>
                     <div className="text-lg font-bold text-brown-500 mb-2">From $9,850</div>
-                    <div className="text-xs text-textSecondary">Professional installation included</div>
+                    <div className="text-caption text-textSecondary">Professional installation included</div>
                   </div>
                 </div>
               </Link>
@@ -186,11 +186,11 @@ export function TroopyPromo() {
             >
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                <span className="text-sm text-textSecondary">4.9/5 rating</span>
+                <span className="text-body-small text-textSecondary">4.9/5 rating</span>
               </div>
               <div className="flex items-center gap-2">
                 <Truck className="w-5 h-5 text-brown-400" />
-                <span className="text-sm text-textSecondary">Free consultation</span>
+                <span className="text-body-small text-textSecondary">Free consultation</span>
               </div>
             </motion.div>
           </motion.div>
@@ -213,7 +213,7 @@ export function TroopyPromo() {
                        />
                      </div>
                     <p className="text-lg font-medium">Troopy Configurator</p>
-                    <p className="text-sm text-textSecondary">Interactive 3D Preview</p>
+                    <p className="text-body-small text-textSecondary">Interactive 3D Preview</p>
                   </div>
                 </div>
               </div>

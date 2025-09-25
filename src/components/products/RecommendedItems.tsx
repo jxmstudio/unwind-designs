@@ -62,6 +62,7 @@ export function RecommendedItems({
           price: product.price,
           image: product.images[0] || "",
           category: product.category,
+          shortDescription: product.shortDescription
         });
       }
     });
@@ -75,6 +76,7 @@ export function RecommendedItems({
       price: product.price,
       image: product.images[0] || "",
       category: product.category,
+      shortDescription: product.shortDescription
     });
   };
 
@@ -124,7 +126,7 @@ export function RecommendedItems({
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-textPrimary/80">
                     <div className="text-3xl mb-2">📦</div>
-                    <p className="text-xs font-medium">{product.category}</p>
+                    <p className="text-caption font-medium">{product.category}</p>
                   </div>
                 </div>
 
@@ -162,10 +164,10 @@ export function RecommendedItems({
               {/* Product Info */}
               <div className="p-4">
                 <div className="mb-3">
-                  <h4 className="font-semibold text-textPrimary text-xs mb-1 group-hover:text-brown-500 transition-colors">
+                  <h4 className="font-semibold text-textPrimary text-caption mb-1 group-hover:text-brown-500 transition-colors">
                     {product.name}
                   </h4>
-                  <p className="text-xs text-textPrimary/80 line-clamp-2">
+                  <p className="text-caption text-textPrimary/80 line-clamp-2">
                     {product.shortDescription}
                   </p>
                 </div>
@@ -185,7 +187,7 @@ export function RecommendedItems({
                       />
                     ))}
                   </div>
-                  <span className="text-xs text-textPrimary/80">
+                  <span className="text-caption text-textPrimary/80">
                     ({product.reviewCount})
                   </span>
                 </div>
@@ -197,14 +199,14 @@ export function RecommendedItems({
                       ${product.price.toFixed(2)}
                     </div>
                     {product.originalPrice && (
-                      <div className="text-xs text-textPrimary/80 line-through">
+                      <div className="text-caption text-textPrimary/80 line-through">
                         ${product.originalPrice.toFixed(2)}
                       </div>
                     )}
                   </div>
                   
                   {product.installationRequired && (
-                    <div className="flex items-center gap-1 text-xs text-textPrimary/80">
+                    <div className="flex items-center gap-1 text-caption text-textPrimary/80">
                       <Info className="w-3 h-3" />
                       <span>Install req.</span>
                     </div>
@@ -216,7 +218,7 @@ export function RecommendedItems({
                   <Button
                     size="sm"
                     onClick={() => addSingleItemToCart(product)}
-                    className="w-full bg-brown-500 hover:bg-darkBrown text-cream-400 text-xs py-2"
+                    className="w-full bg-brown-500 hover:bg-darkBrown text-cream-400 text-caption py-2"
                   >
                     <ShoppingCart className="w-3 h-3 mr-1" />
                     Add to Cart
@@ -275,7 +277,7 @@ export function RecommendedItems({
             </Badge>
           ))}
         </div>
-        <p className="text-sm text-textPrimary/80 mt-2">
+        <p className="text-body-small text-textPrimary/80 mt-2">
           Professional installation available for electrical and plumbing items
         </p>
       </div>

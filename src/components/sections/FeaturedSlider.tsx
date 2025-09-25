@@ -137,7 +137,7 @@ export function FeaturedSlider() {
                           ) : (
                             <div className="text-textSecondary text-center">
                               <div className="text-4xl mb-2" role="img" aria-label="Vehicle icon">🚐</div>
-                              <p className="text-sm">{product.category}</p>
+                              <p className="text-body-small">{product.category}</p>
                             </div>
                           )}
                         </div>
@@ -176,7 +176,7 @@ export function FeaturedSlider() {
                               />
                             ))}
                           </div>
-                          <span className="text-sm text-textSecondary">
+                          <span className="text-body-small text-textSecondary">
                             ({product.reviewCount} reviews)
                           </span>
                         </div>
@@ -194,7 +194,7 @@ export function FeaturedSlider() {
                             )}
                           </div>
                           {product.originalPrice && (
-                            <p className="text-sm text-red-600 font-medium">
+                            <p className="text-body-small text-red-600 font-medium">
                               Save ${(product.originalPrice - product.price).toFixed(2)}!
                             </p>
                           )}

@@ -9,9 +9,9 @@ const fs = require('fs');
 const path = require('path');
 
 // Your API keys
-const STRIPE_SECRET_KEY = 'sk_test_51S3Bs4Ce9f7mPhgDGzA9s9VlNfouMm2SldTkuCWbGVs1sfhorgwKm45yDUpFAvBLHjl5g9eKADJDjIk0EfzoUTwE00qY3Gm7F';
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_51S3Bs4Ce9f7mPhgDk306d1byf1DZLL804BsmIMHcnI87TJKKLcpanYmvE6vLd68RxTXXkahTe2FmRe6xL6Ba6dym00MUUr4XAf';
-const BIGPOST_API_TOKEN = 'ty4DNjHlmkmHe96p39iv5Q';
+const STRIPE_SECRET_KEY = 'sk_test_51S3BrlEKNOoGoyNOSlmf6CkLDFiMtmPaJBgP02iWFpGh2ogmoiJzrVarKyLHxJAHBSuddFJwWzDSvPOLPOey5pd300AquvIIS5';
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51S3BrlEKNOoGoyNOnLgtnRrUYzoDvr9UHZJjgzJgCIQW11oGQnZiF9kXAAvZgi6gWIrWX8XH9ZzSDYRNh1QrdKUn00iRd1HcUF';
+const BIGPOST_API_TOKEN = 'SwaT0fBc_E6TsR-68qDimQ';
 
 // Environment file content
 const envContent = `# ===========================================

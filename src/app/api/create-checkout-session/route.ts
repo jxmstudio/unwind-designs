@@ -18,6 +18,8 @@ const CheckoutSessionSchema = z.object({
   customerEmail: z.string().email().optional(),
   successUrl: z.string().url().optional(),
   cancelUrl: z.string().url().optional(),
+  shippingCost: z.number().min(0).optional(),
+  shippingMethod: z.string().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -29,15 +31,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!process.env.NEXT_PUBLIC_SITE_URL) {
-    return NextResponse.json(
-      { error: 'NEXT_PUBLIC_SITE_URL environment variable is required' },
-      { status: 500 }
-    );
-  }
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://unwind-designs.vercel.app';
 
   try {
     const body = await request.json();
+    
+    console.log('Checkout session request body:', JSON.stringify(body, null, 2));
     
     // Validate request body
     const validationResult = CheckoutSessionSchema.safeParse(body);
@@ -51,7 +50,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { items, customerEmail, successUrl, cancelUrl } = validationResult.data;
+    const { items, customerEmail, successUrl, cancelUrl, shippingCost, shippingMethod } = validationResult.data;
 
     // Convert cart items to Stripe line items
     const lineItems = items.map((item) => ({
@@ -59,13 +58,34 @@ export async function POST(request: NextRequest) {
         currency: DEFAULT_CURRENCY,
         product_data: {
           name: item.name,
-          description: item.shortDescription || '',
-          images: item.images?.slice(0, 1) || [], // Stripe allows up to 8 images, but we'll use 1
+          description: item.shortDescription || item.name || 'Product from Unwind Designs',
+          images: item.images?.map(img => {
+            // Convert relative URLs to absolute URLs
+            if (img.startsWith('/')) {
+              return `${siteUrl}${img}`;
+            }
+            return img;
+          }).slice(0, 1) || [], // Stripe allows up to 8 images, but we'll use 1
         },
         unit_amount: Math.round(item.price * 100), // Convert to cents
       },
       quantity: item.quantity,
     }));
+
+    // Add shipping as a line item if provided
+    if (shippingCost && shippingCost > 0) {
+      lineItems.push({
+        price_data: {
+          currency: DEFAULT_CURRENCY,
+          product_data: {
+            name: shippingMethod || 'Shipping',
+            description: 'Shipping cost',
+          },
+          unit_amount: Math.round(shippingCost * 100), // Convert to cents
+        },
+        quantity: 1,
+      });
+    }
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
@@ -73,8 +93,8 @@ export async function POST(request: NextRequest) {
       line_items: lineItems,
       mode: 'payment',
       customer_email: customerEmail,
-      success_url: successUrl || `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/checkout/cancelled`,
+      success_url: successUrl || `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${siteUrl}/checkout/cancelled`,
       metadata: {
         source: 'unwind-designs-website',
       },
@@ -91,9 +111,18 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    console.warn('Error creating checkout session:', errorMessage);
+    console.error('Error creating checkout session:', error);
+    console.error('Error details:', {
+      message: errorMessage,
+      type: error instanceof Error ? error.constructor.name : typeof error,
+      stack: error instanceof Error ? error.stack : undefined
+    });
     return NextResponse.json(
-      { error: 'Failed to create checkout session' },
+      { 
+        error: 'Failed to create checkout session',
+        details: errorMessage,
+        type: error instanceof Error ? error.constructor.name : typeof error
+      },
       { status: 500 }
     );
   }

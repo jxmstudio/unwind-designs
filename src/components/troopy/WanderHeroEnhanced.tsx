@@ -68,7 +68,7 @@ export function WanderHeroEnhanced() {
           >
             {/* Badge */}
             <m.div variants={isDisabled ? {} : staggerItem} className="mb-6">
-              <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2 text-sm font-medium rounded-full">
+              <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2 text-body-small font-medium rounded-full">
                 Budget-Friendly Choice
               </Badge>
             </m.div>
@@ -102,19 +102,19 @@ export function WanderHeroEnhanced() {
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-2">
                   <Star className="w-6 h-6 text-green-400 mx-auto" />
                 </div>
-                <div className="text-sm text-gray-300">4.8 Rating</div>
+                <div className="text-body-small text-gray-300">4.8 Rating</div>
               </div>
               <div className="text-center">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-2">
                   <Users className="w-6 h-6 text-green-400 mx-auto" />
                 </div>
-                <div className="text-sm text-gray-300">200+ Happy Customers</div>
+                <div className="text-body-small text-gray-300">200+ Happy Customers</div>
               </div>
               <div className="text-center">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-2">
                   <Shield className="w-6 h-6 text-green-400 mx-auto" />
                 </div>
-                <div className="text-sm text-gray-300">2-3 Year Warranty</div>
+                <div className="text-body-small text-gray-300">2-3 Year Warranty</div>
               </div>
             </m.div>
 
@@ -192,7 +192,7 @@ export function WanderHeroEnhanced() {
                   </div>
                   <div className="flex-1">
                     <div className="font-semibold text-white mb-2 text-lg">Easy Assembly</div>
-                    <div className="text-white/80 text-sm leading-relaxed">Tool-free connectors and clear instructions</div>
+                    <div className="text-white/80 text-body-small leading-relaxed">Tool-free connectors and clear instructions</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -201,7 +201,7 @@ export function WanderHeroEnhanced() {
                   </div>
                   <div className="flex-1">
                     <div className="font-semibold text-white mb-2 text-lg">Great Value</div>
-                    <div className="text-white/80 text-sm leading-relaxed">Reliable materials without the premium price tag</div>
+                    <div className="text-white/80 text-body-small leading-relaxed">Reliable materials without the premium price tag</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -210,7 +210,7 @@ export function WanderHeroEnhanced() {
                   </div>
                   <div className="flex-1">
                     <div className="font-semibold text-white mb-2 text-lg">Warranty</div>
-                    <div className="text-white/80 text-sm leading-relaxed">Up to 2–3 years coverage on Wander kits</div>
+                    <div className="text-white/80 text-body-small leading-relaxed">Up to 2–3 years coverage on Wander kits</div>
                   </div>
                 </div>
               </div>
@@ -232,7 +232,7 @@ export function WanderHeroEnhanced() {
           className="flex flex-col items-center cursor-pointer"
           onClick={handleExploreConfigurations}
         >
-          <div className="text-sm mb-2">Scroll to explore</div>
+          <div className="text-body-small mb-2">Scroll to explore</div>
           <ArrowDown className="w-5 h-5" />
         </m.div>
       </m.div>

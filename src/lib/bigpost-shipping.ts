@@ -1,32 +1,129 @@
 // Big Post API Integration for Real-time Shipping Quotes
 // Official Big Post shipping API client for Australia-wide delivery
+// Based on Swagger API: https://api.bigpost.com.au/swagger/index.html
 
+// Enums from Swagger
+export enum JobType {
+  DELIVERY = 0,
+  PICKUP = 1
+}
+
+export enum DeliveryType {
+  DELIVERY = 0,
+  PICKUP = 1,
+  RETURN = 2
+}
+
+export enum ApiItemType {
+  PALLET = 0,
+  CARTON = 1,
+  ENVELOPE = 2,
+  TUBE = 3,
+  SATCHEL = 4,
+  BAG = 5,
+  ROLL = 6,
+  BUNDLE = 7,
+  SKID = 8,
+  OTHER = 9
+}
+
+export enum SourceType {
+  BIGPOST_API = 0,
+  WORDPRESS = 2,
+  SHOPIFY = 3,
+  CUSTOM_INTEGRATION_SYSTEM = 4,
+  PRESTASHOP = 5
+}
+
+// Location model matching Swagger schema
+export interface ApiLocationModel {
+  name: string; // required
+  address: string; // required
+  addressLineTwo?: string; // nullable
+  localityId?: number; // int32, nullable
+  locality?: {
+    suburb: string;
+    postcode: string;
+    state: string;
+  };
+}
+
+// Item model matching Swagger schema
+export interface ApiItemModel {
+  itemType: ApiItemType; // int enum with 10 values
+  description: string; // required
+  quantity: number;
+  height: number; // cm
+  width: number; // cm
+  length: number; // cm
+  weight: number; // kg
+  consolidatable: boolean;
+  isMhp?: boolean; // default false; meaning fragile/liquid/uneven/etc.
+}
+
+// Quote request matching Swagger schema
+export interface QuoteRequest {
+  jobType: JobType[]; // enum, Array [2]
+  buyerIsBusiness: boolean;
+  buyerHasForklift: boolean;
+  returnAuthorityToLeaveOptions: boolean;
+  jobDate: string; // ISO datetime
+  depotId?: number; // int64, nullable
+  pickupLocation: ApiLocationModel; // required
+  buyerLocation: ApiLocationModel; // required
+  items?: ApiItemModel[]; // array, nullable
+}
+
+// Job booking model for after payment
+export interface ApiJobModel {
+  contactName: string; // required
+  buyerEmail?: string; // nullable
+  buyerMobilePhone?: string; // nullable
+  buyerOtherPhone?: string; // nullable
+  carrierId: number; // int, required — Big Post's carrier ID
+  reference?: string; // nullable — use our order id
+  jobType: DeliveryType[]; // enum, Array [3]
+  depotId?: number; // nullable
+  containsDangerousGoods: boolean;
+  buyerHasForklift: boolean;
+  hasDeclaredCarParts: boolean;
+  specialInstructions?: string; // nullable
+  pickupLocation: ApiLocationModel; // required
+  buyerLocation: ApiLocationModel; // required
+  items: ApiItemModel[]; // required
+  authorityToLeave: boolean; // only true if the chosen quote shows ATL is applicable
+  serviceCode?: string; // nullable — pass from chosen quote (if provided)
+  sourceType: SourceType; // int enum
+}
+
+// Response models
+export interface JobCreatedModel {
+  jobId: number; // int64
+  carrierConsignmentNumber?: string;
+}
+
+export interface JobCreatedModelTransferModel {
+  object?: JobCreatedModel;
+  errors?: any[]; // array of validation results
+}
+
+// Legacy interfaces for backward compatibility
 export interface BigPostAddress {
   address_line: string;
   suburb: string;
   state: string;
   postcode: string;
-  country: string; // Default: "AU"
+  country: string;
 }
 
 export interface BigPostItem {
-  length: number; // cm
-  width: number;  // cm
-  height: number; // cm
-  weight: number; // kg
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
   quantity: number;
   product_id?: string;
   description?: string;
-}
-
-export interface BigPostQuoteRequest {
-  pickup_address: BigPostAddress;
-  delivery_address: BigPostAddress;
-  items: BigPostItem[];
-  service_types?: string[]; // e.g., ["standard", "express"]
-  insurance_value?: number;
-  dangerous_goods?: boolean;
-  fragile?: boolean;
 }
 
 export interface BigPostQuoteResponse {
@@ -70,9 +167,20 @@ export interface BigPostTrackingResponse {
 // Configuration
 const BIGPOST_CONFIG = {
   baseUrl: process.env.BIGPOST_API_URL || 'https://api.bigpost.com.au',
-  apiToken: process.env.BIG_POST_API_TOKEN || '',
+  apiToken: process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || '',
   timeout: 15000, // 15 seconds for shipping quotes
   retries: 2,
+  // Default pickup location for Unwind Designs
+  defaultPickupLocation: {
+    name: "Unwind Designs",
+    address: "123 Workshop Street",
+    addressLineTwo: "",
+    locality: {
+      suburb: "Melbourne",
+      postcode: "3000",
+      state: "VIC"
+    }
+  }
 };
 
 // Log configuration for debugging
@@ -85,8 +193,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Validate BigPost configuration
-if (!process.env.BIG_POST_API_TOKEN && process.env.NODE_ENV === 'production') {
-  console.warn('BIG_POST_API_TOKEN is not set. BigPost shipping will not be available.');
+if (!process.env.BIGPOST_API_KEY && !process.env.BIG_POST_API_KEY && process.env.NODE_ENV === 'production') {
+  console.warn('BIGPOST_API_KEY or BIG_POST_API_KEY is not set. BigPost shipping will not be available.');
 }
 
 // Unwind Designs pickup address (default)
@@ -232,7 +340,183 @@ export class BigPostClient {
   }
 
   /**
-   * Get shipping quotes for items to a destination
+   * Get shipping quotes using the new Swagger API
+   */
+  async getSwaggerQuotes(
+    buyerLocation: ApiLocationModel,
+    items: ApiItemModel[],
+    options: {
+      pickupLocation?: ApiLocationModel;
+      jobDate?: string;
+      buyerIsBusiness?: boolean;
+      buyerHasForklift?: boolean;
+      returnAuthorityToLeaveOptions?: boolean;
+    } = {}
+  ): Promise<{
+    success: boolean;
+    quotes?: any[];
+    error?: string;
+  }> {
+    // Return fallback rates if API token is missing
+    if (!BIGPOST_CONFIG.apiToken) {
+      console.warn('BigPost API token not configured, returning fallback shipping rates');
+      return this.getFallbackShippingRates(
+        this.convertApiLocationToBigPostAddress(buyerLocation),
+        this.convertApiItemsToBigPostItems(items)
+      );
+    }
+
+    try {
+      // Quote request structure based on BigPost Swagger API documentation
+      const quoteRequest: QuoteRequest = {
+        jobType: [1, 2], // Depot and Direct
+        buyerIsBusiness: options.buyerIsBusiness || false,
+        buyerHasForklift: options.buyerHasForklift || false,
+        returnAuthorityToLeaveOptions: options.returnAuthorityToLeaveOptions || true,
+        jobDate: options.jobDate || new Date().toISOString(),
+        pickupLocation: options.pickupLocation || BIGPOST_CONFIG.defaultPickupLocation,
+        buyerLocation: buyerLocation,
+        items: items
+      };
+
+      console.log('BigPost API request:', JSON.stringify(quoteRequest, null, 2));
+
+      const response = await this.makeRequest<any>('/api/quote', {
+        method: 'POST',
+        body: JSON.stringify(quoteRequest),
+      });
+
+      console.log('BigPost API response:', response);
+
+      // Transform response to our format
+      if (response && response.quotes) {
+        const transformedQuotes = response.quotes.map((quote: any) => ({
+          service: quote.serviceName || quote.service || 'Standard Shipping',
+          price: quote.price || quote.totalPrice || 0,
+          deliveryDays: quote.estimatedDeliveryDays || quote.deliveryDays || 3,
+          description: quote.description || 'BigPost delivery',
+          carrier: quote.carrierName || quote.carrier || 'BigPost',
+          restrictions: quote.restrictions || [],
+          source: 'bigpost',
+          carrierId: quote.carrierId,
+          serviceCode: quote.serviceCode,
+          authorityToLeave: quote.authorityToLeave || false,
+          originalQuote: quote
+        }));
+
+        return {
+          success: true,
+          quotes: transformedQuotes,
+        };
+      } else {
+        return {
+          success: false,
+          error: 'No quotes returned from BigPost API',
+        };
+      }
+      
+    } catch (error) {
+      console.error('Big Post Swagger quote request failed:', error);
+      
+      if (error instanceof BigPostError) {
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
+      
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error occurred',
+      };
+    }
+  }
+
+  /**
+   * Book a job after payment success
+   */
+  async bookJob(
+    jobData: ApiJobModel
+  ): Promise<{
+    success: boolean;
+    jobId?: number;
+    carrierConsignmentNumber?: string;
+    error?: string;
+  }> {
+    if (!BIGPOST_CONFIG.apiToken) {
+      return {
+        success: false,
+        error: 'BigPost API token not configured',
+      };
+    }
+
+    try {
+      // Job booking structure based on search results
+      const jobRequest = {
+        orderDetails: {
+          contactName: jobData.contactName,
+          buyerEmail: jobData.buyerEmail,
+          buyerMobilePhone: jobData.buyerMobilePhone,
+          reference: jobData.reference,
+          items: jobData.items.map(item => ({
+            description: item.description,
+            quantity: item.quantity,
+            weight: item.weight,
+            length: item.length,
+            width: item.width,
+            height: item.height,
+            itemType: item.itemType
+          })),
+          pickupLocation: {
+            name: jobData.pickupLocation.name,
+            address: jobData.pickupLocation.address,
+            suburb: jobData.pickupLocation.locality?.suburb,
+            postcode: jobData.pickupLocation.locality?.postcode,
+            state: jobData.pickupLocation.locality?.state
+          },
+          deliveryLocation: {
+            name: jobData.buyerLocation.name,
+            address: jobData.buyerLocation.address,
+            suburb: jobData.buyerLocation.locality?.suburb,
+            postcode: jobData.buyerLocation.locality?.postcode,
+            state: jobData.buyerLocation.locality?.state
+          },
+          jobType: 'delivery',
+          authorityToLeave: jobData.authorityToLeave,
+          specialInstructions: jobData.specialInstructions
+        }
+      };
+
+      const response = await this.makeRequest<any>('/book-job', {
+        method: 'POST',
+        body: JSON.stringify(jobRequest),
+      });
+
+      if (response.jobId || response.id) {
+        return {
+          success: true,
+          jobId: response.jobId || response.id,
+          carrierConsignmentNumber: response.trackingNumber || response.consignmentNumber,
+        };
+      } else {
+        return {
+          success: false,
+          error: response.error || response.message || 'Failed to create job',
+        };
+      }
+      
+    } catch (error) {
+      console.error('Big Post job booking failed:', error);
+      
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to book job',
+      };
+    }
+  }
+
+  /**
+   * Get shipping quotes for items to a destination (legacy method)
    */
   async getShippingQuotes(
     deliveryAddress: BigPostAddress,
@@ -251,7 +535,7 @@ export class BigPostClient {
     }
 
     try {
-      const request: BigPostQuoteRequest = {
+      const request = {
         pickup_address: options.pickupAddress || UNWIND_PICKUP_ADDRESS,
         delivery_address: deliveryAddress,
         items: items,
@@ -378,7 +662,145 @@ export class BigPostClient {
   }
 
   /**
-   * Get shipping quotes for cart items
+   * Convert API location to legacy BigPost address
+   */
+  private convertApiLocationToBigPostAddress(location: ApiLocationModel): BigPostAddress {
+    return {
+      address_line: location.address,
+      suburb: location.locality?.suburb || '',
+      state: location.locality?.state || '',
+      postcode: location.locality?.postcode || '',
+      country: 'AU'
+    };
+  }
+
+  /**
+   * Convert API items to legacy BigPost items
+   */
+  private convertApiItemsToBigPostItems(items: ApiItemModel[]): BigPostItem[] {
+    return items.map(item => ({
+      length: item.length,
+      width: item.width,
+      height: item.height,
+      weight: item.weight,
+      quantity: item.quantity,
+      description: item.description
+    }));
+  }
+
+  /**
+   * Convert cart items to API items
+   */
+  private convertCartItemsToApiItems(cartItems: Array<{
+    id: string;
+    name: string;
+    quantity: number;
+    weight?: number;
+    dimensions?: { length: number; width: number; height: number };
+    shipClass?: 'standard' | 'oversized' | 'freight';
+  }>): ApiItemModel[] {
+    return cartItems.map(item => ({
+      itemType: this.getApiItemType(item.shipClass || 'standard'),
+      description: item.name,
+      quantity: item.quantity,
+      height: item.dimensions?.height || 10,
+      width: item.dimensions?.width || 20,
+      length: item.dimensions?.length || 30,
+      weight: item.weight || 1,
+      consolidatable: true,
+      isMhp: item.shipClass === 'oversized' || item.shipClass === 'freight'
+    }));
+  }
+
+  /**
+   * Get API item type based on ship class
+   */
+  private getApiItemType(shipClass: string): ApiItemType {
+    switch (shipClass) {
+      case 'oversized':
+      case 'freight':
+        return ApiItemType.PALLET;
+      case 'standard':
+      default:
+        return ApiItemType.CARTON;
+    }
+  }
+
+  /**
+   * Convert shipping address to API location
+   */
+  convertShippingAddressToApiLocation(address: {
+    street: string;
+    city: string;
+    state: string;
+    postcode: string;
+    country: string;
+  }): ApiLocationModel {
+    // Ensure address is properly formatted for BigPost API
+    const formattedAddress = address.street.substring(0, 30); // Max 30 characters
+    const formattedSuburb = address.city.substring(0, 30); // Max 30 characters
+    
+    return {
+      name: `${formattedSuburb} ${address.postcode}`, // Max 255 characters
+      address: formattedAddress,
+      locality: {
+        suburb: formattedSuburb,
+        postcode: address.postcode,
+        state: address.state.toUpperCase() // Ensure state is uppercase
+      }
+    };
+  }
+
+  /**
+   * Get shipping quotes for cart items using new Swagger API
+   */
+  async getSwaggerQuotesForCart(
+    deliveryAddress: {
+      street: string;
+      city: string;
+      state: string;
+      postcode: string;
+      country: string;
+    },
+    cartItems: Array<{
+      id: string;
+      name: string;
+      quantity: number;
+      weight?: number;
+      dimensions?: { length: number; width: number; height: number };
+      shipClass?: 'standard' | 'oversized' | 'freight';
+    }>,
+    totalValue: number,
+    options: {
+      buyerIsBusiness?: boolean;
+      buyerHasForklift?: boolean;
+      returnAuthorityToLeaveOptions?: boolean;
+    } = {}
+  ): Promise<{
+    success: boolean;
+    quotes?: any[];
+    error?: string;
+  }> {
+    try {
+      const buyerLocation = this.convertShippingAddressToApiLocation(deliveryAddress);
+      const apiItems = this.convertCartItemsToApiItems(cartItems);
+
+      return await this.getSwaggerQuotes(buyerLocation, apiItems, {
+        ...options,
+        returnAuthorityToLeaveOptions: options.returnAuthorityToLeaveOptions ?? true
+      });
+      
+    } catch (error) {
+      console.error('Cart Swagger shipping quote failed:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to get shipping quotes',
+      };
+    }
+  }
+
+  /**
+   * Get shipping quotes for cart items (legacy method)
    */
   async getQuotesForCart(
     deliveryAddress: BigPostAddress,
@@ -443,6 +865,43 @@ export class BigPostClient {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to track shipment',
+      };
+    }
+  }
+
+  /**
+   * Get job status
+   */
+  async getJobStatus(jobId: number): Promise<{
+    success: boolean;
+    status?: string;
+    trackingNumber?: string;
+    error?: string;
+  }> {
+    if (!BIGPOST_CONFIG.apiToken) {
+      return {
+        success: false,
+        error: 'BigPost API token not configured',
+      };
+    }
+
+    try {
+      const response = await this.makeRequest<any>(`/job-status/${jobId}`, {
+        method: 'GET',
+      });
+
+      return {
+        success: true,
+        status: response.status,
+        trackingNumber: response.trackingNumber,
+      };
+      
+    } catch (error) {
+      console.error('Big Post job status request failed:', error);
+      
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to get job status',
       };
     }
   }

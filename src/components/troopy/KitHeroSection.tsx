@@ -12,7 +12,7 @@ import Image from "next/image";
 
 interface KitHeroSectionProps {
   config: BaseKitConfig;
-  backgroundImage: string;
+  backgroundImage?: string;
   imageAlt: string;
   stats?: {
     rating?: number;
@@ -89,25 +89,42 @@ export function KitHeroSection({
 
   const colors = getKitColors();
 
+  const hasBackgroundImage = Boolean(backgroundImage);
+
+  // Render a compact header if no image to eliminate large empty space
+  if (!hasBackgroundImage) {
+    return (
+      <section className="w-full bg-cream-400">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-textPrimary">{config.name}</h1>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="relative min-h-[75vh] md:min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src={backgroundImage}
-          alt={imageAlt}
-          fill
-          className="object-cover object-center"
-          style={{
-            objectPosition: 'center 40%' // Show more of the vehicle setup
-          }}
-          priority
-          sizes="100vw"
-        />
-        {/* Improved gradient overlay for better text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
-      </div>
+    <section className={`relative ${hasBackgroundImage ? 'min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh]' : 'min-h-[24vh] md:min-h-[28vh] lg:min-h-[32vh]'} flex items-center overflow-hidden`}>
+      {/* Background */}
+      {hasBackgroundImage ? (
+        <div className="absolute inset-0">
+          <Image
+            src={backgroundImage as string}
+            alt={imageAlt}
+            fill
+            className="object-cover object-center"
+            style={{
+              objectPosition: 'center 50%'
+            }}
+            priority
+            sizes="100vw"
+            quality={100}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
+        </div>
+      ) : (
+        <div className="absolute inset-0 bg-cream-400" />
+      )}
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full">
@@ -122,7 +139,7 @@ export function KitHeroSection({
             {/* Badge */}
             <m.div variants={isDisabled ? {} : staggerItem} className="mb-6">
               <Badge 
-                className="px-4 py-2 text-sm font-medium rounded-full"
+                className="px-4 py-2 text-body-small font-medium rounded-full"
                 style={{
                   backgroundColor: colors.secondary,
                   color: colors.primary,
@@ -164,19 +181,19 @@ export function KitHeroSection({
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-2">
                   <Star className="w-6 h-6 mx-auto" style={{ color: colors.primary }} />
                 </div>
-                <div className="text-sm text-gray-300">{stats.rating} Rating</div>
+                <div className="text-body-small text-gray-300">{stats.rating} Rating</div>
               </div>
               <div className="text-center">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-2">
                   <Users className="w-6 h-6 mx-auto" style={{ color: colors.primary }} />
                 </div>
-                <div className="text-sm text-gray-300">{stats.customers}</div>
+                <div className="text-body-small text-gray-300">{stats.customers}</div>
               </div>
               <div className="text-center">
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-2">
                   <Shield className="w-6 h-6 mx-auto" style={{ color: colors.primary }} />
                 </div>
-                <div className="text-sm text-gray-300">{stats.warranty}</div>
+                <div className="text-body-small text-gray-300">{stats.warranty}</div>
               </div>
             </m.div>
 
@@ -266,7 +283,7 @@ export function KitHeroSection({
                     </div>
                     <div className="flex-1">
                       <div className="font-semibold text-white mb-2 text-lg">{bullet.title}</div>
-                      <div className="text-white/80 text-sm leading-relaxed">{bullet.description}</div>
+                      <div className="text-white/80 text-body-small leading-relaxed">{bullet.description}</div>
                     </div>
                   </div>
                 ))}
@@ -289,7 +306,7 @@ export function KitHeroSection({
           className="flex flex-col items-center cursor-pointer"
           onClick={handleExploreConfigurations}
         >
-          <div className="text-sm mb-2">Scroll to explore</div>
+          <div className="text-body-small mb-2">Scroll to explore</div>
           <ArrowDown className="w-5 h-5" />
         </m.div>
       </m.div>

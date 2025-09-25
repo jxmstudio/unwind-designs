@@ -243,7 +243,7 @@ export function EnhancedProductGrid() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Price Range */}
               <div>
-                <label className="block text-sm font-medium text-textPrimary mb-2">Price Range</label>
+                <label className="block text-body-small font-medium text-textPrimary mb-2">Price Range</label>
                 <div className="flex gap-2">
                   <input
                     type="number"
@@ -261,22 +261,22 @@ export function EnhancedProductGrid() {
               
               {/* Stock Status */}
               <div>
-                <label className="block text-sm font-medium text-textPrimary mb-2">Stock Status</label>
+                <label className="block text-body-small font-medium text-textPrimary mb-2">Stock Status</label>
                 <div className="space-y-2">
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" />
-                    <span className="text-sm text-textPrimary">In Stock</span>
+                    <span className="text-body-small text-textPrimary">In Stock</span>
                   </label>
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" />
-                    <span className="text-sm text-textPrimary">On Sale</span>
+                    <span className="text-body-small text-textPrimary">On Sale</span>
                   </label>
                 </div>
               </div>
               
               {/* Rating */}
               <div>
-                <label className="block text-sm font-medium text-textPrimary mb-2">Minimum Rating</label>
+                <label className="block text-body-small font-medium text-textPrimary mb-2">Minimum Rating</label>
                 <select className="w-full px-3 py-2 border border-borderNeutral rounded-lg bg-cream-400 text-textPrimary focus:outline-none focus:ring-2 focus:ring-brown-500">
                   <option value="">Any Rating</option>
                   <option value="4">4+ Stars</option>
@@ -289,7 +289,7 @@ export function EnhancedProductGrid() {
         )}
 
         {/* Results Count */}
-        <div className="text-sm text-textPrimary/80 mb-4">
+        <div className="text-body-small text-textPrimary/80 mb-4">
           Showing {sortedProducts.length} of {allProductsList.length} products
         </div>
 
@@ -322,7 +322,7 @@ export function EnhancedProductGrid() {
               <span className="text-2xl">🔋</span>
             </div>
             <h3 className="text-lg font-semibold text-textPrimary mb-2">Power Systems</h3>
-            <p className="text-textPrimary/80 text-sm">12V and 240V solutions for your vehicle</p>
+            <p className="text-textPrimary/80 text-body-small">12V and 240V solutions for your vehicle</p>
           </div>
           
           <div className="bg-cream-400 rounded-2xl p-6 text-center shadow-soft hover:shadow-medium transition-shadow border border-borderNeutral">
@@ -330,7 +330,7 @@ export function EnhancedProductGrid() {
               <span className="text-2xl">📦</span>
             </div>
             <h3 className="text-lg font-semibold text-textPrimary mb-2">Storage Solutions</h3>
-            <p className="text-textPrimary/80 text-sm">Custom storage for every vehicle type</p>
+            <p className="text-textPrimary/80 text-body-small">Custom storage for every vehicle type</p>
           </div>
           
           <div className="bg-cream-400 rounded-2xl p-6 text-center shadow-soft hover:shadow-medium transition-shadow border border-borderNeutral">
@@ -338,7 +338,7 @@ export function EnhancedProductGrid() {
               <span className="text-2xl">🛠️</span>
             </div>
             <h3 className="text-lg font-semibold text-textPrimary mb-2">Installation</h3>
-            <p className="text-textPrimary/80 text-sm">Professional fitout services</p>
+            <p className="text-textPrimary/80 text-body-small">Professional fitout services</p>
           </div>
         </div>
       </div>

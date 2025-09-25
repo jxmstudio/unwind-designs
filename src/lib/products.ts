@@ -14,6 +14,7 @@ export interface Product {
   salePercentage?: number;
   inStock: boolean;
   stockQuantity: number;
+  comingSoon?: boolean; // New field for products not yet available
   tags: string[];
   specifications: Record<string, string>;
   weight?: number;

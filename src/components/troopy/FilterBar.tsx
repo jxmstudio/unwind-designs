@@ -93,7 +93,7 @@ export function FilterBar({ configurations, config, onFilterChange }: FilterBarP
         `}>
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
             {/* Filter header */}
-            <div className="flex items-center gap-2 text-sm font-medium text-textPrimary">
+            <div className="flex items-center gap-2 text-body-small font-medium text-textPrimary">
               <Filter className="w-4 h-4" />
               Filter Configurations
             </div>
@@ -159,7 +159,7 @@ export function FilterBar({ configurations, config, onFilterChange }: FilterBarP
             {/* Results count and clear */}
             <div className="flex items-center gap-3">
               <div 
-                className="text-sm text-textSecondary whitespace-nowrap"
+                className="text-body-small text-textSecondary whitespace-nowrap"
                 aria-live="polite"
               >
                 Showing <span className="font-medium text-textPrimary">{filteredCount}</span> of{' '}

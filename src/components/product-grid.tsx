@@ -4,24 +4,31 @@ import { ProductCard } from "./product-card";
 import { Button } from "./ui/button";
 import { Filter, Grid, List } from "lucide-react";
 import { useState } from "react";
-import { sampleProducts, productCategories } from "@/lib/products";
+import { listAllProducts, searchProducts, getProductsByCategory } from "@/lib/product-utils";
+import { productCategories } from "@/lib/products";
 
 // Use real product data from the products library
 
-export function ProductGrid() {
+interface ProductGridProps {
+  products?: any[];
+  showFilters?: boolean;
+}
+
+export function ProductGrid({ products, showFilters = true }: ProductGridProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('featured');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [showFilters, setShowFilters] = useState(false);
 
+  // Use provided products or get all products
+  const allProducts = products || listAllProducts();
   
   // Filter and search products
-  const filteredProducts = sampleProducts.filter(product => {
+  const filteredProducts = allProducts.filter(product => {
     const matchesSearch = searchQuery === '' || 
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (product.tags && product.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase())));
     
     const matchesCategory = !selectedCategory || product.category === selectedCategory;
     
@@ -61,23 +68,26 @@ export function ProductGrid() {
         </div>
 
         {/* Search Bar */}
-        <div className="w-full max-w-md mb-6">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-3 border border-borderNeutral rounded-lg bg-cream-300 text-textPrimary placeholder-textSecondary focus:outline-none focus:ring-2 focus:ring-brown-500 focus:border-transparent"
-            />
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-textPrimary/80">
-              🔍
+        {showFilters && (
+          <div className="w-full max-w-md mb-6">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-4 pr-10 py-3 border border-borderNeutral rounded-lg bg-cream-300 text-textPrimary placeholder-textSecondary focus:outline-none focus:ring-2 focus:ring-brown-500 focus:border-transparent"
+              />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-textPrimary/80">
+                🔍
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Filters and Controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+        {showFilters && (
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
           {/* Category Filter */}
           <div className="flex items-center gap-4">
             <select
@@ -137,6 +147,7 @@ export function ProductGrid() {
             <option value="newest">Newest</option>
           </select>
         </div>
+        )}
 
         {/* Advanced Filters */}
         {showFilters && (
@@ -145,7 +156,7 @@ export function ProductGrid() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Price Range */}
               <div>
-                <label className="block text-sm font-medium text-textPrimary mb-2">Price Range</label>
+                <label className="block text-body-small font-medium text-textPrimary mb-2">Price Range</label>
                 <div className="flex gap-2">
                   <input
                     type="number"
@@ -163,22 +174,22 @@ export function ProductGrid() {
               
               {/* Stock Status */}
               <div>
-                <label className="block text-sm font-medium text-textPrimary mb-2">Stock Status</label>
+                <label className="block text-body-small font-medium text-textPrimary mb-2">Stock Status</label>
                 <div className="space-y-2">
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" />
-                    <span className="text-sm text-textPrimary">In Stock</span>
+                    <span className="text-body-small text-textPrimary">In Stock</span>
                   </label>
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" />
-                    <span className="text-sm text-textPrimary">On Sale</span>
+                    <span className="text-body-small text-textPrimary">On Sale</span>
                   </label>
                 </div>
               </div>
               
               {/* Rating */}
               <div>
-                <label className="block text-sm font-medium text-textPrimary mb-2">Minimum Rating</label>
+                <label className="block text-body-small font-medium text-textPrimary mb-2">Minimum Rating</label>
                 <select className="w-full px-3 py-2 border border-borderNeutral rounded-lg bg-cream-400 text-textPrimary focus:outline-none focus:ring-2 focus:ring-brown-500">
                   <option value="">Any Rating</option>
                   <option value="4">4+ Stars</option>
@@ -191,8 +202,8 @@ export function ProductGrid() {
         )}
 
         {/* Results Count */}
-        <div className="text-sm text-textPrimary/80 mb-4">
-          Showing {sortedProducts.length} of {sampleProducts.length} products
+        <div className="text-body-small text-textPrimary/80 mb-4">
+          Showing {sortedProducts.length} of {allProducts.length} products
         </div>
 
         {/* Product Grid */}
@@ -224,7 +235,7 @@ export function ProductGrid() {
               <span className="text-2xl">🔋</span>
             </div>
             <h3 className="text-lg font-semibold text-textPrimary mb-2">Power Systems</h3>
-            <p className="text-textPrimary/80 text-sm">12V and 240V solutions for your vehicle</p>
+            <p className="text-textPrimary/80 text-body-small">12V and 240V solutions for your vehicle</p>
           </div>
           
           <div className="bg-cream-400 rounded-2xl p-6 text-center shadow-soft hover:shadow-medium transition-shadow border border-borderNeutral">
@@ -232,7 +243,7 @@ export function ProductGrid() {
               <span className="text-2xl">📦</span>
             </div>
             <h3 className="text-lg font-semibold text-textPrimary mb-2">Storage Solutions</h3>
-            <p className="text-textPrimary/80 text-sm">Custom storage for every vehicle type</p>
+            <p className="text-textPrimary/80 text-body-small">Custom storage for every vehicle type</p>
           </div>
           
           <div className="bg-cream-400 rounded-2xl p-6 text-center shadow-soft hover:shadow-medium transition-shadow border border-borderNeutral">
@@ -240,7 +251,7 @@ export function ProductGrid() {
               <span className="text-2xl">🛠️</span>
             </div>
             <h3 className="text-lg font-semibold text-textPrimary mb-2">Installation</h3>
-            <p className="text-textPrimary/80 text-sm">Professional fitout services</p>
+            <p className="text-textPrimary/80 text-body-small">Professional fitout services</p>
           </div>
         </div>
       </div>

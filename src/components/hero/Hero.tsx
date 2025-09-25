@@ -40,7 +40,7 @@ export function Hero() {
         animate="visible"
       >
         <motion.h1 
-          className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-8 leading-tight drop-shadow-2xl"
+          className="text-display-1 sm:text-5xl lg:text-6xl xl:text-7xl text-white mb-8 drop-shadow-2xl"
           variants={fadeUp}
         >
           <span className="block">Crafting Quality, Personalized</span>
@@ -49,7 +49,7 @@ export function Hero() {
         </motion.h1>
         
         <motion.p 
-          className="text-lg sm:text-xl lg:text-2xl text-white mb-16 max-w-4xl mx-auto leading-relaxed drop-shadow-lg font-medium"
+          className="text-lg sm:text-xl lg:text-2xl text-white mb-16 max-w-4xl mx-auto drop-shadow-lg font-medium"
           variants={fadeUp}
         >
           Transform your vehicle into the ultimate adventure companion. From storage solutions 
@@ -142,7 +142,7 @@ export function Hero() {
               />
             ))}
           </div>
-          <span className="text-sm font-medium">4.9/5 from 200+ reviews</span>
+          <span className="text-body-small font-medium">4.9/5 from 200+ reviews</span>
         </motion.div>
       </motion.div>
 

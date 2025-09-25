@@ -78,12 +78,12 @@ export function ConfigCard({ config, kitConfig, index }: ConfigCardProps) {
           <div className="relative p-4 h-full flex items-start justify-between">
             <div className="flex flex-wrap gap-2">
               {config.fridgeType && (
-                <Badge className={`${kitConfig.badge.className} text-xs`}>
+                <Badge className={`${kitConfig.badge.className} text-caption`}>
                   <Snowflake className="w-3 h-3 mr-1" />
                   {formatFridgeType(config.fridgeType)}
                 </Badge>
               )}
-              <Badge className="bg-brown-100 text-brown-800 border-brown-200 text-xs">
+              <Badge className="bg-brown-100 text-brown-800 border-brown-200 text-caption">
                 <Palette className="w-3 h-3 mr-1" />
                 {formatFinishName(config.finish)}
               </Badge>
@@ -97,13 +97,13 @@ export function ConfigCard({ config, kitConfig, index }: ConfigCardProps) {
             <h3 className="text-lg font-semibold text-textPrimary mb-2 line-clamp-2 group-hover:text-brown-600 transition-colors">
               {config.name}
             </h3>
-            <p className="text-sm text-textSecondary line-clamp-2 leading-relaxed">
+            <p className="text-body-small text-textSecondary line-clamp-2 leading-relaxed">
               {config.description}
             </p>
           </div>
 
           {/* Key Specs */}
-          <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+          <div className="grid grid-cols-2 gap-3 mb-4 text-caption">
             <div className="flex items-center gap-2 text-textSecondary">
               <Snowflake className="w-4 h-4 text-blue-500" />
               <span>{formatFridgeType(config.fridgeType)}</span>
@@ -129,7 +129,7 @@ export function ConfigCard({ config, kitConfig, index }: ConfigCardProps) {
                   />
                 ))}
               </div>
-              <span className="text-sm text-textSecondary">
+              <span className="text-body-small text-textSecondary">
                 {config.rating} ({config.reviewCount || 0} reviews)
               </span>
             </div>
@@ -140,7 +140,7 @@ export function ConfigCard({ config, kitConfig, index }: ConfigCardProps) {
             <div className="text-2xl font-bold text-textPrimary mb-1">
               {formatPrice(config.price)}
             </div>
-            <div className="flex items-center gap-1 text-xs text-textSecondary">
+            <div className="flex items-center gap-1 text-caption text-textSecondary">
               <Shield className="w-3 h-3" />
               <span>2 years warranty included</span>
             </div>

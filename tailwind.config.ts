@@ -92,6 +92,51 @@ export default {
           800: '#991b1b',
           900: '#7f1d1d',
         },
+        // UI component colors
+        primary: {
+          DEFAULT: '#b29982',
+          foreground: '#ffffff',
+        },
+        secondary: {
+          DEFAULT: '#f3ede3',
+          foreground: '#2d1f16',
+        },
+        accent: {
+          DEFAULT: '#b29982',
+          50: '#f8f6f4',
+          100: '#f1ede8',
+          200: '#e3dbd1',
+          300: '#d4c0a8',
+          400: '#c9b9a6',
+          500: '#b29982',
+          600: '#a08a73',
+          700: '#8e7b64',
+          800: '#7a6754',
+          900: '#665a4a',
+          foreground: '#ffffff',
+        },
+        muted: {
+          DEFAULT: '#f3ede3',
+          foreground: '#5a4a3a',
+        },
+        destructive: {
+          DEFAULT: '#ef4444',
+          foreground: '#ffffff',
+        },
+        background: '#eee7d4',
+        foreground: '#2d1f16',
+        card: {
+          DEFAULT: '#fefefe',
+          foreground: '#2d1f16',
+        },
+        popover: {
+          DEFAULT: '#fefefe',
+          foreground: '#2d1f16',
+        },
+        border: '#c9b9a6',
+        input: '#c9b9a6',
+        ring: '#b29982',
+        ringOffset: '#eee7d4',
       },
       borderRadius: {
         'xs': '0.25rem',
@@ -103,8 +148,47 @@ export default {
         '3xl': '2rem',
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: [
+          "Inter", 
+          "ui-sans-serif", 
+          "system-ui", 
+          "-apple-system", 
+          "Segoe UI", 
+          "Roboto", 
+          "Helvetica", 
+          "Arial", 
+          "Apple Color Emoji", 
+          "Segoe UI Emoji"
+        ],
+        display: [
+          "Space Grotesk", 
+          "Inter", 
+          "ui-sans-serif", 
+          "system-ui"
+        ],
         mono: ["var(--font-jetbrains-mono)", "monospace"],
+      },
+      fontSize: {
+        'xs': ['12px', { lineHeight: '1.5' }],
+        'sm': ['14px', { lineHeight: '1.5' }],
+        'base': ['16px', { lineHeight: '1.5' }],
+        'lg': ['18px', { lineHeight: '1.4' }],
+        'xl': ['20px', { lineHeight: '1.4' }],
+        '2xl': ['24px', { lineHeight: '1.4' }],
+        '3xl': ['30px', { lineHeight: '1.2' }],
+        '4xl': ['36px', { lineHeight: '1.2' }],
+        '5xl': ['48px', { lineHeight: '1.2' }],
+      },
+      fontWeight: {
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
+      },
+      letterSpacing: {
+        'tight': '-0.025em',
+        'normal': '0em',
+        'wide': '0.025em',
       },
       boxShadow: {
         'xs': '0 1px 2px rgba(92, 70, 48, 0.05)',

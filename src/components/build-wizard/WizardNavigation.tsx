@@ -54,7 +54,7 @@ export function WizardNavigation({
       </div>
 
       {/* Step Info */}
-      <div className="text-center text-sm text-textSecondary">
+      <div className="text-center text-body-small text-textSecondary">
         Step {currentStep} of {totalSteps}
       </div>
 

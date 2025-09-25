@@ -66,7 +66,7 @@ export function ProductGallery({ images, alt = "Product image" }: ProductGallery
 
         {/* Image Counter */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 right-4 bg-black/60 text-white px-2 py-1 rounded text-sm">
+          <div className="absolute bottom-4 right-4 bg-black/60 text-white px-2 py-1 rounded text-body-small">
             {currentImageIndex + 1} / {images.length}
           </div>
         )}

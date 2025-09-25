@@ -83,7 +83,7 @@ export function ProductDescription({ descriptionHtml, productName }: ProductDesc
             </div>
             <div>
               <h4 className="font-semibold text-textPrimary">In Stock</h4>
-              <p className="text-sm text-textPrimary/70">Ready for immediate shipping</p>
+              <p className="text-body-small text-textPrimary/70">Ready for immediate shipping</p>
             </div>
           </div>
           
@@ -93,7 +93,7 @@ export function ProductDescription({ descriptionHtml, productName }: ProductDesc
             </div>
             <div>
               <h4 className="font-semibold text-textPrimary">Easy Assembly</h4>
-              <p className="text-sm text-textPrimary/70">No experience required</p>
+              <p className="text-body-small text-textPrimary/70">No experience required</p>
             </div>
           </div>
           
@@ -103,7 +103,7 @@ export function ProductDescription({ descriptionHtml, productName }: ProductDesc
             </div>
             <div>
               <h4 className="font-semibold text-textPrimary">Warranty</h4>
-              <p className="text-sm text-textPrimary/70">Up to 5 years coverage</p>
+              <p className="text-body-small text-textPrimary/70">Up to 5 years coverage</p>
             </div>
           </div>
         </div>

@@ -26,13 +26,13 @@ export default function TermsPage() {
               Terms of Service
             </motion.h1>
             <motion.p 
-              className="text-base text-textSecondary"
+              className="text-body text-textSecondary"
               variants={staggerItem}
             >
               Please read these terms carefully before using our services
             </motion.p>
             <motion.p 
-              className="text-xs text-textSecondary mt-2"
+              className="text-caption text-textSecondary mt-2"
               variants={staggerItem}
             >
               Last updated: {new Date().toLocaleDateString('en-AU', { 
@@ -52,7 +52,7 @@ export default function TermsPage() {
           >
             <Card className="bg-cream-300 border-borderNeutral mb-8">
               <CardContent className="pt-6">
-                <p className="text-textSecondary leading-relaxed text-sm">
+                <p className="text-textSecondary leading-relaxed text-body-small">
                   These Terms of Service (&ldquo;Terms&rdquo;) govern your use of the Unwind Designs website and services. 
                   By accessing or using our website, you agree to be bound by these Terms. If you disagree with 
                   any part of these terms, you may not access our services.
@@ -73,7 +73,7 @@ export default function TermsPage() {
                 <CardTitle className="text-lg text-textPrimary">Acceptance of Terms</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-textSecondary text-sm">
+                <p className="text-textSecondary text-body-small">
                   By using our website and services, you confirm that you have read, understood, and agree to 
                   these Terms of Service. You also agree to comply with all applicable laws and regulations. 
                   If you are using our services on behalf of a company or organization, you represent that you 
@@ -99,10 +99,10 @@ export default function TermsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <p className="text-textSecondary text-xs">
+                  <p className="text-textSecondary text-caption">
                     Unwind Designs provides the following services:
                   </p>
-                  <ul className="space-y-2 text-textSecondary text-xs">
+                  <ul className="space-y-2 text-textSecondary text-caption">
                     <li className="flex items-start gap-2">
                       <span className="w-2 h-2 bg-brown-500 rounded-full mt-2 flex-shrink-0"></span>
                       <span>Online retail of van and 4x4 fitout products</span>
@@ -148,22 +148,22 @@ export default function TermsPage() {
                   viewport={{ once: true }}
                 >
                   <motion.div variants={staggerItem}>
-                    <h3 className="text-sm font-medium text-textPrimary mb-2">Account Creation</h3>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body-small font-medium text-textPrimary mb-2">Account Creation</h3>
+                    <p className="text-textSecondary text-caption">
                       To access certain features, you may need to create an account. You must provide accurate, 
                       current, and complete information during registration and keep your account information updated.
                     </p>
                   </motion.div>
                   <motion.div variants={staggerItem}>
-                    <h3 className="text-sm font-medium text-textPrimary mb-2">Account Security</h3>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body-small font-medium text-textPrimary mb-2">Account Security</h3>
+                    <p className="text-textSecondary text-caption">
                       You are responsible for maintaining the confidentiality of your account credentials and 
                       for all activities that occur under your account. Notify us immediately of any unauthorized use.
                     </p>
                   </motion.div>
                   <motion.div variants={staggerItem}>
-                    <h3 className="text-sm font-medium text-textPrimary mb-2">Account Termination</h3>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body-small font-medium text-textPrimary mb-2">Account Termination</h3>
+                    <p className="text-textSecondary text-caption">
                       We reserve the right to terminate or suspend your account at any time for violations of 
                       these Terms or for any other reason at our sole discretion.
                     </p>
@@ -189,24 +189,24 @@ export default function TermsPage() {
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Order Acceptance</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Order Acceptance</h3>
+                  <p className="text-textSecondary text-caption">
                     All orders are subject to acceptance by Unwind Designs. We reserve the right to refuse 
                     any order for any reason, including but not limited to product availability, pricing errors, 
                     or suspected fraud.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Pricing & Payment</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Pricing & Payment</h3>
+                  <p className="text-textSecondary text-caption">
                     All prices are in Australian Dollars (AUD) and include GST where applicable. Payment is 
                     required at the time of order placement. We accept major credit cards and other payment 
                     methods as indicated on our website.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Order Confirmation</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Order Confirmation</h3>
+                  <p className="text-textSecondary text-caption">
                     You will receive an order confirmation email once your order is successfully placed. 
                     This confirmation serves as proof of your order and should be retained for your records.
                   </p>
@@ -232,22 +232,22 @@ export default function TermsPage() {
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Delivery Times</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Delivery Times</h3>
+                  <p className="text-textSecondary text-caption">
                     Delivery times are estimates and may vary due to factors beyond our control, including 
                     weather, holidays, and remote locations. We will communicate any significant delays.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Shipping Costs</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Shipping Costs</h3>
+                  <p className="text-textSecondary text-caption">
                     Shipping costs are calculated based on package weight, size, and destination. Free shipping 
                     is available on orders over $500 within Australia. International shipping costs are calculated at checkout.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Risk of Loss</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Risk of Loss</h3>
+                  <p className="text-textSecondary text-caption">
                     Risk of loss and title for items purchased pass to you upon delivery to the carrier. 
                     We are not responsible for items lost or damaged during transit.
                   </p>
@@ -269,13 +269,13 @@ export default function TermsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                              <p className="text-textSecondary text-sm">
+                              <p className="text-textSecondary text-body-small">
                 Our return and refund policies are detailed in our Returns Policy, which is incorporated 
                 into these Terms by reference. Please review our Returns Policy for complete information 
                 about returning products and receiving refunds.
               </p>
                 <div className="bg-cream-400 p-4 rounded-lg">
-                  <p className="text-textSecondary text-xs">
+                  <p className="text-textSecondary text-caption">
                     <strong>Note:</strong> Custom or installed items may have different return conditions. 
                     Please contact us before making a purchase if you have concerns about fitment or compatibility.
                   </p>
@@ -298,23 +298,23 @@ export default function TermsPage() {
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Product Descriptions</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Product Descriptions</h3>
+                  <p className="text-textSecondary text-caption">
                     We strive to provide accurate product descriptions and images. However, we do not warrant 
                     that product descriptions, colors, information, or other content is accurate, complete, 
                     reliable, current, or error-free.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Warranties</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Warranties</h3>
+                  <p className="text-textSecondary text-caption">
                     Products come with manufacturer warranties as specified in our Warranty Policy. These 
                     warranties are in addition to your rights under Australian Consumer Law.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Installation & Use</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Installation & Use</h3>
+                  <p className="text-textSecondary text-caption">
                     Some products require professional installation. You are responsible for ensuring proper 
                     installation and use according to manufacturer instructions. Improper installation may void warranties.
                   </p>
@@ -344,8 +344,8 @@ export default function TermsPage() {
                   disable, overburden, or impair our website or interfere with other users&apos; enjoyment of our services.
                 </p>
                 <div className="bg-cream-400 p-4 rounded-lg">
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Specifically Prohibited:</h3>
-                  <ul className="space-y-1 text-textSecondary text-sm">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Specifically Prohibited:</h3>
+                  <ul className="space-y-1 text-textSecondary text-body-small">
                     <li>• Attempting to gain unauthorized access to our systems</li>
                     <li>• Using automated tools to scrape or collect data</li>
                     <li>• Transmitting viruses, malware, or harmful code</li>
@@ -397,17 +397,17 @@ export default function TermsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-textSecondary text-sm">
+                <p className="text-textSecondary text-body-small">
                   To the maximum extent permitted by law, Unwind Designs shall not be liable for any indirect, 
                   incidental, special, consequential, or punitive damages, including but not limited to loss of 
                   profits, data, or use, arising from your use of our services.
                 </p>
-                <p className="text-textSecondary text-sm">
+                <p className="text-textSecondary text-body-small">
                   Our total liability to you for any claims arising from these Terms or your use of our services 
                   shall not exceed the amount you paid to us in the 12 months preceding the claim.
                 </p>
                 <div className="bg-cream-400 p-4 rounded-lg">
-                  <p className="text-textSecondary text-xs">
+                  <p className="text-textSecondary text-caption">
                     <strong>Important:</strong> These limitations do not apply to liability that cannot be 
                     excluded or limited under Australian Consumer Law.
                   </p>
@@ -428,7 +428,7 @@ export default function TermsPage() {
               <CardTitle className="text-lg text-textPrimary">Indemnification</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-textSecondary text-sm">
+              <p className="text-textSecondary text-body-small">
                 You agree to indemnify and hold harmless Unwind Designs, its officers, directors, employees, 
                 and agents from and against any claims, damages, obligations, losses, liabilities, costs, or 
                 debt arising from your use of our services or violation of these Terms.
@@ -449,12 +449,12 @@ export default function TermsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-textSecondary text-sm">
+                <p className="text-textSecondary text-body-small">
                   These Terms are governed by and construed in accordance with the laws of Victoria, Australia. 
                   Any disputes arising from these Terms or your use of our services shall be resolved in the 
                   courts of Victoria, Australia.
                 </p>
-                <p className="text-textSecondary text-sm">
+                <p className="text-textSecondary text-body-small">
                   We encourage you to contact us first to resolve any disputes amicably before pursuing legal action.
                 </p>
               </div>
@@ -473,7 +473,7 @@ export default function TermsPage() {
               <CardTitle className="text-lg text-textPrimary">Changes to Terms</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-textSecondary text-sm">
+              <p className="text-textSecondary text-body-small">
                 We reserve the right to modify these Terms at any time. Changes will be effective immediately 
                 upon posting on our website. Your continued use of our services after such changes constitutes 
                 acceptance of the modified Terms. We will notify you of material changes via email or website notice.
@@ -497,7 +497,7 @@ export default function TermsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-center">
-                <p className="text-textSecondary text-sm mb-6">
+                <p className="text-textSecondary text-body-small mb-6">
                   If you have any questions about these Terms of Service, please contact us:
                 </p>
                 <div className="space-y-3">

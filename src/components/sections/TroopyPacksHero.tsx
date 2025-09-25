@@ -114,7 +114,7 @@ export function TroopyPacksHero() {
                   <Star className="w-8 h-8 text-accent-600" />
                 </m.div>
                 <h3 className="text-lg font-semibold text-textPrimary mb-2">Premium Quality</h3>
-                <p className="text-textPrimary/70 text-sm">
+                <p className="text-textPrimary/70 text-body-small">
                   Marine-grade materials and German-engineered hardware
                 </p>
               </m.div>
@@ -133,7 +133,7 @@ export function TroopyPacksHero() {
                   <Wrench className="w-8 h-8 text-accent-600" />
                 </m.div>
                 <h3 className="text-lg font-semibold text-textPrimary mb-2">Easy Assembly</h3>
-                <p className="text-textPrimary/70 text-sm">
+                <p className="text-textPrimary/70 text-body-small">
                   Tool-free assembly with detailed instructions
                 </p>
               </m.div>
@@ -152,7 +152,7 @@ export function TroopyPacksHero() {
                   <Shield className="w-8 h-8 text-accent-600" />
                 </m.div>
                 <h3 className="text-lg font-semibold text-textPrimary mb-2">Warranty</h3>
-                <p className="text-textPrimary/70 text-sm">
+                <p className="text-textPrimary/70 text-body-small">
                   Up to 5 years warranty on premium kits
                 </p>
               </m.div>

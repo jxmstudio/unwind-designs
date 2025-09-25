@@ -135,7 +135,7 @@ export function QuickView({ isOpen, onClose, product }: QuickViewProps) {
               <div className="p-6 lg:p-8 space-y-6">
                 {/* Header */}
                 <div>
-                  <p className="text-sm text-textPrimary/80 uppercase tracking-wide font-medium mb-2">
+                  <p className="text-body-small text-textPrimary/80 uppercase tracking-wide font-medium mb-2">
                     {product.category}
                   </p>
                   <h2 className="text-2xl lg:text-3xl font-bold text-textPrimary mb-3 leading-tight">
@@ -204,15 +204,15 @@ export function QuickView({ isOpen, onClose, product }: QuickViewProps) {
                 <div className="grid grid-cols-3 gap-4 py-4">
                   <div className="text-center">
                     <Truck className="w-6 h-6 text-brown-400 mx-auto mb-2" />
-                    <p className="text-xs text-textPrimary/80">Free Shipping</p>
+                    <p className="text-caption text-textPrimary/80">Free Shipping</p>
                   </div>
                   <div className="text-center">
                     <Shield className="w-6 h-6 text-brown-400 mx-auto mb-2" />
-                    <p className="text-xs text-textPrimary/80">2 Year Warranty</p>
+                    <p className="text-caption text-textPrimary/80">2 Year Warranty</p>
                   </div>
                   <div className="text-center">
                     <Clock className="w-6 h-6 text-brown-400 mx-auto mb-2" />
-                    <p className="text-xs text-textPrimary/80">Fast Delivery</p>
+                    <p className="text-caption text-textPrimary/80">Fast Delivery</p>
                   </div>
                 </div>
 

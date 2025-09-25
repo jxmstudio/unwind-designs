@@ -97,7 +97,7 @@ export function KitConfigurationsGrid({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Fridge Type Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-textPrimary mb-2">
+                  <label className="block text-body-small font-medium text-textPrimary mb-2">
                     Fridge Type
                   </label>
                   <select
@@ -114,7 +114,7 @@ export function KitConfigurationsGrid({
 
                 {/* Finish Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-textPrimary mb-2">
+                  <label className="block text-body-small font-medium text-textPrimary mb-2">
                     Finish
                   </label>
                   <select
@@ -130,7 +130,7 @@ export function KitConfigurationsGrid({
                 </div>
               </div>
 
-              <div className="mt-4 text-sm text-textPrimary/60">
+              <div className="mt-4 text-body-small text-textPrimary/60">
                 Showing {filteredConfigurations.length} of {configurations.length} configurations
               </div>
             </div>
@@ -161,7 +161,7 @@ export function KitConfigurationsGrid({
                     >
                       <div className="text-center text-textPrimary/70">
                         <div className="text-4xl mb-2">🚐</div>
-                        <p className="text-sm font-medium">{config.kitType} Kit</p>
+                        <p className="text-body-small font-medium">{config.kitType} Kit</p>
                       </div>
                     </m.div>
                     <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -182,18 +182,18 @@ export function KitConfigurationsGrid({
                       <h3 className="text-xl font-semibold text-textPrimary mb-2 group-hover:text-brown-500 transition-colors">
                         {config.name}
                       </h3>
-                      <p className="text-textPrimary/70 text-sm mb-3">
+                      <p className="text-textPrimary/70 text-body-small mb-3">
                         {config.shortDescription}
                       </p>
                     </m.div>
 
                     {/* Features */}
                     <div className="space-y-2 mb-6">
-                      <div className="flex items-center gap-2 text-sm text-textPrimary/70">
+                      <div className="flex items-center gap-2 text-body-small text-textPrimary/70">
                         <Info className="w-4 h-4" />
                         <span>{config.fridgeType}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-textPrimary/70">
+                      <div className="flex items-center gap-2 text-body-small text-textPrimary/70">
                         <Star className="w-4 h-4" />
                         <span>{config.finish}</span>
                       </div>
@@ -214,7 +214,7 @@ export function KitConfigurationsGrid({
                           />
                         ))}
                       </div>
-                      <span className="text-sm text-textPrimary/70">
+                      <span className="text-body-small text-textPrimary/70">
                         ({config.reviewCount})
                       </span>
                     </div>
@@ -224,7 +224,7 @@ export function KitConfigurationsGrid({
                       <div className="text-2xl font-bold text-brown-500">
                         ${config.price.toFixed(2)}
                       </div>
-                      <p className="text-sm text-textPrimary/70">
+                      <p className="text-body-small text-textPrimary/70">
                         {config.warranty} warranty included
                       </p>
                     </div>

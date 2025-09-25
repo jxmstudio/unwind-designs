@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, CreditCard, User, MapPin, Shield, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { useAddressAutocomplete } from "@/hooks/useAddressAutocomplete";
 
 interface CheckoutFormData {
   // Customer Information
@@ -35,7 +36,7 @@ interface CheckoutFormData {
 }
 
 export function CheckoutForm() {
-  const { state } = useCart();
+  const { state, setShippingAddress, getShippingQuotes, selectShippingQuote } = useCart();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<CheckoutFormData>({
     firstName: '',
@@ -55,14 +56,40 @@ export function CheckoutForm() {
     subscribeNewsletter: false
   });
 
+  // Autocomplete for suburb/city
+  const suburbAutocomplete = useAddressAutocomplete({
+    type: 'suburb',
+    state: formData.state
+  });
+
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Load shipping quotes when address is complete
+  useEffect(() => {
+    const loadShippingQuotes = async () => {
+      if (formData.address && formData.city && formData.state && formData.postcode && formData.country) {
+        const shippingAddress = {
+          street: formData.address,
+          city: formData.city,
+          state: formData.state,
+          postcode: formData.postcode,
+          country: formData.country
+        };
+        
+        setShippingAddress(shippingAddress);
+        await getShippingQuotes(shippingAddress);
+      }
+    };
+
+    loadShippingQuotes();
+  }, [formData.address, formData.city, formData.state, formData.postcode, formData.country]);
 
   const handleInputChange = (field: keyof CheckoutFormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleNextStep = () => {
-    if (currentStep < 3) {
+    if (currentStep < 2) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -78,6 +105,37 @@ export function CheckoutForm() {
     setIsProcessing(true);
     
     try {
+      // Validate required fields
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+        throw new Error('Please fill in all required customer information');
+      }
+      
+      if (!formData.address || !formData.city || !formData.state || !formData.postcode) {
+        throw new Error('Please fill in all required shipping information');
+      }
+
+      // Set shipping address in cart context
+      const shippingAddress = {
+        street: formData.address,
+        city: formData.city,
+        state: formData.state,
+        postcode: formData.postcode,
+        country: formData.country
+      };
+      
+      // Get shipping quotes
+      setShippingAddress(shippingAddress);
+      const quotes = await getShippingQuotes(shippingAddress);
+      
+      if (!quotes || quotes.length === 0) {
+        throw new Error('No shipping options available for this address');
+      }
+      
+      // The first quote should already be selected by getShippingQuotes
+      if (!state.shipping.selectedQuote) {
+        throw new Error('Please wait for shipping options to load');
+      }
+
       // Create checkout session with Stripe
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -85,29 +143,42 @@ export function CheckoutForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          items: state.items,
+          items: state.items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            shortDescription: item.shortDescription || item.name || 'Product from Unwind Designs',
+            images: [item.image]
+          })),
           customerEmail: formData.email,
           successUrl: `${window.location.origin}/checkout/success`,
           cancelUrl: `${window.location.origin}/checkout/cancelled`,
+          shippingCost: state.shipping.selectedQuote.price,
+          shippingMethod: state.shipping.selectedQuote.service,
         }),
       });
 
-      const { url, error } = await response.json();
+      const data = await response.json();
 
-      if (error) {
-        throw new Error(error);
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      if (data.error) {
+        throw new Error(data.error);
       }
 
       // Redirect to Stripe Checkout
-      if (url) {
-        window.location.href = url;
+      if (data.url) {
+        window.location.href = data.url;
       } else {
-        throw new Error('No checkout URL received');
+        throw new Error('No checkout URL received from server');
       }
       
     } catch (error) {
       console.error('Payment failed:', error);
-      alert('Payment failed. Please try again or contact support.');
+      alert(`Payment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsProcessing(false);
     }
@@ -153,9 +224,9 @@ export function CheckoutForm() {
       {/* Enhanced Progress Steps */}
       <div className="flex items-center justify-center mb-12">
         <div className="flex items-center space-x-6">
-          {[1, 2, 3].map((step) => (
+          {[1, 2].map((step) => (
             <div key={step} className="flex items-center">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center text-body-small font-medium transition-all duration-300 ${
                 step <= currentStep 
                   ? 'bg-accent-500 text-white shadow-medium' 
                   : 'bg-surface-200 text-textSecondary'
@@ -166,7 +237,7 @@ export function CheckoutForm() {
                   step
                 )}
               </div>
-              {step < 3 && (
+              {step < 2 && (
                 <div className={`w-20 h-1 mx-4 rounded-full transition-all duration-300 ${
                   step < currentStep ? 'bg-accent-500' : 'bg-surface-200'
                 }`} />
@@ -194,7 +265,7 @@ export function CheckoutForm() {
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName" className="text-sm font-semibold">First Name *</Label>
+                      <Label htmlFor="firstName" className="text-body-small font-semibold">First Name *</Label>
                       <Input
                         id="firstName"
                         value={formData.firstName}
@@ -204,7 +275,7 @@ export function CheckoutForm() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="lastName" className="text-sm font-semibold">Last Name *</Label>
+                      <Label htmlFor="lastName" className="text-body-small font-semibold">Last Name *</Label>
                       <Input
                         id="lastName"
                         value={formData.lastName}
@@ -216,7 +287,7 @@ export function CheckoutForm() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-semibold">Email *</Label>
+                      <Label htmlFor="email" className="text-body-small font-semibold">Email *</Label>
                       <Input
                         id="email"
                         type="email"
@@ -227,7 +298,7 @@ export function CheckoutForm() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm font-semibold">Phone *</Label>
+                      <Label htmlFor="phone" className="text-body-small font-semibold">Phone *</Label>
                       <Input
                         id="phone"
                         type="tel"
@@ -255,7 +326,7 @@ export function CheckoutForm() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="address" className="text-sm font-semibold">Street Address *</Label>
+                    <Label htmlFor="address" className="text-body-small font-semibold">Street Address *</Label>
                     <Input
                       id="address"
                       value={formData.address}
@@ -266,38 +337,80 @@ export function CheckoutForm() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="city" className="text-sm font-semibold">City *</Label>
-                      <Input
-                        id="city"
-                        value={formData.city}
-                        onChange={(e) => handleInputChange('city', e.target.value)}
-                        required
-                        placeholder="Enter your city"
-                      />
+                      <Label htmlFor="city" className="text-body-small font-semibold">City/Suburb *</Label>
+                      <div className="relative">
+                        <Input
+                          id="city"
+                          value={suburbAutocomplete.query}
+                          onChange={(e) => suburbAutocomplete.setQuery(e.target.value)}
+                          required
+                          placeholder="Start typing suburb name..."
+                          maxLength={30}
+                        />
+                        
+                        {/* Autocomplete dropdown */}
+                        {suburbAutocomplete.results.length > 0 && (
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                            {suburbAutocomplete.results.map((result, index) => (
+                              <div
+                                key={`${result.value}-${index}`}
+                                className="px-3 py-2 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0"
+                                onClick={() => {
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    city: result.suburb,
+                                    state: result.state,
+                                    postcode: result.postcode
+                                  }));
+                                  suburbAutocomplete.clearResults();
+                                }}
+                              >
+                                <div className="font-medium">{result.label}</div>
+                                <div className="text-sm text-gray-500">{result.description}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {suburbAutocomplete.isLoading && (
+                          <div className="absolute right-3 top-3">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        {formData.city.length}/30 characters
+                      </p>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="state" className="text-sm font-semibold">State *</Label>
+                      <Label htmlFor="state" className="text-body-small font-semibold">State</Label>
                       <Input
                         id="state"
                         value={formData.state}
-                        onChange={(e) => handleInputChange('state', e.target.value)}
-                        required
-                        placeholder="Enter your state"
+                        disabled
+                        className="bg-gray-100"
+                        placeholder="Auto-filled from suburb"
                       />
+                      <p className="text-xs text-gray-500">
+                        Auto-populated from suburb selection
+                      </p>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="postcode" className="text-sm font-semibold">Postcode *</Label>
+                      <Label htmlFor="postcode" className="text-body-small font-semibold">Postcode</Label>
                       <Input
                         id="postcode"
                         value={formData.postcode}
-                        onChange={(e) => handleInputChange('postcode', e.target.value)}
-                        required
-                        placeholder="Enter your postcode"
+                        disabled
+                        className="bg-gray-100"
+                        placeholder="Auto-filled from suburb"
                       />
+                      <p className="text-xs text-gray-500">
+                        Auto-populated from suburb selection
+                      </p>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="country" className="text-sm font-semibold">Country *</Label>
+                    <Label htmlFor="country" className="text-body-small font-semibold">Country *</Label>
                     <Input
                       id="country"
                       value={formData.country}
@@ -310,58 +423,32 @@ export function CheckoutForm() {
               </Card>
             )}
 
-            {/* Step 3: Payment Information */}
-            {currentStep === 3 && (
+            {/* Step 2: Payment Information - Note: Stripe handles payment on their secure page */}
+            {currentStep === 2 && (
               <Card className="shadow-soft hover:shadow-medium transition-all duration-300">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3 text-xl">
                     <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
                       <CreditCard className="w-5 h-5 text-accent-600" />
                     </div>
-                    Payment Information
+                    Ready to Pay
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="cardholderName" className="text-sm font-semibold">Cardholder Name *</Label>
-                    <Input
-                      id="cardholderName"
-                      value={formData.cardholderName}
-                      onChange={(e) => handleInputChange('cardholderName', e.target.value)}
-                      required
-                      placeholder="Enter the name on your card"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="cardNumber" className="text-sm font-semibold">Card Number *</Label>
-                    <Input
-                      id="cardNumber"
-                      value={formData.cardNumber}
-                      onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                      required
-                      placeholder="1234 5678 9012 3456"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="expiryDate" className="text-sm font-semibold">Expiry Date *</Label>
-                      <Input
-                        id="expiryDate"
-                        value={formData.expiryDate}
-                        onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                        required
-                        placeholder="MM/YY"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="cvv" className="text-sm font-semibold">CVV *</Label>
-                      <Input
-                        id="cvv"
-                        value={formData.cvv}
-                        onChange={(e) => handleInputChange('cvv', e.target.value)}
-                        required
-                        placeholder="123"
-                      />
+                  <div className="bg-accent-50 border border-accent-200 rounded-lg p-6">
+                    <div className="flex items-start gap-3">
+                      <Shield className="w-6 h-6 text-accent-600 mt-1" />
+                      <div>
+                        <h3 className="font-semibold text-accent-800 mb-2">Secure Payment Processing</h3>
+                        <p className="text-accent-700 text-body-small mb-4">
+                          Your payment will be processed securely by Stripe. You'll be redirected to their secure payment page where you can enter your card details safely.
+                        </p>
+                        <div className="text-caption text-accent-600">
+                          <p>• Your card information is never stored on our servers</p>
+                          <p>• All payments are encrypted and secure</p>
+                          <p>• You can use test card: 4242 4242 4242 4242</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -381,7 +468,7 @@ export function CheckoutForm() {
                 </Button>
               )}
               <div className="ml-auto">
-                {currentStep < 3 ? (
+                {currentStep < 2 ? (
                   <Button
                     type="button"
                     onClick={handleNextStep}
@@ -395,7 +482,7 @@ export function CheckoutForm() {
                     disabled={isProcessing}
                     className="px-8 py-3 bg-accent-500 hover:bg-accent-600"
                   >
-                    {isProcessing ? 'Processing...' : 'Complete Order'}
+                    {isProcessing ? 'Processing...' : 'Proceed to Payment'}
                   </Button>
                 )}
               </div>
@@ -416,7 +503,7 @@ export function CheckoutForm() {
                   <div key={item.id} className="flex justify-between items-center py-2 border-b border-borderNeutral/30">
                     <div className="flex-1">
                       <p className="font-medium text-textPrimary">{item.name}</p>
-                      <p className="text-sm text-textSecondary">Qty: {item.quantity}</p>
+                      <p className="text-body-small text-textSecondary">Qty: {item.quantity}</p>
                     </div>
                     <p className="font-semibold text-accent-600">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>
@@ -431,16 +518,29 @@ export function CheckoutForm() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-textSecondary">Shipping</span>
-                  <span className="font-medium">$12.00</span>
+                  <span className="font-medium">
+                    {state.shipping.selectedQuote 
+                      ? `$${state.shipping.selectedQuote.price.toFixed(2)}` 
+                      : 'Calculating...'
+                    }
+                  </span>
                 </div>
+                {state.shipping.selectedQuote && (
+                  <div className="text-sm text-textSecondary">
+                    {state.shipping.selectedQuote.service} 
+                    ({state.shipping.selectedQuote.deliveryDays} business days)
+                  </div>
+                )}
                 <div className="flex justify-between text-lg font-bold text-textPrimary pt-2 border-t border-borderNeutral/30">
                   <span>Total</span>
-                  <span>${(state.total + 12).toFixed(2)}</span>
+                  <span>
+                    ${(state.total + (state.shipping.selectedQuote?.price || 0)).toFixed(2)}
+                  </span>
                 </div>
               </div>
 
               {/* Security Note */}
-              <div className="flex items-center gap-2 text-sm text-textSecondary bg-surface-100 p-3 rounded-lg">
+              <div className="flex items-center gap-2 text-body-small text-textSecondary bg-surface-100 p-3 rounded-lg">
                 <Shield className="w-4 h-4 text-accent-500" />
                 <span>Secure checkout powered by Stripe</span>
               </div>

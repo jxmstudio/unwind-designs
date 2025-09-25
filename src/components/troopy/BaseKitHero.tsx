@@ -59,7 +59,7 @@ export function BaseKitHero({ config }: BaseKitHeroProps) {
           {/* Badge */}
           <m.div variants={isDisabled ? {} : staggerItem} className="mb-4">
             <Badge 
-              className={`${config.badge.className} px-4 py-1.5 text-sm font-medium border rounded-full`}
+              className={`${config.badge.className} px-4 py-1.5 text-body-small font-medium border rounded-full`}
             >
               {config.badge.text}
             </Badge>
@@ -98,7 +98,7 @@ export function BaseKitHero({ config }: BaseKitHeroProps) {
             <div className="text-3xl md:text-4xl font-bold text-textPrimary">
               From {formatPrice(config.fromPrice)}
             </div>
-            <div className="text-sm text-textSecondary mt-1">
+            <div className="text-body-small text-textSecondary mt-1">
               Complete kit • Multiple configurations available
             </div>
           </m.div>

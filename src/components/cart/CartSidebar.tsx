@@ -89,7 +89,7 @@ export function CartSidebar() {
                             className="w-full h-full object-cover rounded-lg"
                           />
                         ) : (
-                          <span className="text-xs text-textSecondary text-center">
+                          <span className="text-caption text-textSecondary text-center">
                             {item.category || 'Image'}
                           </span>
                         )}
@@ -97,7 +97,7 @@ export function CartSidebar() {
 
                       {/* Product Details */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-textPrimary text-sm mb-1 truncate">
+                        <h4 className="font-medium text-textPrimary text-body-small mb-1 truncate">
                           {item.name}
                         </h4>
                         <p className="text-brown-500 font-semibold">
@@ -115,7 +115,7 @@ export function CartSidebar() {
                             <Minus className="w-3 h-3" />
                           </Button>
                           
-                          <span className="w-8 text-center text-sm font-medium text-textPrimary">
+                          <span className="w-8 text-center text-body-small font-medium text-textPrimary">
                             {item.quantity}
                           </span>
                           

@@ -27,7 +27,7 @@ export default function ShippingPage() {
               Shipping Policy
             </motion.h1>
             <motion.p 
-              className="text-base text-textSecondary"
+              className="text-body text-textSecondary"
               variants={staggerItem}
             >
               Fast, reliable shipping across Australia and worldwide
@@ -44,11 +44,11 @@ export default function ShippingPage() {
                 <CardTitle className="text-lg text-textPrimary">Standard Shipping</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-base font-bold text-brown-500 mb-2">3-7 Business Days</p>
-                <p className="text-textSecondary text-sm mb-4">
+                <p className="text-body font-bold text-brown-500 mb-2">3-7 Business Days</p>
+                <p className="text-textSecondary text-body-small mb-4">
                   Reliable delivery across Australia
                 </p>
-                <p className="text-textPrimary font-medium text-sm">
+                <p className="text-textPrimary font-medium text-body-small">
                   Free on orders over $500
                 </p>
               </CardContent>
@@ -62,11 +62,11 @@ export default function ShippingPage() {
                 <CardTitle className="text-lg text-textPrimary">Express Shipping</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-base font-bold text-brown-500 mb-2">1-2 Business Days</p>
-                <p className="text-textSecondary text-sm mb-4">
+                <p className="text-body font-bold text-brown-500 mb-2">1-2 Business Days</p>
+                <p className="text-textSecondary text-body-small mb-4">
                   Priority delivery for urgent orders
                 </p>
-                <p className="text-textPrimary font-medium text-sm">
+                <p className="text-textPrimary font-medium text-body-small">
                   Additional $15.00
                 </p>
               </CardContent>
@@ -80,11 +80,11 @@ export default function ShippingPage() {
                 <CardTitle className="text-lg text-textPrimary">International</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-base font-bold text-brown-500 mb-2">7-21 Days</p>
-                <p className="text-textSecondary text-sm mb-4">
+                <p className="text-body font-bold text-brown-500 mb-2">7-21 Days</p>
+                <p className="text-textSecondary text-body-small mb-4">
                   Worldwide shipping available
                 </p>
-                <p className="text-textPrimary font-medium text-sm">
+                <p className="text-textPrimary font-medium text-body-small">
                   Calculated at checkout
                 </p>
               </CardContent>
@@ -101,36 +101,36 @@ export default function ShippingPage() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-borderNeutral">
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-sm">Destination</th>
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-sm">Standard</th>
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-sm">Express</th>
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-sm">Free Shipping</th>
+                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Destination</th>
+                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Standard</th>
+                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Express</th>
+                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Free Shipping</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr className="border-b border-borderNeutral/50">
-                      <td className="py-3 px-4 text-textPrimary text-sm">Metro Areas (VIC, NSW, QLD, SA, WA)</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">$12.00</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">$27.00</td>
-                      <td className="py-3 px-4 text-green-600 font-medium text-sm">Orders $500+</td>
+                      <td className="py-3 px-4 text-textPrimary text-body-small">Metro Areas (VIC, NSW, QLD, SA, WA)</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">$12.00</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">$27.00</td>
+                      <td className="py-3 px-4 text-green-600 font-medium text-body-small">Orders $500+</td>
                     </tr>
                     <tr className="border-b border-borderNeutral/50">
-                      <td className="py-3 px-4 text-textPrimary text-sm">Regional Areas (NT, TAS)</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">$18.00</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">$33.00</td>
-                      <td className="py-3 px-4 text-green-600 font-medium text-sm">Orders $500+</td>
+                      <td className="py-3 px-4 text-textPrimary text-body-small">Regional Areas (NT, TAS)</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">$18.00</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">$33.00</td>
+                      <td className="py-3 px-4 text-green-600 font-medium text-body-small">Orders $500+</td>
                     </tr>
                     <tr className="border-b border-borderNeutral/50">
-                      <td className="py-3 px-4 text-textPrimary text-sm">Remote Areas</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">$25.00</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">$40.00</td>
-                      <td className="py-3 px-4 text-green-600 font-medium text-sm">Orders $500+</td>
+                      <td className="py-3 px-4 text-textPrimary text-body-small">Remote Areas</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">$25.00</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">$40.00</td>
+                      <td className="py-3 px-4 text-green-600 font-medium text-body-small">Orders $500+</td>
                     </tr>
                     <tr>
-                      <td className="py-3 px-4 text-textPrimary text-sm">International</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">Calculated</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">Calculated</td>
-                      <td className="py-3 px-4 text-textSecondary text-sm">Not available</td>
+                      <td className="py-3 px-4 text-textPrimary text-body-small">International</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">Calculated</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">Calculated</td>
+                      <td className="py-3 px-4 text-textSecondary text-body-small">Not available</td>
                     </tr>
                   </tbody>
                 </table>
@@ -144,45 +144,45 @@ export default function ShippingPage() {
               <h2 className="text-xl font-semibold text-textPrimary mb-6">How Shipping Works</h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-body-small font-bold">
                     1
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary mb-1">Order Confirmation</h3>
-                    <p className="text-textSecondary text-sm">
+                    <h3 className="text-body-small font-medium text-textPrimary mb-1">Order Confirmation</h3>
+                    <p className="text-textSecondary text-body-small">
                       Once your order is placed, you&apos;ll receive an email confirmation with order details.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-body-small font-bold">
                     2
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary mb-1">Processing</h3>
-                    <p className="text-textSecondary text-sm">
+                    <h3 className="text-body-small font-medium text-textPrimary mb-1">Processing</h3>
+                    <p className="text-textSecondary text-body-small">
                       We&apos;ll process your order within 24 hours and prepare it for shipping.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-body-small font-bold">
                     3
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary mb-1">Shipping</h3>
-                    <p className="text-textSecondary text-sm">
+                    <h3 className="text-body-small font-medium text-textPrimary mb-1">Shipping</h3>
+                    <p className="text-textSecondary text-body-small">
                       Your order will be shipped and you&apos;ll receive tracking information via email.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                  <div className="w-8 h-8 bg-brown-500 text-cream-400 rounded-full flex items-center justify-center flex-shrink-0 text-body-small font-bold">
                     4
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary mb-1">Delivery</h3>
-                    <p className="text-textSecondary text-sm">
+                    <h3 className="text-body-small font-medium text-textPrimary mb-1">Delivery</h3>
+                    <p className="text-textSecondary text-body-small">
                       Your order will be delivered to your specified address during business hours.
                     </p>
                   </div>
@@ -194,26 +194,26 @@ export default function ShippingPage() {
               <h2 className="text-xl font-semibold text-textPrimary mb-6">Shipping Policies</h2>
               <div className="space-y-4">
                 <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Delivery Times</h3>
-                  <p className="text-textSecondary text-sm">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Delivery Times</h3>
+                  <p className="text-textSecondary text-body-small">
                     Delivery times are estimates and may vary due to weather, holidays, or remote locations.
                   </p>
                 </div>
                 <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Signature Required</h3>
-                  <p className="text-textSecondary text-sm">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Signature Required</h3>
+                  <p className="text-textSecondary text-body-small">
                     Orders over $200 require a signature upon delivery for security.
                   </p>
                 </div>
                 <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">Remote Areas</h3>
-                  <p className="text-textSecondary text-sm">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Remote Areas</h3>
+                  <p className="text-textSecondary text-body-small">
                     Additional delivery charges may apply for remote or hard-to-reach locations.
                   </p>
                 </div>
                 <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
-                  <h3 className="text-sm font-medium text-textPrimary mb-2">International Shipping</h3>
-                  <p className="text-textSecondary text-sm">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">International Shipping</h3>
+                  <p className="text-textSecondary text-body-small">
                     International orders may be subject to customs duties and import taxes.
                   </p>
                 </div>
@@ -229,11 +229,11 @@ export default function ShippingPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-base font-medium text-textPrimary mb-4 flex items-center gap-2">
+                  <h3 className="text-body font-medium text-textPrimary mb-4 flex items-center gap-2">
                     <Package className="w-5 h-5 text-brown-500" />
                     Track Your Order
                   </h3>
-                  <p className="text-textSecondary text-sm mb-4">
+                  <p className="text-textSecondary text-body-small mb-4">
                     All orders include tracking information. You&apos;ll receive tracking details via email once your order ships.
                   </p>
                   <Button variant="outline" className="border-borderNeutral text-textPrimary hover:bg-brown-100">
@@ -241,19 +241,19 @@ export default function ShippingPage() {
                   </Button>
                 </div>
                 <div>
-                  <h3 className="text-base font-medium text-textPrimary mb-4 flex items-center gap-2">
+                  <h3 className="text-body font-medium text-textPrimary mb-4 flex items-center gap-2">
                     <Shield className="w-5 h-5 text-brown-500" />
                     Shipping Support
                   </h3>
-                  <p className="text-textSecondary text-sm mb-4">
+                  <p className="text-textSecondary text-body-small mb-4">
                     Need help with shipping? Our customer service team is here to assist you.
                   </p>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-textSecondary">
+                    <div className="flex items-center gap-2 text-body-small text-textSecondary">
                       <Phone className="w-4 h-4" />
                       0417 362 209
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-textSecondary">
+                    <div className="flex items-center gap-2 text-body-small text-textSecondary">
                       <Mail className="w-4 h-4" />
                       shipping@unwinddesigns.com.au
                     </div>
@@ -268,7 +268,7 @@ export default function ShippingPage() {
             <h2 className="text-xl font-semibold text-textPrimary mb-4">
               Ready to get started?
             </h2>
-            <p className="text-textSecondary text-sm mb-6">
+            <p className="text-textSecondary text-body-small mb-6">
               Browse our products and enjoy fast, reliable shipping to your door.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

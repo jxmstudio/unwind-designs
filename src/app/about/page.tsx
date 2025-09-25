@@ -27,7 +27,7 @@ export default function AboutPage() {
               About Us
             </motion.h1>
             <motion.p 
-              className="text-base text-textSecondary max-w-3xl mx-auto"
+              className="text-body text-textSecondary max-w-3xl mx-auto"
               variants={staggerItem}
             >
               We&apos;re passionate about creating quality, personalized van and 4x4 fitouts that transform your vehicle into the ultimate adventure companion.
@@ -44,7 +44,7 @@ export default function AboutPage() {
           >
             <motion.div variants={staggerItem}>
               <h2 className="text-xl font-semibold text-textPrimary mb-6">Our Story</h2>
-              <div className="space-y-4 text-textSecondary leading-relaxed text-sm">
+              <div className="space-y-4 text-textSecondary leading-relaxed text-body-small">
                 <p>
                   Founded with a passion for adventure and quality craftsmanship, Unwind Designs has been helping 
                   outdoor enthusiasts transform their vehicles for over a decade.
@@ -66,8 +66,8 @@ export default function AboutPage() {
                 <div className="flex items-start gap-3">
                   <span className="w-2 h-2 bg-brown-500 rounded-full mt-2 flex-shrink-0"></span>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Custom Storage Systems</h3>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body-small font-medium text-textPrimary">Custom Storage Systems</h3>
+                    <p className="text-textSecondary text-caption">
                       Tailored storage solutions that maximize your vehicle&apos;s space efficiently
                     </p>
                   </div>
@@ -75,8 +75,8 @@ export default function AboutPage() {
                 <div className="flex items-start gap-3">
                   <span className="w-2 h-2 bg-brown-500 rounded-full mt-2 flex-shrink-0"></span>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Kitchen and Living Area Fitouts</h3>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body-small font-medium text-textPrimary">Kitchen and Living Area Fitouts</h3>
+                    <p className="text-textSecondary text-caption">
                       Complete living spaces with kitchens, seating, and sleeping areas
                     </p>
                   </div>
@@ -84,8 +84,8 @@ export default function AboutPage() {
                 <div className="flex items-start gap-3">
                   <span className="w-2 h-2 bg-brown-500 rounded-full mt-2 flex-shrink-0"></span>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Power and Electrical Systems</h3>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body-small font-medium text-textPrimary">Power and Electrical Systems</h3>
+                    <p className="text-textSecondary text-caption">
                       Solar panels, batteries, and electrical systems for off-grid living
                     </p>
                   </div>
@@ -93,8 +93,8 @@ export default function AboutPage() {
                 <div className="flex items-start gap-3">
                   <span className="w-2 h-2 bg-brown-500 rounded-full mt-2 flex-shrink-0"></span>
                   <div>
-                    <h3 className="text-sm font-medium text-textPrimary">Professional Installation Services</h3>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body-small font-medium text-textPrimary">Professional Installation Services</h3>
+                    <p className="text-textSecondary text-caption">
                       Expert installation by certified technicians
                     </p>
                   </div>
@@ -126,8 +126,8 @@ export default function AboutPage() {
                   <div className="w-16 h-16 bg-brown-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-brown-500" />
                   </div>
-                  <h3 className="text-base font-semibold text-textPrimary mb-2">Quality Craftsmanship</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body font-semibold text-textPrimary mb-2">Quality Craftsmanship</h3>
+                  <p className="text-textSecondary text-caption">
                     We never compromise on quality, using only the finest materials and construction techniques.
                   </p>
                 </motion.div>
@@ -135,8 +135,8 @@ export default function AboutPage() {
                   <div className="w-16 h-16 bg-brown-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="w-8 h-8 text-brown-500" />
                   </div>
-                  <h3 className="text-base font-semibold text-textPrimary mb-2">Customer Focus</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body font-semibold text-textPrimary mb-2">Customer Focus</h3>
+                  <p className="text-textSecondary text-caption">
                     Your satisfaction is our priority. We work closely with you to bring your vision to life.
                   </p>
                 </motion.div>
@@ -144,8 +144,8 @@ export default function AboutPage() {
                   <div className="w-16 h-16 bg-brown-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <MapPin className="w-8 h-8 text-brown-500" />
                   </div>
-                  <h3 className="text-base font-semibold text-textPrimary mb-2">Adventure Ready</h3>
-                  <p className="text-textSecondary text-xs">
+                  <h3 className="text-body font-semibold text-textPrimary mb-2">Adventure Ready</h3>
+                  <p className="text-textSecondary text-caption">
                     We understand the demands of outdoor adventures and build accordingly.
                   </p>
                 </motion.div>
@@ -179,9 +179,9 @@ export default function AboutPage() {
                 <Card className="bg-cream-300 border-borderNeutral text-center">
                   <CardContent className="pt-6">
                     <div className="w-24 h-24 bg-brown-200 rounded-full mx-auto mb-4"></div>
-                    <h3 className="text-base font-semibold text-textPrimary mb-2">John Smith</h3>
-                    <p className="text-brown-600 text-sm font-medium mb-2">Founder & Lead Designer</p>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body font-semibold text-textPrimary mb-2">John Smith</h3>
+                    <p className="text-brown-600 text-body-small font-medium mb-2">Founder & Lead Designer</p>
+                    <p className="text-textSecondary text-caption">
                       Passionate about creating functional and beautiful vehicle fitouts for over 15 years.
                     </p>
                   </CardContent>
@@ -192,9 +192,9 @@ export default function AboutPage() {
                 <Card className="bg-cream-300 border-borderNeutral text-center">
                   <CardContent className="pt-6">
                     <div className="w-24 h-24 bg-brown-200 rounded-full mx-auto mb-4"></div>
-                    <h3 className="text-base font-semibold text-textPrimary mb-2">Sarah Johnson</h3>
-                    <p className="text-brown-600 text-sm font-medium mb-2">Head of Operations</p>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body font-semibold text-textPrimary mb-2">Sarah Johnson</h3>
+                    <p className="text-brown-600 text-body-small font-medium mb-2">Head of Operations</p>
+                    <p className="text-textSecondary text-caption">
                       Ensures every project runs smoothly and meets our high standards of quality.
                     </p>
                   </CardContent>
@@ -205,9 +205,9 @@ export default function AboutPage() {
                 <Card className="bg-cream-300 border-borderNeutral text-center">
                   <CardContent className="pt-6">
                     <div className="w-24 h-24 bg-brown-200 rounded-full mx-auto mb-4"></div>
-                    <h3 className="text-base font-semibold text-textPrimary mb-2">Mike Chen</h3>
-                    <p className="text-brown-600 text-sm font-medium mb-2">Master Craftsman</p>
-                    <p className="text-textSecondary text-xs">
+                    <h3 className="text-body font-semibold text-textPrimary mb-2">Mike Chen</h3>
+                    <p className="text-brown-600 text-body-small font-medium mb-2">Master Craftsman</p>
+                    <p className="text-textSecondary text-caption">
                       Expert in woodworking and metal fabrication with 20+ years of experience.
                     </p>
                   </CardContent>
@@ -236,7 +236,7 @@ export default function AboutPage() {
                   viewport={{ once: true }}
                 >
                   <motion.div variants={staggerItem}>
-                    <h3 className="text-base font-medium text-textPrimary mb-4">Contact Information</h3>
+                    <h3 className="text-body font-medium text-textPrimary mb-4">Contact Information</h3>
                     <div className="space-y-3">
                       <div className="flex items-center gap-3 text-textSecondary">
                         <MapPin className="w-5 h-5 text-brown-500" />
@@ -258,8 +258,8 @@ export default function AboutPage() {
                   </motion.div>
                 
                 <motion.div variants={staggerItem}>
-                  <h3 className="text-base font-medium text-textPrimary mb-4">Ready to Start Your Project?</h3>
-                  <p className="text-textSecondary text-sm mb-4">
+                  <h3 className="text-body font-medium text-textPrimary mb-4">Ready to Start Your Project?</h3>
+                  <p className="text-textSecondary text-body-small mb-4">
                     Let&apos;s discuss your vehicle fitout needs and create something amazing together.
                   </p>
                   <div className="space-y-3">
@@ -291,7 +291,7 @@ export default function AboutPage() {
               Ready to transform your vehicle?
             </motion.h2>
             <motion.p 
-              className="text-textSecondary text-sm mb-6"
+              className="text-textSecondary text-body-small mb-6"
               variants={staggerItem}
             >
               Browse our products or start a custom project today.

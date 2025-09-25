@@ -2,9 +2,11 @@
 // This route handles shipping calculations with proper error handling and feature flagging
 
 import { NextRequest, NextResponse } from 'next/server';
-import { bigPostClient, convertShippingAddressToBigPost, BigPostAddress } from '@/lib/bigpost-shipping';
+import { bigPostAPI } from '@/lib/bigpost';
 import { getFeatureFlag } from '@/lib/server-feature-flags';
 import { shippingCalculator, ShippingAddress, PackageDetails } from '@/lib/shipping';
+import { JobType, ItemType, StateCode } from '@/types/bigpost';
+import { validateBigPostFormData, formatForBigPostAPI } from '@/lib/bigpost-validation';
 import { z } from 'zod';
 
 // Validation schema for shipping quote request
@@ -65,25 +67,80 @@ export async function POST(request: NextRequest) {
 
     const { deliveryAddress, items, totalValue } = validationResult.data;
 
+    console.log('Shipping quote request:', { deliveryAddress, items, totalValue });
+
     // Check if Big Post integration is enabled
     const bigPostEnabled = getFeatureFlag('FEATURE_BIG_POST_SHIPPING');
+    const hasApiKey = !!(process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY);
     
-    if (bigPostEnabled && process.env.BIG_POST_API_TOKEN) {
+    console.log('BigPost Debug Info:', {
+      bigPostEnabled,
+      hasApiKey,
+      apiKeyLength: (process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || '').length,
+      featureFlag: process.env.NEXT_PUBLIC_FEATURE_BIG_POST_SHIPPING
+    });
+    
+    if (bigPostEnabled && hasApiKey) {
       try {
-        // Try Big Post API first
-        const bigPostAddress = convertShippingAddressToBigPost(deliveryAddress);
-        const result = await bigPostClient.getQuotesForCart(bigPostAddress, items, totalValue);
+        // Validate and format data for BigPost API
+        const formData = {
+          street: deliveryAddress.street,
+          city: deliveryAddress.city, // This is actually the suburb from BigPost
+          state: deliveryAddress.state,
+          postcode: deliveryAddress.postcode,
+          country: deliveryAddress.country,
+          items: items.map(item => ({
+            name: item.name,
+            weight: item.weight || 1,
+            dimensions: {
+              length: item.dimensions?.length || 30,
+              width: item.dimensions?.width || 20,
+              height: item.dimensions?.height || 10
+            },
+            quantity: item.quantity
+          }))
+        };
+
+        const validation = validateBigPostFormData(formData);
         
-        if (result.success && result.quotes && result.quotes.length > 0) {
-          const quotes = result.quotes.map(quote => ({
-            service: quote.service_name,
-            price: quote.total_price,
-            deliveryDays: quote.estimated_delivery_days,
-            description: quote.description,
-            carrier: quote.carrier,
-            restrictions: quote.restrictions,
+        if (!validation.isValid) {
+          console.error('BigPost form validation failed:', validation.errors);
+          return NextResponse.json({
+            success: false,
+            error: 'Invalid form data',
+            details: validation.errors,
+            fallbackUsed: true
+          }, { status: 400 });
+        }
+
+        // Format for BigPost API
+        const bigPostRequest = formatForBigPostAPI(validation.normalizedData);
+
+        console.log('BigPost API request:', bigPostRequest);
+
+        // Call BigPost API
+        console.log('Calling BigPost API...');
+        const response = await bigPostAPI.getQuote(bigPostRequest);
+        console.log('BigPost API response:', response);
+        
+        if (response.Success && response.Quotes && response.Quotes.length > 0) {
+          // Transform BigPost quotes to our format
+          const quotes = response.Quotes.map(quote => ({
+            service: quote.ServiceName || 'Standard Shipping',
+            price: quote.Price || 0,
+            deliveryDays: quote.EstimatedDeliveryDays || 3,
+            description: quote.Description || 'BigPost delivery',
+            carrier: quote.CarrierName || 'BigPost',
+            restrictions: quote.Restrictions || [],
             source: 'bigpost' as const,
+            // Store additional BigPost data for booking
+            carrierId: quote.CarrierId,
+            serviceCode: quote.ServiceCode,
+            authorityToLeave: quote.AuthorityToLeave || false,
+            originalQuote: quote // Store full quote for booking
           }));
+
+          console.log('BigPost quotes received:', quotes);
 
           return NextResponse.json({
             success: true,
@@ -91,23 +148,49 @@ export async function POST(request: NextRequest) {
             fallbackUsed: false,
           });
         } else {
-          console.warn('Big Post API returned no quotes:', result.error);
+          console.warn('BigPost API returned no quotes:', response.ErrorMessage);
+          console.log('Falling back to local calculator due to no quotes');
           // Fall through to fallback
         }
       } catch (error) {
-        console.error('Big Post API error:', error);
+        console.error('BigPost API error:', error);
+        console.log('Falling back to local calculator due to API error');
         // Fall through to fallback
       }
+    } else {
+      console.log('BigPost not enabled or no API key - using fallback');
     }
 
-    // Fallback to local shipping calculator
-    const fallbackQuotes = calculateFallbackShipping(deliveryAddress, items, totalValue);
-    
-    return NextResponse.json({
-      success: true,
-      quotes: fallbackQuotes,
-      fallbackUsed: true,
-    });
+      // Fallback to local shipping calculator
+      console.log('Using fallback shipping calculator');
+      const fallbackQuotes = calculateFallbackShipping(deliveryAddress, items, totalValue);
+      console.log('Fallback quotes generated:', fallbackQuotes);
+
+      // Ensure we always return quotes
+      const finalQuotes = fallbackQuotes.length > 0 ? fallbackQuotes : [
+        {
+          service: 'Standard Shipping',
+          price: 25.00,
+          deliveryDays: 5,
+          description: 'Standard delivery (estimated)',
+          source: 'fallback' as const,
+        },
+        {
+          service: 'Express Shipping',
+          price: 45.00,
+          deliveryDays: 2,
+          description: 'Express delivery (estimated)',
+          source: 'fallback' as const,
+        }
+      ];
+
+      console.log('Final quotes being returned:', finalQuotes);
+
+      return NextResponse.json({
+        success: true,
+        quotes: finalQuotes,
+        fallbackUsed: true,
+      });
 
   } catch (error) {
     console.error('Shipping quote API error:', error);
@@ -156,6 +239,8 @@ function calculateFallbackShipping(
     };
 
     // Get standard and express rates
+    console.log('Calculating fallback shipping for:', { packageDetails, deliveryAddress });
+    
     const standardRates = shippingCalculator.calculateShipping(
       packageDetails,
       deliveryAddress,
@@ -168,8 +253,31 @@ function calculateFallbackShipping(
       'express'
     );
 
+    console.log('Fallback rates calculated:', { standardRates, expressRates });
+
     // Combine and format rates
     const allRates = [...standardRates, ...expressRates];
+    
+    // If no rates from calculator, provide basic fallback
+    if (allRates.length === 0) {
+      console.log('No rates from calculator, using emergency fallback');
+      return [
+        {
+          service: 'Standard Shipping',
+          price: 25.00,
+          deliveryDays: 5,
+          description: 'Standard delivery (estimated)',
+          source: 'fallback' as const,
+        },
+        {
+          service: 'Express Shipping',
+          price: 45.00,
+          deliveryDays: 2,
+          description: 'Express delivery (estimated)',
+          source: 'fallback' as const,
+        }
+      ];
+    }
     
     return allRates.map(rate => ({
       service: rate.service,

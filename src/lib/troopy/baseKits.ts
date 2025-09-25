@@ -38,11 +38,11 @@ export const baseKitConfigs: Record<BaseKitType, BaseKitConfig> = {
     id: 'wander',
     name: 'Wander Kit',
     tagline: 'Budget-Friendly Adventure',
-    description: 'Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.',
+    description: 'Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available. Coming Soon!',
     fromPrice: 3750,
     badge: {
-      text: 'Budget',
-      className: 'bg-green-100 text-green-800 border-green-200'
+      text: 'Coming Soon',
+      className: 'bg-yellow-100 text-yellow-800 border-yellow-200'
     },
     accent: {
       primary: 'green-600',
@@ -82,11 +82,11 @@ export const baseKitConfigs: Record<BaseKitType, BaseKitConfig> = {
     id: 'roam',
     name: 'Roam Kit',
     tagline: 'The Complete Explorer',
-    description: 'Our most popular choice with premium features and enhanced storage solutions. Built for serious adventurers.',
+    description: 'Our most popular choice with premium features and enhanced storage solutions. Built for serious adventurers. Coming Soon!',
     fromPrice: 6700,
     badge: {
-      text: 'Popular',
-      className: 'bg-blue-100 text-blue-800 border-blue-200'
+      text: 'Coming Soon',
+      className: 'bg-yellow-100 text-yellow-800 border-yellow-200'
     },
     accent: {
       primary: 'blue-600',

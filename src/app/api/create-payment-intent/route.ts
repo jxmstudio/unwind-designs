@@ -21,12 +21,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!process.env.NEXT_PUBLIC_SITE_URL) {
-    return NextResponse.json(
-      { error: 'NEXT_PUBLIC_SITE_URL environment variable is required' },
-      { status: 500 }
-    );
-  }
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://unwind-designs.vercel.app';
 
   try {
     const body = await request.json();

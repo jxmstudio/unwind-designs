@@ -21,7 +21,7 @@ export function Footer() {
               Crafting quality, personalized van & 4x4 fitouts for your unique lifestyle. 
               Transform your vehicle into the ultimate adventure companion.
             </p>
-            <div className="space-y-2 text-sm text-cream-300">
+            <div className="space-y-2 text-body-small text-cream-300">
               <p>ABN: 12 345 678 901</p>
               <p>Est. 2020</p>
             </div>
@@ -216,10 +216,10 @@ export function Footer() {
       <div className="border-t border-brown-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-cream-300">
+            <p className="text-body-small text-cream-300">
               © 2025 Unwind Designs. All rights reserved.
             </p>
-            <div className="flex items-center space-x-6 text-sm text-cream-300">
+            <div className="flex items-center space-x-6 text-body-small text-cream-300">
               <Link href="/policies/privacy" className="hover:text-cream-400 transition-colors">
                 Privacy Policy
               </Link>

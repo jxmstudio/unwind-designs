@@ -62,21 +62,21 @@ export function Navigation() {
           <div className="hidden lg:flex items-center space-x-1">
             <Link
               href="/flat-packs"
-              className="text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 relative group text-base py-2 px-4 whitespace-nowrap inline-flex items-center"
+              className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body py-2 px-4 whitespace-nowrap inline-flex items-center"
             >
               Flat Packs
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-500 group-hover:w-full transition-all duration-300" />
             </Link>
             <Link
               href="/shop"
-              className="text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 relative group text-base py-2 px-4 whitespace-nowrap inline-flex items-center"
+              className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body py-2 px-4 whitespace-nowrap inline-flex items-center"
             >
               Shop All Products
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-500 group-hover:w-full transition-all duration-300" />
             </Link>
             <Link
               href="/start-your-build"
-              className="text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 relative group text-base py-2 px-4 whitespace-nowrap inline-flex items-center"
+              className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body py-2 px-4 whitespace-nowrap inline-flex items-center"
             >
               Start Your Build
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-500 group-hover:w-full transition-all duration-300" />
@@ -87,7 +87,7 @@ export function Navigation() {
               <button
                 onClick={toggleAboutDropdown}
                 onMouseEnter={() => setIsAboutDropdownOpen(true)}
-                className="text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 relative group text-base flex items-center gap-1 py-2 px-4 whitespace-nowrap"
+                className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body flex items-center gap-1 py-2 px-4 whitespace-nowrap"
               >
                 About
                 <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isAboutDropdownOpen ? 'rotate-180' : ''}`} />
@@ -109,35 +109,35 @@ export function Navigation() {
                 <div className="py-2">
                   <Link
                     href="/about"
-                    className="block px-4 py-3 text-textPrimary hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
                     onClick={closeAboutDropdown}
                   >
                     About Us
                   </Link>
                   <Link
                     href="/policies/returns"
-                    className="block px-4 py-3 text-textPrimary hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
                     onClick={closeAboutDropdown}
                   >
                     Return Policy
                   </Link>
                   <Link
                     href="/policies/terms"
-                    className="block px-4 py-3 text-textPrimary hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
                     onClick={closeAboutDropdown}
                   >
                     Terms of Service
                   </Link>
                   <Link
                     href="/policies/privacy"
-                    className="block px-4 py-3 text-textPrimary hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
                     onClick={closeAboutDropdown}
                   >
                     Privacy Policy
                   </Link>
                   <Link
                     href="/policies/shipping"
-                    className="block px-4 py-3 text-textPrimary hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
                     onClick={closeAboutDropdown}
                   >
                     Shipping Policy
@@ -148,7 +148,7 @@ export function Navigation() {
             
             <Link
               href="/contact"
-              className="text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 relative group text-base py-2 px-4 whitespace-nowrap inline-flex items-center"
+              className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body py-2 px-4 whitespace-nowrap inline-flex items-center"
             >
               Contact
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-500 group-hover:w-full transition-all duration-300" />
@@ -172,13 +172,13 @@ export function Navigation() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white px-3 py-2 rounded-xl transition-all duration-200 font-medium text-sm relative"
+                className="border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white px-3 py-2 rounded-xl transition-all duration-200 font-medium text-body-small relative"
               >
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 Cart
                 {state.itemCount > 0 && (
                   <motion.span 
-                    className="absolute -top-1 -right-1 w-5 h-5 bg-error-500 text-white text-xs rounded-full flex items-center justify-center font-semibold shadow-medium"
+                    className="absolute -top-1 -right-1 w-5 h-5 bg-error-500 text-white text-caption rounded-full flex items-center justify-center font-semibold shadow-medium"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ 
@@ -222,21 +222,21 @@ export function Navigation() {
           <div className="py-6 space-y-2 border-t border-borderNeutral bg-surface-50/80 backdrop-blur-sm">
             <Link
               href="/flat-packs"
-              className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100"
+              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
               onClick={closeMenu}
             >
               Flat Packs
             </Link>
             <Link
               href="/shop"
-              className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100"
+              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
               onClick={closeMenu}
             >
               Shop All Products
             </Link>
             <Link
               href="/start-your-build"
-              className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100"
+              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
               onClick={closeMenu}
             >
               Start Your Build
@@ -244,40 +244,40 @@ export function Navigation() {
             
             {/* Mobile About Section */}
             <div className="space-y-2">
-              <div className="px-4 py-2 text-sm font-medium text-textSecondary uppercase tracking-wide">
+              <div className="px-4 py-2 text-body-small font-medium text-textSecondary uppercase tracking-wide">
                 About
               </div>
               <Link
                 href="/about"
-                className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
                 onClick={closeMenu}
               >
                 About Us
               </Link>
               <Link
                 href="/policies/returns"
-                className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
                 onClick={closeMenu}
               >
                 Return Policy
               </Link>
               <Link
                 href="/policies/terms"
-                className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
                 onClick={closeMenu}
               >
                 Terms of Service
               </Link>
               <Link
                 href="/policies/privacy"
-                className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
                 onClick={closeMenu}
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/policies/shipping"
-                className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
                 onClick={closeMenu}
               >
                 Shipping Policy
@@ -286,7 +286,7 @@ export function Navigation() {
             
             <Link
               href="/contact"
-              className="block text-textPrimary hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100"
+              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
               onClick={closeMenu}
             >
               Contact

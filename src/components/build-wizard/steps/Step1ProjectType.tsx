@@ -147,12 +147,12 @@ export function Step1ProjectType() {
                       <h3 className="text-xl font-semibold text-textPrimary mb-2">
                         {type.title}
                       </h3>
-                      <p className="text-textSecondary text-sm mb-4">
+                      <p className="text-textSecondary text-body-small mb-4">
                         {type.description}
                       </p>
                       <div className="space-y-1">
                         {type.features.map((feature, idx) => (
-                          <div key={idx} className="text-xs text-textSecondary flex items-center justify-center">
+                          <div key={idx} className="text-caption text-textSecondary flex items-center justify-center">
                             <div className="w-1 h-1 bg-brown-400 rounded-full mr-2"></div>
                             {feature}
                           </div>
@@ -166,7 +166,7 @@ export function Step1ProjectType() {
           </div>
           {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
           {errors.step1?.projectType && (
-            <p className="text-red-500 text-sm mt-2 text-center">
+            <p className="text-red-500 text-body-small mt-2 text-center">
               {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
               {errors.step1.projectType.message}
             </p>
@@ -210,7 +210,7 @@ export function Step1ProjectType() {
                           <h4 className="font-semibold text-textPrimary mb-1">
                             {kit.title}
                           </h4>
-                          <p className="text-sm text-brown-600 font-medium">
+                          <p className="text-body-small text-brown-600 font-medium">
                             {kit.price}
                           </p>
                         </CardContent>
@@ -221,7 +221,7 @@ export function Step1ProjectType() {
               </div>
               {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
               {errors.step1?.baseKit && (
-                <p className="text-red-500 text-sm mt-2 text-center">
+                <p className="text-red-500 text-body-small mt-2 text-center">
                   {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                   {errors.step1.baseKit.message}
                 </p>

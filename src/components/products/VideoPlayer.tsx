@@ -80,9 +80,9 @@ export function VideoPlayer({
           <div className="text-6xl mb-4">🎬</div>
           <h3 className="text-xl font-semibold text-textPrimary mb-2">{title}</h3>
           {description && (
-            <p className="text-textPrimary/80 text-sm">{description}</p>
+            <p className="text-textPrimary/80 text-body-small">{description}</p>
           )}
-          <p className="text-xs text-textPrimary/80 mt-4 opacity-75">
+          <p className="text-caption text-textPrimary/80 mt-4 opacity-75">
             Video feature coming soon
           </p>
         </div>
@@ -101,9 +101,9 @@ export function VideoPlayer({
           <div className="text-6xl mb-4">📹</div>
           <h3 className="text-xl font-semibold text-textPrimary mb-2">{title}</h3>
           {description && (
-            <p className="text-textPrimary/80 text-sm mb-4">{description}</p>
+            <p className="text-textPrimary/80 text-body-small mb-4">{description}</p>
           )}
-          <p className="text-xs text-textPrimary/80 opacity-75">
+          <p className="text-caption text-textPrimary/80 opacity-75">
             {hasError ? "Video unavailable" : "Video coming soon"}
           </p>
         </div>
@@ -253,7 +253,7 @@ export function VideoPlayer({
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="text-white text-center">
             <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-2" />
-            <p className="text-sm">Loading video...</p>
+            <p className="text-body-small">Loading video...</p>
           </div>
         </div>
       )}
@@ -329,13 +329,13 @@ export function VideoPlayer({
                 {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
               </Button>
 
-              <div className="text-white text-sm font-medium">
+              <div className="text-white text-body-small font-medium">
                 {formatTime(currentTime)} / {formatTime(duration)}
               </div>
             </div>
 
             <div className="flex items-center space-x-2">
-              <div className="text-white text-sm">{title}</div>
+              <div className="text-white text-body-small">{title}</div>
               
               <Button
                 variant="ghost"

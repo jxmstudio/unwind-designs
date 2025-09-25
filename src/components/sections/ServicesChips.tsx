@@ -91,11 +91,11 @@ export function ServicesChips() {
                   <service.icon className={`w-8 h-8 ${service.iconColor}`} />
                 </div>
                 
-                <h3 className="text-base font-semibold text-textPrimary text-center mb-2 group-hover:text-accent-600 transition-colors">
+                <h3 className="text-body font-semibold text-textPrimary text-center mb-2 group-hover:text-accent-600 transition-colors">
                   {service.title}
                 </h3>
                 
-                <p className="text-xs text-textSecondary text-center leading-relaxed">
+                <p className="text-caption text-textSecondary text-center leading-relaxed">
                   {service.description}
                 </p>
                 

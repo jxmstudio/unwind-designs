@@ -131,7 +131,7 @@ export function WanderGallery() {
                       <h3 className="text-lg font-semibold text-textPrimary mb-2">
                         {image.title}
                       </h3>
-                      <p className="text-textSecondary text-sm">
+                      <p className="text-textSecondary text-body-small">
                         {image.description}
                       </p>
                     </div>
@@ -239,7 +239,7 @@ export function WanderGallery() {
             </m.div>
 
             {/* Image Counter */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-body-small">
               {selectedImage + 1} of {wanderGalleryImages.length}
             </div>
           </m.div>

@@ -147,10 +147,10 @@ export function Testimonials() {
                         <h4 className="font-semibold text-textPrimary text-lg">
                           {testimonial.name}
                         </h4>
-                        <p className="text-textSecondary text-sm">
+                        <p className="text-textSecondary text-body-small">
                           {testimonial.role}
                         </p>
-                        <p className="text-textSecondary text-sm">
+                        <p className="text-textSecondary text-body-small">
                           {testimonial.location}
                         </p>
                       </div>

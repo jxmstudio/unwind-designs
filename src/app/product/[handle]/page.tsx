@@ -14,6 +14,7 @@ import { sampleProducts } from "@/lib/products";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useCart } from "@/lib/cart-context";
 
 
 // Sample add-on products for FBT
@@ -58,6 +59,7 @@ export default function ProductPage() {
   
   const params = useParams();
   const handle = params.handle as string;
+  const { addItem } = useCart();
 
   useEffect(() => {
     // Handle both Troopy Pack kit routes and regular product IDs
@@ -101,20 +103,36 @@ export default function ProductPage() {
     notFound();
   }
 
-  const variants = [
+  // Only show variants for non-test products
+  const showVariants = product && !('category' in product && product.category === 'Test');
+  
+  const variants = showVariants ? [
     { id: "black-hex", name: "Black Hex", price: product.price },
     { id: "white", name: "White", price: product.price + 250 },
     { id: "plain-birch", name: "Plain Birch", price: product.price + 100 }
+  ] : [
+    { id: "default", name: "Default", price: product.price }
   ];
 
   const selectedVariantData = variants.find(v => v.id === selectedVariant) || variants[0];
 
   const handleAddToCart = () => {
+    if (!product) return;
+    
     setIsAddingToCart(true);
-    // Simulate API call
+    
+    // Add product to cart
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: selectedVariantData.price,
+      image: product.images[0] || '/images/placeholder.svg',
+      category: 'category' in product ? product.category : 'Test'
+    });
+    
+    // Simulate loading state
     setTimeout(() => {
       setIsAddingToCart(false);
-      // Handle cart addition
     }, 1000);
   };
 
@@ -133,8 +151,10 @@ export default function ProductPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
           <nav className="mb-8">
-            <div className="flex items-center space-x-2 text-sm text-textPrimary/60">
-              <Link href="/flat-packs" className="hover:text-accent-600">Flat Packs</Link>
+            <div className="flex items-center space-x-2 text-body-small text-textPrimary/60">
+              <Link href={showVariants ? "/flat-packs" : "/shop"} className="hover:text-accent-600">
+                {showVariants ? "Flat Packs" : "Shop"}
+              </Link>
               <span>/</span>
               <span className="text-textPrimary">{product.name}</span>
             </div>
@@ -166,30 +186,32 @@ export default function ProductPage() {
                     </span>
                   )}
                 </div>
-                <p className="text-textPrimary/70 text-sm">
+                <p className="text-textPrimary/70 text-body-small">
                   Tax included. Shipping calculated at checkout.
                 </p>
               </div>
 
-              {/* Variant Selection */}
-              <div>
-                <h3 className="text-lg font-semibold text-textPrimary mb-4">Finish</h3>
-                <div className="flex flex-wrap gap-3">
-                  {variants.map((variant) => (
-                    <button
-                      key={variant.id}
-                      onClick={() => setSelectedVariant(variant.id)}
-                      className={`px-4 py-2 rounded-full border-2 transition-all duration-200 ${
-                        selectedVariant === variant.id
-                          ? "border-accent-500 bg-accent-500 text-white"
-                          : "border-borderNeutral text-textPrimary hover:border-accent-300"
-                      }`}
-                    >
-                      {variant.name}
-                    </button>
-                  ))}
+              {/* Variant Selection - Only show for non-test products */}
+              {showVariants && (
+                <div>
+                  <h3 className="text-lg font-semibold text-textPrimary mb-4">Finish</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {variants.map((variant) => (
+                      <button
+                        key={variant.id}
+                        onClick={() => setSelectedVariant(variant.id)}
+                        className={`px-4 py-2 rounded-full border-2 transition-all duration-200 ${
+                          selectedVariant === variant.id
+                            ? "border-accent-500 bg-accent-500 text-white"
+                            : "border-borderNeutral text-textPrimary hover:border-accent-300"
+                        }`}
+                      >
+                        {variant.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Quantity Selector */}
               <div>
@@ -218,7 +240,7 @@ export default function ProductPage() {
                       <Plus className="w-4 h-4" />
                     </Button>
                   </div>
-                  <span className="text-sm text-textPrimary/70">
+                  <span className="text-body-small text-textPrimary/70">
                     {product.stockQuantity} in stock
                   </span>
                 </div>
@@ -226,30 +248,39 @@ export default function ProductPage() {
 
               {/* Primary Actions */}
               <div className="space-y-4">
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={isAddingToCart || !product.inStock}
-                  className="w-full bg-accent-500 hover:bg-accent-600 text-white font-semibold py-4 text-lg rounded-xl transition-all duration-300"
-                >
-                  {isAddingToCart ? (
-                    "Adding to Cart..."
-                  ) : (
-                    <>
-                      <ShoppingCart className="w-5 h-5 mr-2" />
-                      Add to Cart
-                    </>
-                  )}
-                </Button>
-                
-                <Link href={`/configurator/troopy?base=${'slug' in product ? product.slug : product.id}`}>
+                {product.comingSoon ? (
+                  <div className="w-full bg-amber-500 text-white font-semibold py-4 text-lg rounded-xl text-center">
+                    Coming Soon
+                  </div>
+                ) : (
                   <Button
-                    variant="outline"
-                    className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white font-semibold py-4 text-lg rounded-xl transition-all duration-300"
+                    onClick={handleAddToCart}
+                    disabled={isAddingToCart || !product.inStock}
+                    className="w-full bg-accent-500 hover:bg-accent-600 text-white font-semibold py-4 text-lg rounded-xl transition-all duration-300"
                   >
-                    <Settings className="w-5 h-5 mr-2" />
-                    Complete the kit here!
+                    {isAddingToCart ? (
+                      "Adding to Cart..."
+                    ) : (
+                      <>
+                        <ShoppingCart className="w-5 h-5 mr-2" />
+                        Add to Cart
+                      </>
+                    )}
                   </Button>
-                </Link>
+                )}
+                
+                {/* Only show configurator button for non-test products and non-coming soon products */}
+                {showVariants && !product.comingSoon && (
+                  <Link href={`/configurator/troopy?base=${'slug' in product ? product.slug : product.id}`}>
+                    <Button
+                      variant="outline"
+                      className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white font-semibold py-4 text-lg rounded-xl transition-all duration-300"
+                    >
+                      <Settings className="w-5 h-5 mr-2" />
+                      Complete the kit here!
+                    </Button>
+                  </Link>
+                )}
               </div>
 
               {/* Stock Status */}
@@ -278,9 +309,9 @@ export default function ProductPage() {
                   <h3 className="font-semibold text-green-800 mb-2">Pickup available at Export Drive</h3>
                   <div className="flex items-center space-x-2 text-green-700 mb-3">
                     <Clock className="w-4 h-4" />
-                    <span className="text-sm">Usually ready in 2-4 days</span>
+                    <span className="text-body-small">Usually ready in 2-4 days</span>
                   </div>
-                  <Link href="/contact" className="text-green-600 hover:text-green-700 font-medium text-sm">
+                  <Link href="/contact" className="text-green-600 hover:text-green-700 font-medium text-body-small">
                     View store information
                   </Link>
                 </div>

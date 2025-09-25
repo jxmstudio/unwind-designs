@@ -31,7 +31,7 @@ export default function CheckoutCancelledPage() {
               {/* Return to Cart */}
               <div className="p-6 bg-cream-400 rounded-lg border border-borderNeutral">
                 <h3 className="font-semibold text-textPrimary mb-3">Return to Your Cart</h3>
-                <p className="text-textSecondary text-sm mb-4">
+                <p className="text-textSecondary text-body-small mb-4">
                   Your items are still in your cart. You can review your order and try the checkout process again.
                 </p>
                 <Link href="/cart">
@@ -45,7 +45,7 @@ export default function CheckoutCancelledPage() {
               {/* Continue Shopping */}
               <div className="p-6 bg-cream-400 rounded-lg border border-borderNeutral">
                 <h3 className="font-semibold text-textPrimary mb-3">Continue Shopping</h3>
-                <p className="text-textSecondary text-sm mb-4">
+                <p className="text-textSecondary text-body-small mb-4">
                   Browse our complete range of Toyota Troopcarrier flat pack solutions and accessories.
                 </p>
                 <Link href="/flat-packs">
@@ -60,7 +60,7 @@ export default function CheckoutCancelledPage() {
           {/* Common Issues */}
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-8">
             <h3 className="text-lg font-semibold text-textPrimary mb-4">Common Payment Issues</h3>
-            <div className="space-y-3 text-sm text-textSecondary">
+            <div className="space-y-3 text-body-small text-textSecondary">
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
                 <div>
