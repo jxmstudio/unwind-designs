@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { ProductPage } from '@/components/products/ProductPage';
 import { getProductBySlug, listAllProducts, getRelatedProducts } from '@/lib/product-utils';
+import { allAdditionalProducts } from '@/data/additional-products';
 
 interface ProductPageProps {
   params: {
@@ -20,7 +21,8 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = getProductBySlug(params.slug);
+  const { slug } = await params;
+  const product = getProductBySlug(slug);
   
   if (!product) {
     return {
@@ -96,8 +98,16 @@ function generateJsonLd(product: any) {
   };
 }
 
-export default function ProductDetailPage({ params }: ProductPageProps) {
-  const product = getProductBySlug(params.slug);
+export default async function ProductDetailPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  
+  // First try to get from additional products (which has variantOptions)
+  let product = allAdditionalProducts.find(p => p.slug === slug);
+  
+  // If not found, fall back to the regular product utils
+  if (!product) {
+    product = getProductBySlug(slug);
+  }
   
   if (!product) {
     notFound();

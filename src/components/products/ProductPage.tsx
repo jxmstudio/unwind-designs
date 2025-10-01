@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Minus, Plus, ShoppingCart, CheckCircle, Star, ArrowLeft } from "lucide-react";
-import { Product, formatPrice, isProductPurchasable, getProductAvailabilityStatus, getRelatedProducts } from "@/lib/product-utils";
+import { Product, formatPrice, isProductPurchasable, getProductAvailabilityStatus, getRelatedProducts, getUpsellProducts } from "@/lib/product-utils";
 import { useCart } from "@/lib/cart-context";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ProductVariantSection, normalizeProductForVariants } from "./ProductVariantSection";
 
 interface ProductPageProps {
   product: Product;
@@ -23,10 +24,52 @@ interface ProductPageProps {
 export function ProductPage({ product, relatedProducts = [] }: ProductPageProps) {
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const { addItem } = useCart();
 
   const isPurchasable = isProductPurchasable(product);
   const availabilityStatus = getProductAvailabilityStatus(product);
+  
+  // Get upsell products for frequently bought together
+  const upsellProducts = getUpsellProducts(product);
+
+  const handleVariantChange = (variant: any) => {
+    setSelectedVariant(variant);
+  };
+
+  const handleAddToCartVariant = async (variant: any, quantity: number) => {
+    const cartItem = {
+      id: variant.id,
+      name: `${product.name}${Object.entries(variant.selectedOptions).map(([key, value]) => {
+        const option = product.variantOptions?.find((opt: any) => opt.name === key);
+        const optionValue = option?.values.find((v: any) => v.value === value);
+        return optionValue ? ` - ${optionValue.label}` : '';
+      }).join('')}`,
+      price: variant.price,
+      image: product.images[0] || '',
+      category: product.category,
+      shortDescription: product.shortDescription || product.description
+    };
+
+    addItem(cartItem);
+  };
+
+  const handleBundleAddToCart = async (items: { productId: string; variantId?: string; quantity: number }[]) => {
+    for (const item of items) {
+      const productToAdd = upsellProducts.find(p => p.id === item.productId);
+      if (productToAdd) {
+        const cartItem = {
+          id: item.variantId || productToAdd.id,
+          name: productToAdd.name,
+          price: productToAdd.price,
+          image: productToAdd.images[0] || '',
+          category: productToAdd.category,
+          shortDescription: productToAdd.shortDescription || productToAdd.description
+        };
+        await addItem(cartItem, item.quantity);
+      }
+    }
+  };
 
   const handleAddToCart = async () => {
     if (!isPurchasable) return;
@@ -69,18 +112,6 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
       <Navigation />
       
       <main className="pt-20">
-        {/* Breadcrumb */}
-        <nav className="bg-white border-b border-borderNeutral/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center space-x-2 text-body-small text-textPrimary/60">
-              <Link href="/" className="hover:text-accent-600 transition-colors">Home</Link>
-              <span>/</span>
-              <Link href="/shop" className="hover:text-accent-600 transition-colors">Products</Link>
-              <span>/</span>
-              <span className="text-textPrimary">{product.name}</span>
-            </div>
-          </div>
-        </nav>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -154,9 +185,9 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
               <div className="space-y-2">
                 <div className="flex items-center gap-4">
                   <span className="text-3xl font-bold text-accent-600">
-                    {formatPrice(product.price)}
+                    {formatPrice(selectedVariant?.price || product.price)}
                   </span>
-                  {product.originalPrice && product.originalPrice > product.price && (
+                  {product.originalPrice && product.originalPrice > (selectedVariant?.price || product.price) && (
                     <span className="text-lg text-textPrimary/60 line-through">
                       {formatPrice(product.originalPrice)}
                     </span>
@@ -182,12 +213,64 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
                 </div>
               </div>
 
+              {/* Universal Variant Section */}
+              {product.variantOptions && product.variantOptions.length > 0 && (
+                <div className="mt-6">
+                  <ProductVariantSection
+                    product={normalizeProductForVariants(product)}
+                    onVariantChange={handleVariantChange}
+                    onAddToCart={handleAddToCartVariant}
+                    showPrice={false}
+                    showSKU={true}
+                    showStockStatus={true}
+                    showSelectedSummary={true}
+                    showAddToCart={false}
+                  />
+                </div>
+              )}
+
               {/* Description */}
               {product.description && (
-                <div className="prose prose-sm max-w-none">
-                  <p className="text-textPrimary leading-relaxed">
-                    {product.description}
-                  </p>
+                <div className="prose prose-sm max-w-none text-textPrimary leading-relaxed">
+                  {product.description.split('\n\n').map((paragraph, index) => {
+                    // Handle bullet points
+                    if (paragraph.includes('•')) {
+                      const lines = paragraph.split('\n');
+                      const title = lines[0].replace('**', '').replace('**', '');
+                      const bulletPoints = lines.slice(1).filter(line => line.trim().startsWith('•'));
+                      
+                      return (
+                        <div key={index} className="mb-4">
+                          {title && (
+                            <h4 className="font-semibold text-textPrimary mb-2">{title}</h4>
+                          )}
+                          <ul className="list-disc pl-6 space-y-1">
+                            {bulletPoints.map((point, bulletIndex) => (
+                              <li key={bulletIndex} className="text-textPrimary">
+                                {point.replace('•', '').trim()}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    }
+                    
+                    // Handle bold text
+                    if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+                      return (
+                        <h4 key={index} className="font-semibold text-textPrimary mb-2">
+                          {paragraph.replace(/\*\*/g, '')}
+                        </h4>
+                      );
+                    }
+                    
+                    // Regular paragraph
+                    return (
+                      <p key={index} className="mb-4 text-textPrimary">
+                        {paragraph}
+                      </p>
+                    );
+                  })}
                 </div>
               )}
 
@@ -251,6 +334,27 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
                   </Button>
                 )}
               </div>
+
+              {/* Frequently Bought Together */}
+              {upsellProducts.length > 0 && (
+                <div className="mt-6">
+                  <FrequentlyBoughtTogether 
+                    addOns={upsellProducts.map(p => ({
+                      id: p.id,
+                      name: p.name,
+                      price: p.price,
+                      image: p.images[0] || '',
+                      variants: p.variants?.map(v => ({
+                        id: v.id,
+                        name: Object.entries(v.options).map(([key, value]) => `${key}: ${value}`).join(', '),
+                        price: v.price
+                      })),
+                      defaultVariant: p.variants?.[0]?.id
+                    }))}
+                    onAddToCart={handleBundleAddToCart}
+                  />
+                </div>
+              )}
 
               {/* Product Details */}
               <Accordion type="single" collapsible className="w-full">
@@ -397,15 +501,6 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
             </div>
           )}
 
-          {/* Frequently Bought Together - Temporarily disabled for build */}
-          {false && (
-            <div className="mt-16">
-              <FrequentlyBoughtTogether 
-                productId={product.id}
-                productName={product.name}
-              />
-            </div>
-          )}
         </div>
       </main>
 

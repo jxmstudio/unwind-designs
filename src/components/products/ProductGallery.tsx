@@ -28,13 +28,13 @@ export function ProductGallery({ images, alt = "Product image" }: ProductGallery
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="relative aspect-square bg-cream-200 rounded-2xl overflow-hidden group">
+      <div className="relative w-full h-[380px] md:h-[480px] lg:h-[560px] bg-white rounded-2xl overflow-hidden group p-2">
         <AnimatePresence mode="wait">
           <motion.img
             key={currentImageIndex}
             src={images[currentImageIndex]}
             alt={`${alt} ${currentImageIndex + 1}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -88,7 +88,7 @@ export function ProductGallery({ images, alt = "Product image" }: ProductGallery
               <img
                 src={image}
                 alt={`${alt} thumbnail ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain bg-white"
               />
             </button>
           ))}

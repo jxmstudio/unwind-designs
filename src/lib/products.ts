@@ -348,44 +348,74 @@ export const otherProducts: Product[] = [
   {
     id: "7",
     name: "Everlock Latches",
-    description: "Heavy-duty latches designed for vehicle storage and security. Perfect for drawers, cabinets, and storage compartments.",
+    description: "These German designed latches are a simple and effective way to keep your drawers and cupboards securely locked. Paired with a coloured faceplate and you have a stylish and effective door latch.\n\nAnother great benefit is that they sit flush with your cabinet/drawer front so there's no need to worry about getting caught on your door handles in your narrow corridors of your van.\n\nCurrently we stock matt black, white and pearl gold.\n\nThe faceplate comes in either 12 or 15mm depth.\n\n• If your drawer front is 12mm use a 12mm faceplate.\n• If your drawer front is 15mm or larger use a 15mm faceplate. (You can still use a 12mm faceplate)\n• If your drawer front is less than 12mm send us a message after checkout with your drawer face thickness and we will send spacers to suit. A 9mm front will require 1 spacer.\n\nIf you are interested in other colours, please get in touch.\n\nVideos and instructions are coming soon.\n\nThere is a template which is used to accurately align the latch and catch provided with every purchase.",
     price: 22.50,
     originalPrice: 25.00,
-    images: ["/products/latches-1.jpg", "/products/latches-2.jpg"],
+    images: ["/brand/everlock-latches-1.jpg", "/brand/everlock-latches-2.jpg", "/brand/everlock-latches-3.jpg"],
+    videoUrl: "/brand/everlock.mp4",
     category: "Hardware",
     subcategory: "Latches",
-    rating: 4.9,
-    reviewCount: 267,
+    rating: 4.8,
+    reviewCount: 2,
     isOnSale: true,
     salePercentage: 10,
     inStock: true,
-    stockQuantity: 120,
-    tags: ["Latches", "Heavy Duty", "Security", "Storage", "Vehicle"],
+    stockQuantity: 40,
+    tags: ["Everlock", "Latches", "Hardware", "German", "Secure", "Flush Mount", "DIY"],
     specifications: {
-      "Material": "Zinc Alloy",
-      "Finish": "Chrome Plated",
-      "Load Capacity": "50kg",
-      "Installation": "Screw Mount",
-      "Lock Type": "Push Button"
+      "Brand": "Everlock",
+      "Type": "Cabinet Latches",
+      "Material": "German designed",
+      "Finish": "Matt Black, White, Pearl Gold",
+      "Installation": "Screw mounting with template",
+      "Compatibility": "12mm or 15mm drawer fronts",
+      "Faceplate Depth": "12mm or 15mm",
+      "Spacers": "Available for fronts less than 12mm"
     },
-    weight: 0.15,
+    weight: 0.2,
     dimensions: {
       length: 8,
       width: 4,
-      height: 3
+      height: 2
     },
     features: [
-      "Heavy duty construction",
-      "Secure locking mechanism",
-      "Easy installation",
-      "Durable finish",
-      "Versatile mounting"
+      "Easy DIY Installation",
+      "Guaranteed to keep your doors and drawers shut",
+      "Slim profile",
+      "Simple to use"
     ],
-    installationRequired: false,
-    warranty: "1 year",
-    sku: "LH-EVER-001",
+    installationRequired: true,
+    warranty: "1 year minimum",
+    sku: "EVERLOCK-LATCH-001",
     createdAt: new Date("2024-01-18"),
-    updatedAt: new Date("2024-01-18")
+    updatedAt: new Date("2024-01-18"),
+    // Color and thickness options
+    colorOptions: [
+      { value: "black", label: "Black", available: true },
+      { value: "white", label: "White", available: true },
+      { value: "gold", label: "Gold", available: true },
+      { value: "sandy-beige", label: "Sandy Beige", available: false },
+      { value: "aluminum", label: "Aluminum", available: false }
+    ],
+    thicknessOptions: [
+      { value: "6-11mm", label: "6-11mm", description: "Requires spacers" },
+      { value: "12-14mm", label: "12-14mm", description: "Use 12mm faceplate" },
+      { value: "15mm-plus", label: "15mm or more", description: "Use 15mm faceplate" }
+    ],
+    faceplateSizeOptions: [
+      { value: "12mm", label: "12mm", available: true },
+      { value: "15mm", label: "15mm", available: true }
+    ],
+    // Shipping and guarantee information
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping Over $450*",
+      freeShippingDetails: "Free Shipping on orders over $450 *Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    }
   },
   {
     id: "8",

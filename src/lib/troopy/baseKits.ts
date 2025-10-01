@@ -38,11 +38,11 @@ export const baseKitConfigs: Record<BaseKitType, BaseKitConfig> = {
     id: 'wander',
     name: 'Wander Kit',
     tagline: 'Budget-Friendly Adventure',
-    description: 'Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available. Coming Soon!',
+    description: 'Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.',
     fromPrice: 3750,
     badge: {
-      text: 'Coming Soon',
-      className: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      text: 'Available Now',
+      className: 'bg-green-100 text-green-800 border-green-200'
     },
     accent: {
       primary: 'green-600',

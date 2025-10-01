@@ -24,7 +24,11 @@ const CheckoutSessionSchema = z.object({
 
 export async function POST(request: NextRequest) {
   // Early environment checks
+  console.log('Stripe instance:', !!stripe);
+  console.log('STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
+  
   if (!stripe) {
+    console.error('Stripe is not initialized. Check STRIPE_SECRET_KEY environment variable.');
     return NextResponse.json(
       { error: 'Payment system is not configured. Please contact support.' },
       { status: 503 }
@@ -80,6 +84,7 @@ export async function POST(request: NextRequest) {
           product_data: {
             name: shippingMethod || 'Shipping',
             description: 'Shipping cost',
+            images: [], // Add empty images array
           },
           unit_amount: Math.round(shippingCost * 100), // Convert to cents
         },
@@ -97,6 +102,9 @@ export async function POST(request: NextRequest) {
       cancel_url: cancelUrl || `${siteUrl}/checkout/cancelled`,
       metadata: {
         source: 'unwind-designs-website',
+        items: JSON.stringify(items),
+        shippingCost: shippingCost?.toString() || '0',
+        shippingMethod: shippingMethod || 'Standard Shipping',
       },
       shipping_address_collection: {
         allowed_countries: ['AU'], // Australia only for now

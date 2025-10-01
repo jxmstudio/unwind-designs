@@ -11,6 +11,7 @@ import { useCart } from "@/lib/cart-context";
 import { useState } from "react";
 import Link from "next/link";
 import { useAddressAutocomplete } from "@/hooks/useAddressAutocomplete";
+import { CheckoutSummary } from "./CheckoutSummary";
 
 export function CartPageContent() {
   // Force cache bust - v4 - ${Date.now()} - ${Math.random()}
@@ -59,8 +60,56 @@ export function CartPageContent() {
     removeItem(id);
   };
 
-  const handleCheckout = () => {
-    window.location.href = '/checkout';
+  const handleCheckout = async () => {
+    if (!state.shipping.selectedQuote) {
+      alert('Please calculate shipping first');
+      return;
+    }
+
+    try {
+      // Create checkout session with Stripe directly
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: state.items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            shortDescription: item.shortDescription || item.name || 'Product from Unwind Designs',
+            images: [item.image]
+          })),
+          successUrl: `${window.location.origin}/checkout/success`,
+          cancelUrl: `${window.location.origin}/checkout/cancelled`,
+          shippingCost: state.shipping.selectedQuote.price,
+          shippingMethod: state.shipping.selectedQuote.service,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL received from server');
+      }
+      
+    } catch (error) {
+      console.error('Payment failed:', error);
+      alert(`Payment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const handleAddressChange = (field: string, value: string) => {
@@ -320,11 +369,29 @@ export function CartPageContent() {
               
               <Button 
                 onClick={handleGetQuotes}
-                disabled={state.shipping.loading}
-                className="w-full bg-brown-500 hover:bg-darkBrown text-cream-400"
+                disabled={state.shipping.loading || !shippingAddressForm?.street || !shippingAddressForm?.city || !shippingAddressForm?.state || !shippingAddressForm?.postcode}
+                className="w-full bg-brown-500 hover:bg-darkBrown text-cream-400 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                {state.shipping.loading ? 'Getting Quotes...' : 'Get Shipping Quotes'}
+                {state.shipping.loading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-cream-400 border-t-transparent rounded-full animate-spin"></div>
+                    Getting Quotes...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Truck className="w-4 h-4" />
+                    Calculate Shipping Cost
+                  </div>
+                )}
               </Button>
+              {state.shipping.error && (
+                <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                  <div className="flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4" />
+                    <span>{state.shipping.error}</span>
+                  </div>
+                </div>
+              )}
 
               {/* Shipping Quotes */}
               {state.shipping.quotes.length > 0 && (
@@ -439,72 +506,29 @@ export function CartPageContent() {
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <div className="bg-cream-400 rounded-2xl p-6 shadow-soft border border-borderNeutral sticky top-24">
-            <h2 className="text-xl font-semibold text-textPrimary mb-6">Order Summary</h2>
-            
-            <div className="space-y-4 mb-6">
-              <div className="flex justify-between text-textSecondary">
-                <span>Subtotal ({state.itemCount} items)</span>
-                <span>${state.total.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-textSecondary">
-                <span>Shipping</span>
-                <span>
-                  {state.shipping.selectedQuote 
-                    ? `$${state.shipping.selectedQuote.price.toFixed(2)}`
-                    : 'Not calculated'
-                  }
-                </span>
-              </div>
-              {state.shipping.selectedQuote && (
-                <div className="text-sm text-textSecondary">
-                  {state.shipping.selectedQuote.service} 
-                  ({state.shipping.selectedQuote.deliveryDays} business days)
-                </div>
-              )}
-              {/* Payment Surcharge */}
-              {orderOptions.paymentSurcharge && orderOptions.paymentSurcharge !== 'none' && (
-                <div className="flex justify-between text-textSecondary">
-                  <span>Payment Surcharge</span>
-                  <span>
-                    {orderOptions.paymentSurcharge === 'credit-card' && `${(state.total * 0.025).toFixed(2)}`}
-                    {orderOptions.paymentSurcharge === 'paypal' && `${(state.total * 0.035).toFixed(2)}`}
-                    {orderOptions.paymentSurcharge === 'bank-transfer' && '$0.00'}
-                  </span>
-                </div>
-              )}
-
-              {/* Shipping Insurance */}
-              {orderOptions.shippingInsurance && orderOptions.shippingInsurance !== 'none' && (
-                <div className="flex justify-between text-textSecondary">
-                  <span>Shipping Insurance</span>
-                  <span>
-                    {orderOptions.shippingInsurance === 'basic' && '$50.00'}
-                    {orderOptions.shippingInsurance === 'standard' && '$119.00'}
-                    {orderOptions.shippingInsurance === 'premium' && '$250.00'}
-                  </span>
-                </div>
-              )}
-
-              <div className="flex justify-between text-textSecondary">
-                <span>Tax</span>
-                <span>Calculated at checkout</span>
-              </div>
-              <div className="border-t border-borderNeutral pt-4">
-                <div className="flex justify-between text-xl font-bold text-textPrimary">
-                  <span>Total</span>
-                  <span>
-                    ${(() => {
+          <CheckoutSummary orderOptions={orderOptions} />
+          
+          <div className="mt-6 space-y-4">
+            <Button
+              onClick={handleCheckout}
+              disabled={!state.shipping.selectedQuote}
+              className={`w-full py-4 text-lg ${
+                state.shipping.selectedQuote 
+                  ? 'bg-brown-500 hover:bg-darkBrown text-cream-400' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {state.shipping.selectedQuote ? (
+                <div className="flex items-center justify-center gap-2">
+                  <span>Pay with Stripe</span>
+                  <span className="text-sm opacity-90">
+                    (${(() => {
                       let total = state.total + (state.shipping.selectedQuote?.price || 0);
-                      
-                      // Add payment surcharge
                       if (orderOptions.paymentSurcharge === 'credit-card') {
                         total += state.total * 0.025;
                       } else if (orderOptions.paymentSurcharge === 'paypal') {
                         total += state.total * 0.035;
                       }
-                      
-                      // Add shipping insurance
                       if (orderOptions.shippingInsurance === 'basic') {
                         total += 50;
                       } else if (orderOptions.shippingInsurance === 'standard') {
@@ -512,23 +536,20 @@ export function CartPageContent() {
                       } else if (orderOptions.shippingInsurance === 'premium') {
                         total += 250;
                       }
-                      
                       return total.toFixed(2);
-                    })()}
+                    })()})
                   </span>
                 </div>
-              </div>
-            </div>
-
-            <Button
-              onClick={handleCheckout}
-              className="w-full bg-brown-500 hover:bg-darkBrown text-cream-400 py-4 text-lg"
-            >
-              Proceed to Checkout
+              ) : (
+                'Calculate Shipping First'
+              )}
             </Button>
 
-            <p className="text-caption text-textSecondary text-center mt-4">
-              Secure checkout powered by Stripe
+            <p className="text-caption text-textSecondary text-center">
+              {state.shipping.selectedQuote 
+                ? 'You will be redirected to Stripe to enter your payment details' 
+                : 'Enter your address and calculate shipping to continue'
+              }
             </p>
           </div>
         </div>

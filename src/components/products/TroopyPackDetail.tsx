@@ -53,14 +53,6 @@ export function TroopyPackDetail({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Breadcrumb */}
-      <nav className="mb-8">
-        <div className="flex items-center space-x-2 text-body-small text-textPrimary/60">
-          <Link href="/flat-packs" className="hover:text-accent-600">Flat Packs</Link>
-          <span>/</span>
-          <span className="text-textPrimary">{kitName}</span>
-        </div>
-      </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Product Images */}

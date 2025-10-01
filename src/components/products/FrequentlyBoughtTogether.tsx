@@ -20,10 +20,14 @@ interface AddOnProduct {
 interface FrequentlyBoughtTogetherProps {
   addOns: AddOnProduct[];
   onAddToCart: (items: { productId: string; variantId?: string; quantity: number }[]) => void;
+  // Optional: notify parent when a variant changes so it can sync other items
+  onVariantChange?: (productId: string, variantId: string) => void;
+  // Optional: allow the parent to provide initial selections/variants to keep bundles in sync
+  initialSelections?: Record<string, { selected: boolean; variantId?: string; quantity: number }>;
 }
 
-export function FrequentlyBoughtTogether({ addOns, onAddToCart }: FrequentlyBoughtTogetherProps) {
-  const [selectedItems, setSelectedItems] = useState<Record<string, { selected: boolean; variantId?: string; quantity: number }>>({});
+export function FrequentlyBoughtTogether({ addOns, onAddToCart, onVariantChange, initialSelections }: FrequentlyBoughtTogetherProps) {
+  const [selectedItems, setSelectedItems] = useState<Record<string, { selected: boolean; variantId?: string; quantity: number }>>(initialSelections || {});
 
   const updateSelection = (productId: string, selected: boolean, variantId?: string) => {
     setSelectedItems(prev => ({
@@ -45,6 +49,7 @@ export function FrequentlyBoughtTogether({ addOns, onAddToCart }: FrequentlyBoug
         selected: true
       }
     }));
+    onVariantChange?.(productId, variantId);
   };
 
   const getSelectedItems = () => {
@@ -87,7 +92,10 @@ export function FrequentlyBoughtTogether({ addOns, onAddToCart }: FrequentlyBoug
       viewport={{ once: true }}
       className="bg-white rounded-2xl p-6 shadow-soft border border-borderNeutral"
     >
-      <h3 className="text-xl font-bold text-textPrimary mb-6">Frequently Bought Together</h3>
+      <h3 className="text-xl font-bold text-textPrimary mb-2">Frequently Bought Together</h3>
+      <p className="text-sm text-textSecondary mb-6">
+        Bundle together and save $50 + Combined shipping will save you approximately an additional $100.
+      </p>
       
       <div className="space-y-4">
         {addOns.map((product) => {

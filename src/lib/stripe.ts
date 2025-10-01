@@ -8,10 +8,7 @@ if (!stripeSecretKey && process.env.NODE_ENV === 'production') {
 }
 
 // Initialize Stripe with AUD as default currency (if key is available)
-export const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
-  apiVersion: '2025-07-30.basil',
-  typescript: true,
-}) : null;
+export const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null;
 
 // Default currency for Australian business
 export const DEFAULT_CURRENCY = 'aud' as const;

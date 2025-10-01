@@ -7,7 +7,6 @@ import { ServicesChips } from "@/components/sections/ServicesChips";
 import { TroopyPromo } from "@/components/sections/TroopyPromo";
 import { GalleryPreview } from "@/components/sections/GalleryPreview";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { NewsletterCard } from "@/components/sections/NewsletterCard";
 import { Footer } from "@/components/footer";
 import { AnimationProvider } from "@/components/anim";
 import { Case } from "@/components/ui/cases-with-infinite-scroll";
@@ -26,7 +25,6 @@ export default function Home() {
           <ServicesChips />
           <GalleryPreview />
           <Testimonials />
-          <NewsletterCard />
         </div>
         <Case />
         <Footer />

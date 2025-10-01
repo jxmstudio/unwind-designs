@@ -90,7 +90,7 @@ export const wanderKits: FlatPackProduct[] = [
     sku: "WK-CF-PH-001",
     inStock: false,
     stockQuantity: 0,
-    comingSoon: true, // Wander Kit is coming soon
+    comingSoon: false, // Wander Kit is now available
     rating: 4.6,
     reviewCount: 89,
     tags: ["Flat Pack", "Troopcarrier", "Budget", "Chest Fridge", "Plain Hardwood"],
@@ -144,7 +144,7 @@ export const wanderKits: FlatPackProduct[] = [
     sku: "WK-CF-EBH-001",
     inStock: false,
     stockQuantity: 0,
-    comingSoon: true, // Wander Kit is coming soon
+    comingSoon: false, // Wander Kit is now available
     rating: 4.7,
     reviewCount: 67,
     tags: ["Flat Pack", "Troopcarrier", "Budget", "Chest Fridge", "Eucalyptus", "Black Hex"],
@@ -198,7 +198,7 @@ export const wanderKits: FlatPackProduct[] = [
     sku: "WK-CF-BBH-001",
     inStock: false,
     stockQuantity: 0,
-    comingSoon: true, // Wander Kit is coming soon
+    comingSoon: false, // Wander Kit is now available
     rating: 4.8,
     reviewCount: 43,
     tags: ["Flat Pack", "Troopcarrier", "Budget", "Chest Fridge", "Birch", "Black Hex", "Premium Veneer"],
@@ -253,7 +253,7 @@ export const wanderKits: FlatPackProduct[] = [
     sku: "WK-UF-PH-001",
     inStock: false,
     stockQuantity: 0,
-    comingSoon: true, // Wander Kit is coming soon
+    comingSoon: false, // Wander Kit is now available
     rating: 4.5,
     reviewCount: 76,
     tags: ["Flat Pack", "Troopcarrier", "Budget", "Upright Fridge", "Plain Hardwood"],
@@ -307,7 +307,7 @@ export const wanderKits: FlatPackProduct[] = [
     sku: "WK-UF-EBH-001",
     inStock: false,
     stockQuantity: 0,
-    comingSoon: true, // Wander Kit is coming soon
+    comingSoon: false, // Wander Kit is now available
     rating: 4.6,
     reviewCount: 52,
     tags: ["Flat Pack", "Troopcarrier", "Budget", "Upright Fridge", "Eucalyptus", "Black Hex"],
@@ -361,7 +361,7 @@ export const wanderKits: FlatPackProduct[] = [
     sku: "WK-UF-BBH-001",
     inStock: false,
     stockQuantity: 0,
-    comingSoon: true, // Wander Kit is coming soon
+    comingSoon: false, // Wander Kit is now available
     rating: 4.8,
     reviewCount: 31,
     tags: ["Flat Pack", "Troopcarrier", "Budget", "Upright Fridge", "Birch", "Black Hex", "Premium Veneer"],
@@ -371,6 +371,93 @@ export const wanderKits: FlatPackProduct[] = [
     troopyPackSlug: "wander-kit",
     createdAt: new Date("2024-01-10"),
     updatedAt: new Date("2024-01-15")
+  },
+  // Wander Troopy Flat Pack (Main Product)
+  {
+    id: "wander-troopy-flat-pack",
+    name: "Wander Troopy Flat Pack",
+    kitType: "Wander",
+    fridgeType: "Chest Fridge", // Default, but configurable
+    finish: "black-hex", // Default, but configurable
+    price: 3750.00,
+    slug: "wander-troopy-flat-pack",
+    description: "You asked - we delivered, our wander Troopy kit! The design you all love at a price point to help you hit the road! Offered in a plain wood finish or the ever popular black hex finish* Please note the black hex finish is different to our Premium Roam kit - you can read more about the differences here.\n\nWhat to Expect:\n✨ Easy Assembly: Setup designed for all skill levels.\n🔧 Quality Components that make camping a breeze\n⚡️ Thoughtful design for maximum storage and convenience.\n\nBenefits of our Wander flat pack:\n\n• Using Swiss designed cabinetry connectors, full installation is achieved in a weekend with no experience required.\n• Maximum functionality with accessible storage when inside AND outside your Troopy!\n• Unique day bed set up for the ultimate in comfort when stuck inside on a rainy day while maintaining access to your storage. This design allows access to storage under the bed while inside your Troopy!\n• Shower cabinet access from the drivers side window from a standard sliding window or gullwing.\n• Option for a plain plywood finish for those wanting a natural look or to paint your own colour and in a eucalyptus plywood with a black hex film for added style and durability. Please read our material selection blog for all the information about what we use.\n\nKey Dimensions\n\n• Fridge Space - approx 850x460 - Looking to fit a larger fridge? Get in contact as options may be available to accommodate.\n• Bed Dimensions - approx 1900x950\n• Walkway - approx 360 wide (enough room to comfortable walk through and not snag your feet.\n\nWeight Approx 120kg\n\nManufacturing Partner: No Goat for Jack\nWe have teamed up with a mechanical engineer/industrial designer with a top of the line manufacturing facility to be able to bring the product to life. Using state of the art machinery we are able to produce a premium product at an affordable price point.\n\nInstallation available by request in Brooklyn VIC and Perth\n\nShipping: Free pickup from Brooklyn VIC\n\nShipping available Australia wide. For an accurate quote please contact us. We offer shipping to nearly 200 depot locations Australia wide or direct to your door. The shipping quote calculated at checkout may not be accurate dependent on your location and by messaging us you are likely to receive a more competitive rate.\n\nHave a question? Call Karim on 0417362209",
+    shortDescription: "Budget-friendly flat pack solution for Toyota Troopcarriers",
+    images: [
+      "/brand/wander-troopy-flat-pack-346203.jpg",
+      "/brand/wander-troopy-flat-pack-537705.jpg",
+      "/brand/wander-troopy-flat-pack-705534.jpg",
+      "/brand/wander-troopy-flat-pack-937135.jpg",
+      "/brand/wander-troopy-flat-pack-939319.jpg",
+      "/brand/wander-troopy-flat-pack-281517.jpg"
+    ],
+    videoUrl: "/videos/wander-troopy-flat-pack-walkthrough.mp4",
+    features: [
+      "Easy assembly with Swiss designed cabinetry connectors",
+      "Maximum functionality with accessible storage",
+      "Unique day bed setup for comfort",
+      "Shower cabinet access from driver's side window",
+      "Multiple finish options available",
+      "Weekend installation with no experience required"
+    ],
+    specifications: {
+      "Fridge Space": "Approx 850x460mm",
+      "Bed Dimensions": "Approx 1900x950mm", 
+      "Walkway": "Approx 360mm wide",
+      "Weight": "Approx 120kg",
+      "Assembly": "Weekend installation",
+      "Manufacturing": "No Goat for Jack partnership"
+    },
+    dimensions: {
+      length: 1900,
+      width: 950,
+      height: 1200
+    },
+    weight: 120.0,
+    badges: ["Budget", "Easy Assembly", "Complete Kit"],
+    shipClass: "oversized",
+    upsells: ["cushion-set-troopy-flat-packs", "shower-outlet", "mass-noise-liner"],
+    variantOptions: [
+      {
+        name: "Finish",
+        values: [
+          { value: "black-hex", label: "Black Hex", available: true },
+          { value: "plain-plywood", label: "Plain Plywood", available: true }
+        ]
+      }
+    ],
+    variants: [
+      { 
+        id: "WFP-BH", 
+        price: 4400.00, 
+        sku: "WFP-BH-001", 
+        available: true, 
+        options: { Finish: "Black Hex" } 
+      },
+      { 
+        id: "WFP-PP", 
+        price: 3750.00, 
+        sku: "WFP-PP-001", 
+        available: true, 
+        options: { Finish: "Plain Plywood" } 
+      }
+    ],
+    installationRequired: true,
+    warranty: "1 year",
+    assemblyTime: "Weekend",
+    sku: "WFP-001",
+    inStock: true,
+    stockQuantity: 5,
+    comingSoon: false,
+    rating: 4.8,
+    reviewCount: 1,
+    tags: ["Flat Pack", "Troopcarrier", "Wander", "Complete Kit", "Storage"],
+    category: "Storage",
+    subcategory: "Complete Kits",
+    isTroopyPack: true,
+    troopyPackSlug: "wander-kit",
+    createdAt: new Date("2024-01-10"),
+    updatedAt: new Date("2024-01-10")
   }
 ];
 

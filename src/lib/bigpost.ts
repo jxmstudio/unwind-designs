@@ -17,15 +17,15 @@ import {
 
 // Configuration
 const BIGPOST_CONFIG = {
-  baseUrl: process.env.BIGPOST_BASE_URL || 'https://api.bigpost.com.au',
-  apiKey: process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || '',
+  baseUrl: process.env.BIGPOST_BASE_URL || process.env.BIGPOST_API_URL || 'https://app.bigpost.com.au',
+  apiKey: process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || process.env.BIG_POST_API_TOKEN || '',
   timeout: 30000, // 30 seconds
   retries: 2
 };
 
 // Validate configuration (only at runtime, not build time)
 if (!BIGPOST_CONFIG.apiKey && process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
-  console.warn('BIGPOST_API_KEY or BIG_POST_API_KEY environment variable is not set. BigPost features will not be available.');
+  console.warn('BIGPOST_API_KEY, BIG_POST_API_KEY, or BIG_POST_API_TOKEN environment variable is not set. BigPost features will not be available.');
 }
 
 // Error classes

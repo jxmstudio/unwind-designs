@@ -71,13 +71,19 @@ export async function POST(request: NextRequest) {
 
     // Check if Big Post integration is enabled
     const bigPostEnabled = getFeatureFlag('FEATURE_BIG_POST_SHIPPING');
-    const hasApiKey = !!(process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY);
+    const hasApiKey = !!(process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || process.env.BIG_POST_API_TOKEN);
     
     console.log('BigPost Debug Info:', {
       bigPostEnabled,
       hasApiKey,
-      apiKeyLength: (process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || '').length,
-      featureFlag: process.env.NEXT_PUBLIC_FEATURE_BIG_POST_SHIPPING
+      apiKeyLength: (process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || process.env.BIG_POST_API_TOKEN || '').length,
+      featureFlag: process.env.NEXT_PUBLIC_FEATURE_BIG_POST_SHIPPING,
+      allEnvVars: {
+        BIGPOST_API_KEY: process.env.BIGPOST_API_KEY ? 'SET' : 'NOT_SET',
+        BIG_POST_API_KEY: process.env.BIG_POST_API_KEY ? 'SET' : 'NOT_SET',
+        BIG_POST_API_TOKEN: process.env.BIG_POST_API_TOKEN ? 'SET' : 'NOT_SET',
+        NEXT_PUBLIC_FEATURE_BIG_POST_SHIPPING: process.env.NEXT_PUBLIC_FEATURE_BIG_POST_SHIPPING
+      }
     });
     
     if (bigPostEnabled && hasApiKey) {

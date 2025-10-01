@@ -91,6 +91,67 @@ export interface ComponentProduct {
   troopyPackSlug?: string; // For the main kit page (wander-kit, roam-kit, premium-kit)
   createdAt: Date;
   updatedAt: Date;
+  // Additional fields for enhanced product display
+  isOnSale?: boolean;
+  salePercentage?: number;
+  colorOptions?: Array<{
+    value: string;
+    label: string;
+    available: boolean;
+  }>;
+  thicknessOptions?: Array<{
+    value: string;
+    label: string;
+    description: string;
+  }>;
+  faceplateSizeOptions?: Array<{
+    value: string;
+    label: string;
+    available: boolean;
+  }>;
+  shippingInfo?: {
+    freeShippingThreshold: number;
+    freeShippingText: string;
+    freeShippingDetails: string;
+  };
+  guaranteeInfo?: {
+    title: string;
+    details: string;
+  };
+  requiresEmailOrder?: boolean;
+  sideOptions?: Array<{
+    value: string;
+    label: string;
+    available: boolean;
+  }>;
+  utilityPanelOptions?: Array<{
+    value: string;
+    label: string;
+    available: boolean;
+  }>;
+  variantOptions?: Array<{
+    name: string;
+    values: Array<{
+      value: string;
+      label: string;
+      available: boolean;
+      variantId?: string;
+      price?: number;
+      image?: string;
+      sku?: string;
+    }>;
+  }>;
+  variants?: Array<{
+    id: string;
+    price: number;
+    originalPrice?: number;
+    sku?: string;
+    image?: string;
+    available: boolean;
+    inStock?: boolean;
+    stockQuantity?: number;
+    options: { [key: string]: string };
+  }>;
 }
 
 // NEW PRODUCTS FROM NOTION LIST
@@ -129,7 +190,7 @@ export const generalFlatPackProducts: ComponentProduct[] = [
     warranty: "2-3 years depending on finish",
     assemblyTime: "4-6 hours",
     sku: "WK-GENERAL-001",
-    slug: "wander-troopy-flat-pack",
+    slug: "wander-troopy-flat-pack-general",
     inStock: true,
     stockQuantity: 25,
     rating: 4.6,
@@ -288,11 +349,17 @@ export const sidePanelProducts: ComponentProduct[] = [
   },
   {
     id: "troopy-side-panels-storage",
-    name: "Troopy Side Panels with Storage",
+    name: "Troopy Side Panels with added storage",
     description: "Enhanced side panels featuring integrated storage compartments, perfect for organizing smaller items while maintaining the clean interior aesthetic.", // TODO: update description, media, pricing
     shortDescription: "Side panels with integrated storage compartments",
-    price: 1250.00, // TODO: update pricing 
-    images: ["/products/side-panels-storage-1.jpg", "/products/side-panels-storage-2.jpg"], // TODO: update with actual product images
+    price: 865.00,
+    originalPrice: 895.00,
+    images: [
+      "/brand/troopy-side-panels-with-added-storage-146756.jpg",
+      "/brand/troopy-side-panels-with-added-storage-151873.jpg",
+      "/brand/troopy-side-panels-with-added-storage-616672.jpg",
+      "/brand/troopy-side-panels-with-added-storage-720531.jpg"
+    ],
     category: "Panels",
     subcategory: "Storage Panels",
     tags: ["Panels", "Troopcarrier", "Storage", "Organization"],
@@ -305,11 +372,11 @@ export const sidePanelProducts: ComponentProduct[] = [
       "Easy access design"
     ],
     specifications: {
-      "Material": "Premium marine-grade plywood", // TODO: update specifications
-      "Storage Volume": "45L total across all compartments",
-      "Compartments": "6 various sized storage areas",
-      "Installation": "Enhanced bracket mounting",
-      "Compatibility": "Toyota Troopcarrier all models"
+      "Material": "6.5mm Black Hex on Birch plywood",
+      "Reveals": "3 each side with boxes",
+      "Rear Doors": "Matching rear door panels included",
+      "Hardware": "M5 nutserts, bolts, washers included",
+      "Compatibility": "Toyota Troopcarrier"
     },
     dimensions: {
       length: 200,
@@ -320,7 +387,7 @@ export const sidePanelProducts: ComponentProduct[] = [
     compatibility: ["Toyota Troopcarrier"],
     isPopular: true,
     installationRequired: true,
-    warranty: "3 years",
+    warranty: "1 year",
     assemblyTime: "3-4 hours",
     sku: "SP-STOR-001",
     slug: "troopy-side-panels-with-storage",
@@ -329,92 +396,80 @@ export const sidePanelProducts: ComponentProduct[] = [
     rating: 4.7, // TODO: update rating and reviews
     reviewCount: 38,
     badges: ["Popular", "Enhanced Storage"],
+    // Variant options and explicit variants for button-group selector
+    variantOptions: [
+      {
+        name: "Material",
+        values: [
+          { value: "Plain Birch", label: "Plain Birch", available: true },
+          { value: "Black Hex", label: "Black Hex", available: true }
+        ]
+      },
+      {
+        name: "Bungee",
+        values: [
+          { value: "No Bungee", label: "No Bungee", available: true },
+          { value: "With Bungee", label: "With Bungee", available: true }
+        ]
+      }
+    ],
+    variants: [
+      { id: "PB-NB", price: 850.00, sku: "PB-NB", available: true, options: { Material: "Plain Birch", Bungee: "No Bungee" } },
+      { id: "PB-WB", price: 865.00, sku: "PB-WB", available: true, options: { Material: "Plain Birch", Bungee: "With Bungee" } },
+      { id: "BH-NB", price: 850.00, sku: "BH-NB", available: true, options: { Material: "Black Hex", Bungee: "No Bungee" } },
+      { id: "BH-WB", price: 865.00, sku: "BH-WB", available: true, options: { Material: "Black Hex", Bungee: "With Bungee" } }
+    ],
     shipClass: "oversized", 
     upsells: ["storage-organizers", "led-strip-warm"],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
+    shippingInfo: {
+      freeShippingThreshold: 0,
+      freeShippingText: "Bulky Item Shipping Details",
+      freeShippingDetails: "Free Pickup in Brooklyn Victoria. Shipping available Australia wide and calculated on a case by case basis. For the best shipping rates fill out the quote form or send us a message. Shipping to a business address with access to a forklift is the cheapest option. Residential and depot collect options also available. We ship to over 200 depots Australia wide to help provide you with the best shipping rates."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    },
+    
+    updatedAt: new Date("2024-09-30")
   }
 ];
 
 // Flooring Products
-export const flooringProducts: ComponentProduct[] = [
-  {
-    id: "troopy-floor",
-    name: "Troopy Floor",
-    description: "Professional-grade flooring solution designed specifically for Toyota Troopcarriers. Provides durable, easy-to-clean surface with integrated attachment points for fitout components.", // TODO: update description, media, pricing
-    shortDescription: "Professional flooring system for Troopcarriers",
-    price: 950.00, // TODO: update pricing
-    images: ["/products/troopy-floor-1.jpg", "/products/troopy-floor-2.jpg"], // TODO: update with actual product images
-    category: "Flooring",
-    subcategory: "Vehicle Flooring",
-    tags: ["Flooring", "Troopcarrier", "Professional", "Durable"],
-    features: [
-      "Custom-fit for Toyota Troopcarrier",
-      "Heavy-duty marine-grade materials",
-      "Integrated attachment points",
-      "Easy-to-clean surface", 
-      "Non-slip texture",
-      "Removable for maintenance"
-    ],
-    specifications: {
-      "Material": "Marine-grade plywood with vinyl surface", // TODO: update specifications
-      "Thickness": "18mm", 
-      "Surface": "Anti-slip vinyl coating",
-      "Attachment Points": "Pre-drilled mounting locations",
-      "Compatibility": "Toyota Troopcarrier all models"
-    },
-    dimensions: {
-      length: 220,
-      width: 140,
-      height: 2
-    },
-    weight: 45.0,
-    compatibility: ["Toyota Troopcarrier"],
-    installationRequired: true,
-    warranty: "3 years",
-    assemblyTime: "1-2 hours",
-    sku: "FLOOR-001",
-    slug: "troopy-floor", 
-    inStock: true,
-    stockQuantity: 20,
-    rating: 4.6, // TODO: update rating and reviews
-    reviewCount: 67,
-    badges: ["Professional Grade"],
-    shipClass: "oversized",
-    upsells: ["insulation-kit-basic", "wander-troopy-flat-pack-general"],
-    isTroopyPack: false,
-    createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
-  }
-];
+export const flooringProducts: ComponentProduct[] = [];
 
 // Accessory Products
 export const accessoryProducts: ComponentProduct[] = [
   {
     id: "cushion-set-troopy-kits",
-    name: "Cushion Set for Troopy Kits",
-    description: "Premium cushion set designed to complement any of our Troopy flat pack configurations. Available in multiple colors and materials to match your kit finish.", // TODO: update description, media, pricing
-    shortDescription: "Premium cushions for all Troopy kit configurations",
-    price: 450.00, // TODO: update pricing
-    images: ["/products/cushion-troopy-kits-1.jpg", "/products/cushion-troopy-kits-2.jpg"], // TODO: update with actual product images
+    name: "Cushion Set For Troopy Flat Packs",
+    description: "Cushion set for your Troopy flat pack. Designed to complement Wander/Roam and Upright kits with durable, easy-clean covers and comfortable foam. Pickup available at Export Drive (Usually ready in 2–4 days).",
+    shortDescription: "Premium cushion set for Troopy flat packs",
+    price: 850.00,
+    originalPrice: 895.00,
+    images: [
+      "/brand/cushion-set-for-troopy-flat-packs-312040.jpg",
+      "/brand/cushion-set-for-troopy-flat-packs-258801.jpg"
+    ],
     category: "Accessories",
     subcategory: "Cushions",
     tags: ["Cushions", "Troopcarrier", "Comfort", "Custom Fit"],
     features: [
-      "Compatible with all flat pack kits",
-      "Multiple color options available",
-      "Marine-grade vinyl construction",
-      "High-density foam core",
-      "Water-resistant and easy to clean",
-      "Custom sizing available"
+      "Compatible with Wander/Roam and Upright kits",
+      "Color options: Grey, Beige",
+      "Durable, easy-clean covers",
+      "High-density foam for comfort",
+      "Professional finish",
+      "Made to fit Troopy dimensions"
     ],
     specifications: {
-      "Material": "Marine-grade vinyl with foam core", // TODO: update specifications
-      "Thickness": "8cm high-density foam",
-      "Colors": "6 standard colors available",
-      "Attachment": "Velcro and snap fasteners",
-      "Compatibility": "All Troopy flat pack configurations"
+      "Materials": "High-density foam, durable fabric covers",
+      "Colors": "Grey, Beige",
+      "Fit": "Wander/Roam Kit, Upright Kit",
+      "Cleaning": "Easy-clean covers",
+      "Compatibility": "Troopy flat pack configurations"
     },
     dimensions: {
       length: 120,
@@ -425,7 +480,7 @@ export const accessoryProducts: ComponentProduct[] = [
     compatibility: ["Wander Kit", "Roam Kit", "Premium Kit"],
     isPopular: true,
     installationRequired: false,
-    warranty: "2 years",
+    warranty: "1 year",
     sku: "CUSH-TROOPY-001",
     slug: "cushion-set-troopy-kits",
     inStock: true,
@@ -437,7 +492,32 @@ export const accessoryProducts: ComponentProduct[] = [
     upsells: ["storage-organizers", "led-strip-warm"],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping on orders over $450",
+      freeShippingDetails: "Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    },
+    variantOptions: [
+      {
+        name: "Flat Pack Model",
+        values: [
+          { value: "wander-roam", label: "Wander/Roam Kit", available: true },
+          { value: "upright", label: "Upright Kit", available: true }
+        ]
+      },
+      {
+        name: "Color",
+        values: [
+          { value: "grey", label: "Grey", available: true },
+          { value: "beige", label: "Beige", available: true }
+        ]
+      }
+    ],
+    updatedAt: new Date("2024-09-30")
   }
 ];
 
@@ -445,11 +525,15 @@ export const accessoryProducts: ComponentProduct[] = [
 export const plumbingProducts: ComponentProduct[] = [
   {
     id: "shower-outlet",
-    name: "Shower Outlet",
-    description: "Compact external shower outlet system perfect for outdoor washing and cleaning. Easy installation with quick-connect fittings and integrated water flow control.", // TODO: update description, media, pricing
-    shortDescription: "External shower system for outdoor use", 
-    price: 180.00, // TODO: update pricing
-    images: ["/products/shower-outlet-1.jpg", "/products/shower-outlet-2.jpg"], // TODO: update with actual product images
+    name: "Troopy Shower Outlet Kit",
+    description: "Designed specifically for our flat packs. Includes a super simple to install mixer tap, flexible hose, and an adjustable shower head with multiple modes and an on/off button to help save precious water while on the road.",
+    shortDescription: "Mixer tap, hose and adjustable shower head",
+    price: 125.00,
+    images: [
+      "/brand/troopy-shower-outlet-kit-146456.jpg",
+      "/brand/troopy-shower-outlet-kit-151059.jpg",
+      "/brand/troopy-shower-outlet-kit-616672.jpg"
+    ],
     category: "Plumbing",
     subcategory: "External Outlets",
     tags: ["Plumbing", "Shower", "External", "Outdoor"],
@@ -462,11 +546,10 @@ export const plumbingProducts: ComponentProduct[] = [
       "Easy installation design"
     ],
     specifications: {
-      "Material": "Stainless steel body", // TODO: update specifications
-      "Connection": "Standard garden hose thread",
-      "Flow Rate": "8L/min maximum",
-      "Installation": "Single mounting point required",
-      "Compatibility": "All water systems 20L+"
+      "Mixer": "Included, simple install",
+      "Hose": "Flexible hose",
+      "Shower head": "Adjustable with multiple modes and on/off button",
+      "Compatibility": "Troopy flat packs and standard water systems"
     },
     dimensions: {
       length: 15,
@@ -476,7 +559,7 @@ export const plumbingProducts: ComponentProduct[] = [
     weight: 1.2,
     compatibility: ["Water Tank 20L", "Water Tank 30L", "All flat pack kits"],
     installationRequired: true,
-    warranty: "3 years",
+    warranty: "1 year",
     assemblyTime: "30 minutes",
     sku: "SHOWER-001",
     slug: "shower-outlet",
@@ -489,7 +572,16 @@ export const plumbingProducts: ComponentProduct[] = [
     upsells: ["water-tank-30l", "water-tank-20l"],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"), 
-    updatedAt: new Date("2024-01-15")
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping on orders over $450",
+      freeShippingDetails: "Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    },
+    updatedAt: new Date("2024-09-30")
   }
 ];
 
@@ -497,14 +589,19 @@ export const plumbingProducts: ComponentProduct[] = [
 export const ventilationProducts: ComponentProduct[] = [
   {
     id: "troopy-utility-vent",
-    name: "Troopy Utility Vent (Ark Earth)",
-    description: "High-quality utility vent designed specifically for Toyota Troopcarriers. Provides excellent ventilation while maintaining weather protection.",
-    shortDescription: "Professional utility vent for Troopcarriers",
-    price: 85.00,
-    images: ["/products/utility-vent-1.jpg", "/products/utility-vent-2.jpg"],
+    name: "Troopcarrier Utility Vent - Ark Earth",
+    description: "Available now! - Limited quantity ready for immediate dispatch\n\nDiscover the ultimate in functionality and style with our new utility vents, meticulously handcrafted by Ark Earth Fabrication in Perth. Engineered for Troopcarriers and Landcruisers, these vents boast a factory look, concealing outlets seamlessly.\n\nKey Features:\n• Easy access to power, air, and water\n• Secure magnetic catch for reliable closure\n• Suitable for both passenger and driver sides\n• Stainless steel construction for enduring quality\n\nOptions:\n- All models are constructed from stainless steel\n\nBlack powder coated vent with fittings\n1x 1/2” Water Outlet\n1x 1/4” Air Outlet\n1x 3/8” Breather\n1x Anderson Plug\n\nBlack powder coated vent without fittings\nVent box only - no fittings provided so you can customise them to suit your requirements. Please note holes come pre drilled for the above size fittings.\n\nVersatile Installation:\nEasily install in minutes in any Landcruiser with a factory vent or in any other vehicle with a simple cutout wherever you need it. The utility vents come standard with 2x Nitto fittings and 1x Anderson plug. Perfect for all your air, water and power needs!\n\nFuture-Ready Integration:\nDesigned to complement our 75 & 78 Series 65L Troop Carrier water tanks. Get ready for a seamless blend of form and function.\n\nUpgrade your vehicle with this sleek addition. Secure your vent now and experience the perfect fusion of aesthetics and utility!",
+    shortDescription: "Stainless utility vent with optional fittings (Troopy/Landcruiser)",
+    price: 360.00,
+    images: [
+      "/brand/troopcarrier-utility-vent-ark-earth-422540.jpg",
+      "/brand/troopcarrier-utility-vent-ark-earth-518089.jpg",
+      "/brand/troopcarrier-utility-vent-ark-earth-694455.jpg",
+      "/brand/troopcarrier-utility-vent-ark-earth-702171.jpg"
+    ],
     category: "Ventilation",
     subcategory: "Utility Vents",
-    tags: ["Ventilation", "Troopcarrier", "Weather Resistant", "Professional"],
+    tags: ["Ventilation", "Troopcarrier", "Utility Vent", "Ark Earth"],
     features: [
       "Weather-resistant construction",
       "Easy installation design",
@@ -514,11 +611,11 @@ export const ventilationProducts: ComponentProduct[] = [
       "Long-lasting performance"
     ],
     specifications: {
-      "Material": "High-grade plastic with metal components",
-      "Size": "Standard Troopcarrier fit",
-      "Installation": "Screw-on mounting",
-      "Weather Rating": "IP65",
-      "Compatibility": "Toyota Troopcarrier"
+      "Material": "Stainless steel (black powder coat)",
+      "Fit": "Troopcarrier and Landcruiser factory vent locations",
+      "Fittings Option": "Water 1/2”, Air 1/4”, Breather 3/8”, Anderson Plug",
+      "Install": "Minutes with simple tools",
+      "Sides": "Passenger or Driver"
     },
     dimensions: {
       length: 20,
@@ -528,7 +625,7 @@ export const ventilationProducts: ComponentProduct[] = [
     weight: 0.8,
     compatibility: ["Toyota Troopcarrier"],
     installationRequired: true,
-    warranty: "2 years",
+    warranty: "1 year",
     assemblyTime: "15 minutes",
     sku: "VENT-001",
     slug: "troopy-utility-vent",
@@ -541,7 +638,25 @@ export const ventilationProducts: ComponentProduct[] = [
     upsells: ["troopy-side-panels"],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping on orders over $450",
+      freeShippingDetails: "Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    },
+    variantOptions: [
+      {
+        name: "Option",
+        values: [
+          { value: "with-fittings", label: "With Fittings", available: true },
+          { value: "no-fittings", label: "No Fittings", available: true }
+        ]
+      }
+    ],
+    updatedAt: new Date("2024-09-30")
   }
 ];
 
@@ -549,14 +664,14 @@ export const ventilationProducts: ComponentProduct[] = [
 export const compressorProducts: ComponentProduct[] = [
   {
     id: "arb-twin-compressor-bracket",
-    name: "ARB Twin Compressor Bracket (Ark Earth)",
-    description: "Heavy-duty mounting bracket for ARB twin air compressors. Designed for secure installation in Toyota Troopcarriers with easy access for maintenance.",
-    shortDescription: "Heavy-duty ARB compressor mounting bracket",
-    price: 120.00,
-    images: ["/products/arb-bracket-1.jpg", "/products/arb-bracket-2.jpg"],
+    name: "Landcruiser Troopcarrier 75,78 series ARB twin compressor bracket - Ark Earth",
+    description: "ARB Twin compressor bracket suitable for 75, 78 Series Landcruiser Troopcarrier\n\nKey Features\n- Easy installation - uses existing factory mounts\n- Compatible with side panels and utility box\n- Designed to perfectly fit the twin ARB Compressor\n\n*A single ARB compressor and some other compressors will also fit but will require DIY modification.\n\nSuitable for 75,78 Series Landcruiser Troopcarrier\n- Stainless steel construction\n- Compressor mounts directly to the bracket\n- The compressor bracket bolts underneath the vent and to the side body of the vehicle\n- Compatible with our Vent utility box\n- Compatible with side panels\n- Fittings and hose options includes all fittings and hose to plumb the twin ARB compressor to the ARK Earth Vent Replacement.\n\n* For Drivers side mounting only - Passenger side bracket coming soon.",
+    shortDescription: "ARB twin compressor bracket for 75/78 Series Troopy",
+    price: 180.00,
+    images: ["/brand/67.jpg"],
     category: "Compressors",
     subcategory: "Mounting Brackets",
-    tags: ["Compressor", "ARB", "Mounting", "Heavy Duty", "Professional"],
+    tags: ["Compressor", "ARB", "Bracket", "Troopcarrier", "Ark Earth"],
     features: [
       "Heavy-duty construction",
       "ARB twin compressor compatible",
@@ -566,11 +681,11 @@ export const compressorProducts: ComponentProduct[] = [
       "Durable materials"
     ],
     specifications: {
-      "Material": "Powder-coated steel",
-      "Compatibility": "ARB Twin Compressor",
-      "Installation": "Vehicle-specific mounting",
-      "Weight Capacity": "Up to 15kg",
-      "Finish": "Black powder coat"
+      "Material": "Stainless steel",
+      "Compatibility": "ARB Twin Compressor (and some single with mods)",
+      "Installation": "Uses existing factory mounts",
+      "Side": "Driver side (passenger coming soon)",
+      "Includes": "Optional fittings and hose kit"
     },
     dimensions: {
       length: 30,
@@ -580,7 +695,7 @@ export const compressorProducts: ComponentProduct[] = [
     weight: 2.5,
     compatibility: ["Toyota Troopcarrier", "ARB Twin Compressor"],
     installationRequired: true,
-    warranty: "3 years",
+    warranty: "1 year",
     assemblyTime: "45 minutes",
     sku: "ARB-BRACKET-001",
     slug: "arb-twin-compressor-bracket",
@@ -593,7 +708,25 @@ export const compressorProducts: ComponentProduct[] = [
     upsells: ["arb-twin-compressor"],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping on orders over $450",
+      freeShippingDetails: "Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    },
+    variantOptions: [
+      {
+        name: "Material",
+        values: [
+          { value: "bracket-only", label: "Bracket Only", available: true },
+          { value: "bracket-fittings", label: "Bracket with fittings and hose", available: true }
+        ]
+      }
+    ],
+    updatedAt: new Date("2024-09-30")
   }
 ];
 
@@ -601,11 +734,15 @@ export const compressorProducts: ComponentProduct[] = [
 export const waterTankProducts: ComponentProduct[] = [
   {
     id: "62l-stainless-water-tank",
-    name: "62L Stainless Steel Water Tank",
-    description: "High-quality stainless steel water tank with 62L capacity. Perfect for extended adventures with durable construction and easy maintenance.",
-    shortDescription: "62L stainless steel water tank",
-    price: 450.00,
-    images: ["/products/62l-tank-1.jpg", "/products/62l-tank-2.jpg"],
+    name: "62L Stainless Steel Landcruiser Water Tank | 78 & 75 Series troop carrier",
+    description: "We are working hard to build stock levels, for urgent orders please call us on 0417362209.\n\nContact us for a shipping quote - shipping will be invoice separately if you check out via the website.\n\nApproximately 2-4 Week Lead Time (Message for up to date availability).\n\nAvailable for local install in Brooklyn VIC or Australia wide shipping.\n\nToyota Troopcarrier 53L/62L Stainless Steel water tank. Our tank mounts behind your sub fuel tank. Designed to millimeter perfection to maximise your on board water supply!\n\nThis tank has been tested on some of Australia's harshest tracks and is built tough!\n\n53L sits up a little higher than the 62L giving you more off road clearance. (This is only necessary to consider for extreme off road conditions)\n\nQuick tank Facts:\n- 62L or 53L Stainless steel tank, Electropolished for maximum corrosion resistance & food grade properties\n- Mounts are fixed to the tank (no straps)\n- Tank mounts to existing locations on the chassis\n- Easy and fast Installation with basic hand tools and mechanical knowledge.\n- Australian made and hand built by Ark Earth Fabrication\n\nOther notes:\n- Installation available at our Brooklyn VIC Workshop\n- Pumps and plumbing kits are available, send us a message.\n- Pairs perfectly with our side vent replacement!\n\nPickup Available in Brooklyn Victoria\n\n*Contact us for Shipping Quote - Shipping will be invoiced separately if you do not request a quote*",
+    shortDescription: "62L/53L stainless steel water tank for 78/75 Series Troopy",
+    price: 1280.00,
+    images: [
+      "/brand/65l-stainless-steel-landcruiser-water-tank-78-75-series-troop-carrier-340332.jpg",
+      "/brand/65l-stainless-steel-landcruiser-water-tank-78-75-series-troop-carrier-895704.jpg",
+      "/brand/65l-stainless-steel-landcruiser-water-tank-78-75-series-troop-carrier-949973.jpg"
+    ],
     category: "Water Systems",
     subcategory: "Water Tanks",
     tags: ["Water Tank", "Stainless Steel", "62L", "Durable", "Professional"],
@@ -618,11 +755,11 @@ export const waterTankProducts: ComponentProduct[] = [
       "Long-lasting performance"
     ],
     specifications: {
-      "Material": "304 Stainless Steel",
-      "Capacity": "62 Liters",
-      "Dimensions": "400mm x 300mm x 500mm",
-      "Weight": "8.5kg",
-      "Fittings": "Standard BSP threads"
+      "Material": "304 Stainless Steel (Electropolished)",
+      "Capacity": "62L or 53L",
+      "Mounting": "Existing chassis locations, mounts fixed to tank",
+      "Install": "Basic hand tools; Australian made",
+      "Notes": "53L sits higher for more clearance"
     },
     dimensions: {
       length: 40,
@@ -644,33 +781,56 @@ export const waterTankProducts: ComponentProduct[] = [
     shipClass: "oversized",
     upsells: ["water-pump-40psi", "shower-outlet"],
     isTroopyPack: false,
+    shippingInfo: {
+      freeShippingThreshold: 0,
+      freeShippingText: "Bulky Item Shipping Details",
+      freeShippingDetails: "Free Pickup in Brooklyn Victoria. Shipping available Australia wide and calculated on a case by case basis. For the best shipping rates fill out the quote form or send us a message. Shipping to a business address with access to a forklift is the cheapest option. Residential and depot collect options also available. We ship to over 200 depots Australia wide to help provide you with the best shipping rates."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply"
+    },
+    variantOptions: [
+      {
+        name: "Size",
+        values: [
+          { value: "62l", label: "62L", available: true, price: 1280.00 },
+          { value: "53l", label: "53L", available: true, price: 1250.00 }
+        ]
+      }
+    ],
     createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
+    updatedAt: new Date("2024-09-30"),
+    videoUrl: "https://youtu.be/qdP-rNhHmDA"
   },
   {
     id: "90l-troopy-water-tank",
-    name: "90L Troopy Water Tank",
-    description: "Large capacity 90L water tank designed specifically for Toyota Troopcarriers. Provides ample water storage for extended adventures.",
-    shortDescription: "90L water tank for Troopcarriers",
-    price: 680.00,
-    images: ["/products/90l-tank-1.jpg", "/products/90l-tank-2.jpg"],
+    name: "90L Troopcarrier Water Tank",
+    description: "Our 90L Troopcarrier water tank has arrived. Please email us to place an order.\n\nQuick tank Facts:\n\n-Mounts between the Diffs in the centre of the Troopy.\n\n-Mounts without requiring access inside the body. All brackets are bolted from underneath.\n\n-Comes with 3x 1/2 fittings welded to the tank, intended for water in / water out / breather\n\n-All tank components are made from stainless steel, which is chemically cleaned after fabrication. We do all of these processes in house at Ark Earth Products.\n\n-This product requires exhaust modification. The exhaust must be within 200mm of the passenger side chassis rail. Please contact us for more information.\n\n-During installation the handbrake cable is removed and passed through the centre of the water tank (the water tank has a cable pass through its centre)\n\nWater tank recommendations:\n\nOur 90L water tank is a great asset to have for overlanding in your Troopy. The 90L tank can also be paired with either of our rear mounted water tanks. This combination can allow you to carry around 150L of water between 2 tanks.\n\nFor more information please send us an email.",
+    shortDescription: "90L stainless steel water tank for Troopcarriers",
+    price: 1950.00,
+    images: ["/brand/90Ltank.jpg"],
     category: "Water Systems",
     subcategory: "Water Tanks",
-    tags: ["Water Tank", "90L", "Troopcarrier", "Large Capacity", "Professional"],
+    tags: ["Water Tank", "90L", "Troopcarrier", "Stainless Steel", "Professional", "Email Order"],
     features: [
       "90L large capacity",
-      "Troopcarrier specific design",
-      "Heavy-duty construction",
-      "Easy installation",
-      "Professional grade",
-      "Extended adventure ready"
+      "Stainless steel construction",
+      "Mounts between diffs in centre of Troopy",
+      "No body access required for installation",
+      "3x 1/2 fittings welded to tank",
+      "Chemically cleaned after fabrication",
+      "Handbrake cable pass-through design"
     ],
     specifications: {
-      "Material": "Food-grade plastic",
+      "Material": "Stainless Steel",
       "Capacity": "90 Liters",
-      "Dimensions": "500mm x 400mm x 450mm",
-      "Weight": "12kg",
-      "Compatibility": "Toyota Troopcarrier"
+      "Mounting": "Between diffs, centre of Troopy",
+      "Installation": "Bolted from underneath",
+      "Fittings": "3x 1/2 inch welded fittings",
+      "Processing": "Chemically cleaned in-house",
+      "Exhaust Requirement": "Within 200mm of passenger side chassis rail",
+      "Cable Pass": "Handbrake cable through centre"
     },
     dimensions: {
       length: 50,
@@ -688,10 +848,14 @@ export const waterTankProducts: ComponentProduct[] = [
     stockQuantity: 8,
     rating: 4.8,
     reviewCount: 22,
-    badges: ["Large Capacity", "Professional"],
+    badges: ["Stainless Steel", "Professional", "Email Order"],
     shipClass: "oversized",
     upsells: ["90l-plumbing-kit", "water-pump-40psi"],
     isTroopyPack: false,
+    colorOptions: [
+      { value: "black", label: "Black", available: true }
+    ],
+    requiresEmailOrder: true,
     createdAt: new Date("2024-01-12"),
     updatedAt: new Date("2024-01-15")
   }
@@ -702,10 +866,10 @@ export const soundDeadeningProducts: ComponentProduct[] = [
   {
     id: "mass-noise-liner",
     name: "Car Builders Mass Noise Liner",
-    description: "Professional mass noise liner for effective sound deadening. Reduces road noise and improves cabin acoustics in Toyota Troopcarriers.",
-    shortDescription: "Professional mass noise liner",
+    description: "2x sheets required for the rear of a Troopy, 2 additional sheets required if also using for front of Troopy.\n\nTroopy Floor Template is a special order item and generally has a processing time of 3-5 days. This is cut to order by Carbuilders directly.\n\nThe rear only option contains 2x sheets which are cut to size for the rear floor pan. This is highly recommended to install under a fit out.\n\nThe Template option for the entire troopy comes with 4 sheets cut to size for under the seats, floor pan and rear cargo area.\n\nCar Builders Mass Noise Liner is a 12mm thick, heavy weight, acoustic barrier. This product is used over the top of sound deadening (stage 1) which is applied directly onto the sheet metal. Sound deadening stops noise created by panel vibration whereas Mass Noise Liner (stage 2) reduces air borne noise generated from the engine, road etc. This premium carpet underlay is an OEM product used in high-end luxury vehicles. Mass Noise Liner replaces cotton jute or shoddy, creating far superior sound proofing results.\n\nConstruction\n2mm Mass Loaded vinyl upper layer, coupled with an 10mm closed cell foam to create the most effective means of acoustic blocking. Our flexible closed cell foam is water resistant and offers superior thermal insulation.\n\nFeatures/Advantages\n- Heavy duty sound blocking\n- Water resistant\n- Removable\n- Cuts with scissor and knife\n- Reduces heat transfer\n- Does not rot or deteriorate\n\nApplications\n- Firewalls\n- Cargo areas\n- Van floors\n- Boot floors\n\nIt is not 100% necessary to put Stage 1 Sound Deadener underneath Mass Noise Liner on cargo area floors or van floors due to the metal already being fairly rigid from the ribs. The Mass Noise Liner will be an effective floor sound proofing by itself.\n\nIdeal for:\n- 4WD's and muscle cars - firewall barrier to reduce engine noise\n- Trucks - reduce engine noise and heat on floors and firewalls, great for serviceability\n- Exhaust drone - drop in as a boot liner to reduce exhaust drone particular common in 6's, V8's and flat fours.\n- Engine rooms, compressors etc\n\nNote: due to the weight of our Mass Noise Liner it is not recommended for use on the underside of horizontal surfaces. For these applications you should use our light weight foam such as Acoustic Liner, Water proof carpet underlay, Under bonnet insulation or our 6mm Insul-layer.",
+    shortDescription: "12mm acoustic barrier with MLV and closed-cell foam",
     price: 95.00,
-    images: ["/products/mass-liner-1.jpg", "/products/mass-liner-2.jpg"],
+    images: ["/brand/dog1.png", "/brand/dog2.png", "/brand/dog3.png"],
     category: "Sound Deadening",
     subcategory: "Mass Liners",
     tags: ["Sound Deadening", "Mass Liner", "Noise Reduction", "Professional"],
@@ -718,11 +882,12 @@ export const soundDeadeningProducts: ComponentProduct[] = [
       "Long-lasting performance"
     ],
     specifications: {
-      "Material": "Butyl rubber with aluminum",
-      "Thickness": "2mm",
-      "Coverage": "1 square meter",
-      "Weight": "2.5kg per sheet",
-      "Installation": "Self-adhesive"
+      "Construction": "2mm Mass Loaded Vinyl + 10mm closed cell foam",
+      "Thickness": "12mm",
+      "Sheets": "Rear only: 2 sheets. Full Troopy: 4 sheets",
+      "Fitment": "Rear floor, under seats, floor pan, cargo area",
+      "Water Resistance": "Closed cell foam layer",
+      "Install": "Cuts with scissors/knife; removable"
     },
     dimensions: {
       length: 100,
@@ -750,35 +915,46 @@ export const soundDeadeningProducts: ComponentProduct[] = [
   {
     id: "troopy-sound-pack",
     name: "Carbuilders Troopy Sound Deadening Pack",
-    description: "Complete sound deadening pack specifically designed for Toyota Troopcarriers. Includes all materials needed for professional sound insulation.",
-    shortDescription: "Complete Troopcarrier sound deadening pack",
-    price: 280.00,
-    images: ["/products/sound-pack-1.jpg", "/products/sound-pack-2.jpg"],
+    description: "We are super excited to be providing you legends with the ultimate sound deadening packs from Carbuilders!\n\nOur most popular kit is Pack 2 with the pre cut floor pan and pre cut foam insulation.\n\n## Pack 1\n\n• **4 Boxes (7.2sq/m) of Stage 1 Sound Deadener** - Apply to your firewall, front floor pan, under front seats, inner 1/4 panels, rear wheel arches, door skins.\n• **2 Boxes (3.6sq/m) of Water Proof Underlay** - Apply to front floor pan and under front seats.\n• **1 x Install kit** - Includes 1 x application roller, 1 x utility knife, 1 x roll of foil tape, stubby holder & bottle opener\n\n## Pack 2\n\n• **4 Boxes (7.2sq/m) of Stage 1 Sound Deadener** - Apply to your firewall, front floor pan, under front seats, inner 1/4 panels, rear wheel arches, door skins. This leaves 8 x Sound Deadener sheets for cargo area - see layout in above photos.\n• **2 Sheets (3sq/m) of Mass Noise Liner** - Stage 2 underlay sound barrier apply to foot wells, transmission tunnel, under seats.\n• **2 Sheets (3sq/m) of Mass Noise Liner** - Stage 2 sound barrier apply to rear cargo area.\n• **1 x Install kit** - Includes 1 x application roller, 1 x utility knife, 1 x roll of foil tape, stubby holder & bottle opener.\n\n## Pre-Cut Floorpan\n\nThis option is available if you are purchasing Pack 2. We have machine cut the Mass Noise Liner (Stage 2 underlay) for Troopy floorpans to suit the Land Cruiser Troopcarrier (2007) 78 Series. This allows you to simply directly drop in the stage 2 underlay and it will save you significant time in having to template the material to fit.\n\n## Pre-Cut Insulation Pack\n\nPre-cut Insulation Packs are designed to be used in addition to the sound deadening packs (Pack 1 - Standard or Pack 2 - Premium) to achieve optimal sound and insulation results. This pack uses precut insulation material, Van Liner, in the quarter panels and/or on the roof. This is particularly effective if the vehicle is being used for extended touring.\n\n### Quarter Panels\n\nPre-cut Van Liner - 10mm peel and stick closed cell foam. Create a radiant heat barrier and soft surface to reduce sound energy. Upholstery glue can be applied to this ready to trim with carpet if desired.\n\n**If you require insulation for the roof please send us a message.**\n\n## Roof\n\nThe factory headliner in the Troopy is a tight fit and will only allow for Stage 1 Sound Deadener to fit underneath it. If you are replacing the factory lining then you are able to add more insulation. We pre-cut our Van Liner to suit the roof, this can be covered with carpet. These pre-cut sheets are available in our Insulation Packs. If you require an insulation pack (van liner and carpet, please get in contact with Karim - 0417362209)\n\n### Troopy Roof Kit Includes\n\n**Roof Pack (approx 15kg)**\n\n• **2 Boxes (3.6sq/m) of Stage 1 Sound Deadener** - Apply to your roof skin to control resonance, minimum 50% coverage of open skin sheet metal.\n• **1 x Aluminium Foil Tape** - Use to seal all sound deadener edges.\n• **1 x Application Roller** - To roll on the Stage 1 Sound Deadener (not included if purchased with an above pack that already comes with a roller)",
+    shortDescription: "Ultimate sound deadening packs from Carbuilders for Troopcarriers",
+    price: 790.00,
+    images: [
+      "/brand/sound1.png",
+      "/brand/sound 2.png", 
+      "/brand/sound3.png"
+    ],
     category: "Sound Deadening",
     subcategory: "Complete Packs",
-    tags: ["Sound Deadening", "Complete Pack", "Troopcarrier", "Professional"],
+    tags: ["Sound Deadening", "Complete Pack", "Troopcarrier", "Professional", "Carbuilders", "Stage 1", "Stage 2", "Pre-cut"],
     features: [
       "Complete sound deadening solution",
       "Troopcarrier specific design",
       "Professional installation guide",
       "All materials included",
       "Effective noise reduction",
-      "Easy installation"
+      "Easy installation",
+      "Pre-cut floorpan option",
+      "Pre-cut insulation option",
+      "Stage 1 and Stage 2 materials",
+      "Install kit included"
     ],
     specifications: {
-      "Contents": "Mass liner, foam, adhesive",
-      "Coverage": "Complete Troopcarrier",
-      "Materials": "Professional grade",
-      "Installation": "DIY friendly",
-      "Compatibility": "Toyota Troopcarrier"
+      "Pack 1 Contents": "4 Boxes Stage 1 Sound Deadener (7.2sq/m), 2 Boxes Water Proof Underlay (3.6sq/m), Install kit",
+      "Pack 2 Contents": "4 Boxes Stage 1 Sound Deadener (7.2sq/m), 2 Sheets Mass Noise Liner (3sq/m each), Install kit",
+      "Pre-cut Floorpan": "Machine cut Mass Noise Liner for Land Cruiser Troopcarrier (2007) 78 Series",
+      "Pre-cut Insulation": "10mm peel and stick closed cell foam Van Liner",
+      "Materials": "Professional grade Carbuilders",
+      "Installation": "DIY friendly with detailed guide",
+      "Compatibility": "Toyota Troopcarrier 78 Series",
+      "Coverage": "Complete vehicle interior"
     },
     dimensions: {
       length: 60,
       width: 40,
-      height: 10
+      height: 15
     },
-    weight: 8.0,
-    compatibility: ["Toyota Troopcarrier"],
+    weight: 12.0,
+    compatibility: ["Toyota Troopcarrier 78 Series", "Land Cruiser Troopcarrier (2007)"],
     installationRequired: true,
     warranty: "2 years",
     assemblyTime: "4-6 hours",
@@ -787,13 +963,45 @@ export const soundDeadeningProducts: ComponentProduct[] = [
     inStock: true,
     stockQuantity: 15,
     rating: 4.7,
-    reviewCount: 31,
-    badges: ["Complete Pack", "Professional"],
+    reviewCount: 1,
+    badges: ["Complete Pack", "Professional", "Carbuilders"],
     shipClass: "oversized",
     upsells: ["mass-noise-liner"],
     isTroopyPack: false,
+    variantOptions: [
+      {
+        name: "Pack",
+        values: [
+          { value: "pack1", label: "Pack 1", available: true },
+          { value: "pack2", label: "Pack 2", available: true }
+        ]
+      },
+      {
+        name: "Pre Cut Floorpan",
+        values: [
+          { value: "no", label: "No", available: true },
+          { value: "yes", label: "Yes", available: false }
+        ]
+      },
+      {
+        name: "Pre Cut Insulation",
+        values: [
+          { value: "yes", label: "Yes", available: true },
+          { value: "no", label: "No", available: true }
+        ]
+      }
+    ],
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping on orders over $450",
+      freeShippingDetails: "Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available. Free Pickup in Brooklyn Victoria. Shipping available Australia wide and calculated on a case by case basis. For the best shipping rates fill out the quote form or send us a message. Shipping to a business address with access to a forklift is the cheapest option. Residential and depot collect options also available. We ship to over 200 depots Australia wide to help provide you with the best shipping rates."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply"
+    },
     createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
+    updatedAt: new Date("2024-01-20")
   }
 ];
 

@@ -148,39 +148,52 @@ export function ConfigCard({ config, kitConfig, index }: ConfigCardProps) {
 
           {/* CTA Buttons */}
           <div className="space-y-3">
-            <Link href={`/product/${config.slug}`} className="block">
-              <Button 
-                className="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium group"
-                style={{
-                  backgroundColor: kitConfig.id === 'wander' ? '#059669' : kitConfig.id === 'roam' ? '#2563eb' : '#7c3aed'
-                }}
-                size="lg"
-              >
-                View Details
-                <m.div
-                  className="ml-2"
-                  animate={isDisabled ? {} : { x: 0 }}
-                  whileHover={isDisabled ? {} : { x: 2 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </m.div>
-              </Button>
-            </Link>
+            {config.comingSoon ? (
+              <div className="text-center">
+                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 text-sm font-medium px-4 py-2">
+                  Coming Soon
+                </Badge>
+                <p className="text-sm text-textSecondary mt-2">
+                  This configuration will be available soon
+                </p>
+              </div>
+            ) : (
+              <>
+                <Link href={`/products/${kitConfig.id === 'wander' ? 'wander-troopy-flat-pack' : config.slug}`} className="block">
+                  <Button 
+                    className="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium group"
+                    style={{
+                      backgroundColor: kitConfig.id === 'wander' ? '#059669' : kitConfig.id === 'roam' ? '#2563eb' : '#7c3aed'
+                    }}
+                    size="lg"
+                  >
+                    View Details
+                    <m.div
+                      className="ml-2"
+                      animate={isDisabled ? {} : { x: 0 }}
+                      whileHover={isDisabled ? {} : { x: 2 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ArrowRight className="w-4 h-4" />
+                    </m.div>
+                  </Button>
+                </Link>
 
-            <Link href={configureKitUrl} className="block">
-              <Button 
-                variant="outline"
-                className="w-full border-2 border-green-600 text-green-600 hover:bg-green-100 rounded-xl font-medium"
-                style={{
-                  borderColor: kitConfig.id === 'wander' ? '#059669' : kitConfig.id === 'roam' ? '#2563eb' : '#7c3aed',
-                  color: kitConfig.id === 'wander' ? '#059669' : kitConfig.id === 'roam' ? '#2563eb' : '#7c3aed'
-                }}
-                size="lg"
-              >
-                Configure Kit
-              </Button>
-            </Link>
+                <Link href={configureKitUrl} className="block">
+                  <Button 
+                    variant="outline"
+                    className="w-full border-2 border-green-600 text-green-600 hover:bg-green-100 rounded-xl font-medium"
+                    style={{
+                      borderColor: kitConfig.id === 'wander' ? '#059669' : kitConfig.id === 'roam' ? '#2563eb' : '#7c3aed',
+                      color: kitConfig.id === 'wander' ? '#059669' : kitConfig.id === 'roam' ? '#2563eb' : '#7c3aed'
+                    }}
+                    size="lg"
+                  >
+                    Configure Kit
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

@@ -233,7 +233,7 @@ export function KitConfigurationsGrid({
                       variants={textReveal}
                       className="space-y-3"
                     >
-                      <Link href={`/product/${config.slug}`} className="block">
+                      <Link href={`/products/${config.kitType === 'Wander' ? 'wander-troopy-flat-pack' : config.slug}`} className="block">
                         <m.div
                           variants={buttonHover}
                           whileHover={isDisabled ? {} : "hover"}

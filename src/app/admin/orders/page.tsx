@@ -1,230 +1,227 @@
-import { createSupabaseServerClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
+'use client';
 
-export default async function AdminOrdersPage() {
-  const supabase = createSupabaseServerClient()
-  
-  // Get the current user
-  const { data: { user }, error: userError } = await supabase.auth.getUser()
-  
-  if (userError || !user) {
-    redirect('/login')
-  }
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
-  // Simple admin check - in production, you'd want proper role-based access
-  // For now, we'll just check if the user email contains 'admin' or is a specific admin email
-  const isAdmin = user.email?.includes('admin') || user.email === 'admin@unwinddesigns.com'
-  
-  if (!isAdmin) {
-    redirect('/account')
-  }
+interface Order {
+  id: string;
+  customerEmail: string;
+  customerName: string;
+  shippingAddress: {
+    name: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    state: string;
+    postal_code: string;
+    country: string;
+  };
+  items: Array<{
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    image?: string;
+  }>;
+  shipping: {
+    method: string;
+    cost: number;
+  };
+  payment: {
+    amount: number;
+    currency: string;
+    stripePaymentIntentId: string;
+    status: 'paid' | 'pending' | 'failed';
+  };
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
+}
 
-  // Get all orders with related data
-  let orders: any[] = []
-  try {
-    const { data, error } = await supabase
-      .from('orders')
-      .select(`
-        *,
-        order_items (*),
-        shipments (*)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(50) // Limit to latest 50 orders for performance
+export default function OrdersPage() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    if (error) {
-      console.error('Error fetching orders:', error)
-    } else {
-      orders = data || []
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch('/api/admin/orders');
+      const data = await response.json();
+      setOrders(data.orders || []);
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error('Error fetching orders:', error)
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: Order['status']) => {
+    try {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      
+      if (response.ok) {
+        setOrders(orders.map(order => 
+          order.id === orderId 
+            ? { ...order, status: newStatus, updatedAt: new Date().toISOString() }
+            : order
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+    }
+  };
+
+  const getStatusColor = (status: Order['status']) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'processing': return 'bg-blue-100 text-blue-800';
+      case 'shipped': return 'bg-purple-100 text-purple-800';
+      case 'delivered': return 'bg-green-100 text-green-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Loading Orders...</h1>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">Admin - Order Management</h1>
-              <Link 
-                href="/account"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-body-small font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-              >
-                Back to Account
-              </Link>
-            </div>
-            
-            {/* Orders Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-body-small font-medium text-blue-600">Total Orders</h3>
-                <p className="text-2xl font-bold text-blue-900">{orders.length}</p>
-              </div>
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="text-body-small font-medium text-green-600">Successful Payments</h3>
-                <p className="text-2xl font-bold text-green-900">
-                  {orders.filter(o => o.payment_status === 'succeeded').length}
-                </p>
-              </div>
-              <div className="bg-yellow-50 p-4 rounded-lg">
-                <h3 className="text-body-small font-medium text-yellow-600">Processing</h3>
-                <p className="text-2xl font-bold text-yellow-900">
-                  {orders.filter(o => o.order_status === 'processing').length}
-                </p>
-              </div>
-              <div className="bg-purple-50 p-4 rounded-lg">
-                <h3 className="text-body-small font-medium text-purple-600">Shipped</h3>
-                <p className="text-2xl font-bold text-purple-900">
-                  {orders.filter(o => o.order_status === 'shipped').length}
-                </p>
-              </div>
-            </div>
-
-            {/* Orders Table */}
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-caption font-medium text-gray-500 uppercase tracking-wider">
-                      Order
-                    </th>
-                    <th className="px-6 py-3 text-left text-caption font-medium text-gray-500 uppercase tracking-wider">
-                      Customer
-                    </th>
-                    <th className="px-6 py-3 text-left text-caption font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-caption font-medium text-gray-500 uppercase tracking-wider">
-                      Total
-                    </th>
-                    <th className="px-6 py-3 text-left text-caption font-medium text-gray-500 uppercase tracking-wider">
-                      Items
-                    </th>
-                    <th className="px-6 py-3 text-left text-caption font-medium text-gray-500 uppercase tracking-wider">
-                      Shipping
-                    </th>
-                    <th className="px-6 py-3 text-left text-caption font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {orders.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
-                        No orders found
-                      </td>
-                    </tr>
-                  ) : (
-                    orders.map((order: any) => (
-                      <tr key={order.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-body-small font-medium text-gray-900">
-                            #{order.id.slice(-8)}
-                          </div>
-                          <div className="text-body-small text-gray-500">
-                            {order.stripe_payment_intent_id ? 
-                              `PI: ${order.stripe_payment_intent_id.slice(-8)}` : 
-                              'No Payment Intent'
-                            }
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-body-small text-gray-900">{order.email}</div>
-                          <div className="text-body-small text-gray-500">
-                            {order.user_id ? 'Registered User' : 'Guest'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col space-y-1">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-medium ${
-                              order.payment_status === 'succeeded' 
-                                ? 'bg-green-100 text-green-800'
-                                : order.payment_status === 'pending'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}>
-                              Payment: {order.payment_status}
-                            </span>
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-medium ${
-                              order.order_status === 'delivered' 
-                                ? 'bg-green-100 text-green-800'
-                                : order.order_status === 'shipped'
-                                ? 'bg-blue-100 text-blue-800'
-                                : order.order_status === 'processing'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-gray-100 text-gray-800'
-                            }`}>
-                              Order: {order.order_status}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-body-small text-gray-900">
-                          ${(order.total_cents / 100).toFixed(2)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-body-small text-gray-500">
-                          {order.order_items?.length || 0} items
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {order.shipments && order.shipments.length > 0 ? (
-                            <div className="text-body-small">
-                              {order.shipments.map((shipment: any, index: number) => (
-                                <div key={shipment.id} className={index > 0 ? 'mt-1' : ''}>
-                                  <div className="text-gray-900">{shipment.service_code}</div>
-                                  {shipment.tracking_number && (
-                                    <div className="text-gray-500 text-caption">
-                                      Track: {shipment.tracking_number}
-                                    </div>
-                                  )}
-                                  <div className={`text-caption ${
-                                    shipment.status === 'delivered' ? 'text-green-600' :
-                                    shipment.status === 'in_transit' ? 'text-blue-600' :
-                                    shipment.status === 'booked' ? 'text-yellow-600' :
-                                    'text-gray-500'
-                                  }`}>
-                                    {shipment.status.replace('_', ' ')}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <span className="text-gray-400 text-body-small">No shipment</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-body-small text-gray-500">
-                          {new Date(order.created_at).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => window.location.reload()}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-body-small font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  Refresh Orders
-                </button>
-                <Link
-                  href="/admin/orders/export"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-body-small font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-                >
-                  Export Orders
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="container mx-auto p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Order Management</h1>
+        <Button onClick={fetchOrders} variant="outline">
+          Refresh
+        </Button>
       </div>
+
+      {orders.length === 0 ? (
+        <Card>
+          <CardContent className="p-6 text-center">
+            <p className="text-gray-500">No orders found</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <Card key={order.id} className="border-l-4 border-l-blue-500">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-lg">
+                      Order #{order.id.split('_')[1]}
+                    </CardTitle>
+                    <p className="text-sm text-gray-600">
+                      {order.customerName} ({order.customerEmail})
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(order.createdAt).toLocaleDateString()} at{' '}
+                      {new Date(order.createdAt).toLocaleTimeString()}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <Badge className={getStatusColor(order.status)}>
+                      {order.status.toUpperCase()}
+                    </Badge>
+                    <p className="text-lg font-semibold mt-1">
+                      ${order.payment.amount.toFixed(2)} {order.payment.currency.toUpperCase()}
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Shipping Address */}
+                  <div>
+                    <h4 className="font-semibold mb-2">Shipping Address</h4>
+                    <div className="text-sm text-gray-600">
+                      <p>{order.shippingAddress.name}</p>
+                      <p>{order.shippingAddress.line1}</p>
+                      {order.shippingAddress.line2 && <p>{order.shippingAddress.line2}</p>}
+                      <p>
+                        {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.postal_code}
+                      </p>
+                      <p>{order.shippingAddress.country}</p>
+                    </div>
+                  </div>
+
+                  {/* Items */}
+                  <div>
+                    <h4 className="font-semibold mb-2">Items</h4>
+                    <div className="space-y-2">
+                      {order.items.length > 0 ? (
+                        order.items.map((item, index) => (
+                          <div key={index} className="flex justify-between text-sm">
+                            <span>{item.name} x{item.quantity}</span>
+                            <span>${(item.price * item.quantity).toFixed(2)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-500 text-sm">No items recorded</p>
+                      )}
+                      <div className="border-t pt-2 flex justify-between text-sm font-semibold">
+                        <span>Shipping ({order.shipping.method})</span>
+                        <span>${order.shipping.cost.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="mt-4 pt-4 border-t flex gap-2">
+                  {order.status === 'pending' && (
+                    <Button 
+                      onClick={() => updateOrderStatus(order.id, 'processing')}
+                      size="sm"
+                    >
+                      Start Processing
+                    </Button>
+                  )}
+                  {order.status === 'processing' && (
+                    <Button 
+                      onClick={() => updateOrderStatus(order.id, 'shipped')}
+                      size="sm"
+                      variant="outline"
+                    >
+                      Mark as Shipped
+                    </Button>
+                  )}
+                  {order.status === 'shipped' && (
+                    <Button 
+                      onClick={() => updateOrderStatus(order.id, 'delivered')}
+                      size="sm"
+                      variant="outline"
+                    >
+                      Mark as Delivered
+                    </Button>
+                  )}
+                  <Button 
+                    onClick={() => window.open(`https://dashboard.stripe.com/payments/${order.payment.stripePaymentIntentId}`, '_blank')}
+                    size="sm"
+                    variant="outline"
+                  >
+                    View in Stripe
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }

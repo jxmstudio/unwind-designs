@@ -1,200 +1,95 @@
-// Order management interfaces and utilities
-// This will be expanded when a proper database is implemented
-
-export interface Order {
+// Simple in-memory order storage (replace with database in production)
+interface Order {
   id: string;
-  orderNumber: string;
   customerEmail: string;
   customerName: string;
-  customerPhone?: string;
-  status: OrderStatus;
-  items: OrderItem[];
-  shippingAddress: ShippingAddress;
-  billingAddress: ShippingAddress;
-  subtotal: number;
-  shippingCost: number;
-  tax: number;
-  total: number;
-  paymentMethod: string;
-  paymentStatus: PaymentStatus;
-  stripePaymentIntentId?: string;
-  // BigPost integration fields
-  bigPostJobId?: number;
-  bigPostCarrierConsignmentNumber?: string;
-  bigPostTrackingUrl?: string;
-  selectedShippingQuote?: {
-    service: string;
+  shippingAddress: {
+    name: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    state: string;
+    postal_code: string;
+    country: string;
+  };
+  items: Array<{
+    id: string;
+    name: string;
     price: number;
-    deliveryDays: number;
-    carrier: string;
-    carrierId: number;
-    serviceCode?: string;
-    authorityToLeave: boolean;
+    quantity: number;
+    image?: string;
+  }>;
+  shipping: {
+    method: string;
+    cost: number;
   };
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface OrderItem {
-  id: string;
-  productId: string;
-  name: string;
-  quantity: number;
-  price: number;
-  weight?: number;
-  dimensions?: {
-    length: number;
-    width: number;
-    height: number;
+  payment: {
+    amount: number;
+    currency: string;
+    stripePaymentIntentId: string;
+    status: 'paid' | 'pending' | 'failed';
   };
-  shipClass?: 'standard' | 'oversized' | 'freight';
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface ShippingAddress {
-  street: string;
-  city: string;
-  state: string;
-  postcode: string;
-  country: string;
-}
+// In-memory storage (replace with database)
+const orders: Order[] = [];
 
-export enum OrderStatus {
-  PENDING = 'pending',
-  CONFIRMED = 'confirmed',
-  PROCESSING = 'processing',
-  SHIPPED = 'shipped',
-  DELIVERED = 'delivered',
-  CANCELLED = 'cancelled',
-  REFUNDED = 'refunded'
-}
-
-export enum PaymentStatus {
-  PENDING = 'pending',
-  PROCESSING = 'processing',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-  REFUNDED = 'refunded'
-}
-
-// In-memory storage for development (replace with database in production)
-const orders: Map<string, Order> = new Map();
-
-export class OrderService {
-  /**
-   * Create a new order
-   */
-  static createOrder(orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt' | 'updatedAt'>): Order {
-    const id = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const orderNumber = `UD-${Date.now().toString().slice(-8)}`;
-    
+export const orderService = {
+  // Create a new order
+  createOrder: (orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt' | 'status'>): Order => {
     const order: Order = {
       ...orderData,
-      id,
-      orderNumber,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      id: `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
     
-    orders.set(id, order);
+    orders.push(order);
+    console.log('📦 Order created:', {
+      id: order.id,
+      customer: order.customerEmail,
+      items: order.items.length,
+      total: order.payment.amount,
+    });
+    
     return order;
-  }
+  },
 
-  /**
-   * Get order by ID
-   */
-  static getOrder(id: string): Order | undefined {
-    return orders.get(id);
-  }
+  // Get all orders
+  getAllOrders: (): Order[] => {
+    return orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  },
 
-  /**
-   * Get order by order number
-   */
-  static getOrderByNumber(orderNumber: string): Order | undefined {
-    for (const order of orders.values()) {
-      if (order.orderNumber === orderNumber) {
-        return order;
-      }
-    }
-    return undefined;
-  }
+  // Get order by ID
+  getOrderById: (id: string): Order | undefined => {
+    return orders.find(order => order.id === id);
+  },
 
-  /**
-   * Update order status
-   */
-  static updateOrderStatus(id: string, status: OrderStatus): boolean {
-    const order = orders.get(id);
+  // Update order status
+  updateOrderStatus: (id: string, status: Order['status']): Order | null => {
+    const order = orders.find(order => order.id === id);
     if (order) {
       order.status = status;
-      order.updatedAt = new Date();
-      return true;
+      order.updatedAt = new Date().toISOString();
+      console.log(`📦 Order ${id} status updated to: ${status}`);
+      return order;
     }
-    return false;
-  }
+    return null;
+  },
 
-  /**
-   * Update BigPost tracking information
-   */
-  static updateBigPostTracking(
-    id: string, 
-    jobId: number, 
-    carrierConsignmentNumber?: string,
-    trackingUrl?: string
-  ): boolean {
-    const order = orders.get(id);
-    if (order) {
-      order.bigPostJobId = jobId;
-      order.bigPostCarrierConsignmentNumber = carrierConsignmentNumber;
-      order.bigPostTrackingUrl = trackingUrl;
-      order.updatedAt = new Date();
-      return true;
-    }
-    return false;
-  }
+  // Get orders by status
+  getOrdersByStatus: (status: Order['status']): Order[] => {
+    return orders.filter(order => order.status === status);
+  },
 
-  /**
-   * Get all orders (for admin purposes)
-   */
-  static getAllOrders(): Order[] {
-    return Array.from(orders.values()).sort((a, b) => 
-      b.createdAt.getTime() - a.createdAt.getTime()
-    );
-  }
+  // Get pending orders (ready to ship)
+  getPendingOrders: (): Order[] => {
+    return orders.filter(order => order.status === 'pending');
+  },
+};
 
-  /**
-   * Get orders by customer email
-   */
-  static getOrdersByCustomer(email: string): Order[] {
-    return Array.from(orders.values())
-      .filter(order => order.customerEmail === email)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
-}
-
-// Utility functions
-export function formatOrderNumber(orderNumber: string): string {
-  return orderNumber.replace('UD-', '');
-}
-
-export function getOrderStatusDisplay(status: OrderStatus): string {
-  const statusMap: Record<OrderStatus, string> = {
-    [OrderStatus.PENDING]: 'Pending',
-    [OrderStatus.CONFIRMED]: 'Confirmed',
-    [OrderStatus.PROCESSING]: 'Processing',
-    [OrderStatus.SHIPPED]: 'Shipped',
-    [OrderStatus.DELIVERED]: 'Delivered',
-    [OrderStatus.CANCELLED]: 'Cancelled',
-    [OrderStatus.REFUNDED]: 'Refunded'
-  };
-  return statusMap[status] || 'Unknown';
-}
-
-export function getPaymentStatusDisplay(status: PaymentStatus): string {
-  const statusMap: Record<PaymentStatus, string> = {
-    [PaymentStatus.PENDING]: 'Pending',
-    [PaymentStatus.PROCESSING]: 'Processing',
-    [PaymentStatus.COMPLETED]: 'Completed',
-    [PaymentStatus.FAILED]: 'Failed',
-    [PaymentStatus.REFUNDED]: 'Refunded'
-  };
-  return statusMap[status] || 'Unknown';
-}
+export type { Order };

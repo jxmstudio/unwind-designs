@@ -38,16 +38,6 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      {/* Breadcrumb */}
-      <nav className="text-body-small text-textPrimary/80 mb-8">
-        <span>Home</span>
-        <span className="mx-2">/</span>
-        <span>Shop</span>
-        <span className="mx-2">/</span>
-        <span>{product.category}</span>
-        <span className="mx-2">/</span>
-        <span className="text-textPrimary">{product.name}</span>
-      </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Product Images */}

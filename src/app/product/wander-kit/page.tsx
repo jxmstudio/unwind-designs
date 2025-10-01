@@ -6,7 +6,7 @@ export default function WanderKitPage() {
   const kitData = {
     kitSlug: "wander-kit",
     kitName: "Wander Kit",
-    kitDescription: "Our budget-friendly flat pack solution for Toyota Troopcarriers. Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available. Coming Soon!",
+    kitDescription: "Our budget-friendly flat pack solution for Toyota Troopcarriers. Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.",
     kitFeatures: [
       "Multiple fridge configuration options",
       "Three finish choices available", 

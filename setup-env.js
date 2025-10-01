@@ -8,10 +8,10 @@
 const fs = require('fs');
 const path = require('path');
 
-// Your API keys
-const STRIPE_SECRET_KEY = 'sk_test_51S3BrlEKNOoGoyNOSlmf6CkLDFiMtmPaJBgP02iWFpGh2ogmoiJzrVarKyLHxJAHBSuddFJwWzDSvPOLPOey5pd300AquvIIS5';
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_51S3BrlEKNOoGoyNOnLgtnRrUYzoDvr9UHZJjgzJgCIQW11oGQnZiF9kXAAvZgi6gWIrWX8XH9ZzSDYRNh1QrdKUn00iRd1HcUF';
-const BIGPOST_API_TOKEN = 'SwaT0fBc_E6TsR-68qDimQ';
+// Your API keys - Replace with your actual keys
+const STRIPE_SECRET_KEY = 'sk_test_your_stripe_secret_key_here';
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_your_stripe_publishable_key_here';
+const BIGPOST_API_TOKEN = 'your_bigpost_api_token_here';
 
 // Environment file content
 const envContent = `# ===========================================

@@ -25,7 +25,7 @@ export function TroopyPacksGrid() {
     "wander-kit": {
       name: "Wander Kit",
       tagline: "Budget-Friendly Adventure",
-      description: "Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available. Coming Soon!",
+      description: "Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.",
       startingPrice: 3750,
       features: [
         "Multiple fridge configuration options",
@@ -35,8 +35,8 @@ export function TroopyPacksGrid() {
         "Slide-out storage drawers",
         "Built-in power management"
       ],
-      badge: "Coming Soon",
-      badgeColor: "bg-yellow-100 text-yellow-800",
+      badge: "Available Now",
+      badgeColor: "bg-green-100 text-green-800",
       image: "/products/wander-general-1.jpg"
     },
     "roam-kit": {

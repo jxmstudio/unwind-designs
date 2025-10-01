@@ -64,24 +64,20 @@ export function CheckoutForm() {
 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Load shipping quotes when address is complete
+  // Update shipping address when form changes, but don't recalculate quotes
   useEffect(() => {
-    const loadShippingQuotes = async () => {
-      if (formData.address && formData.city && formData.state && formData.postcode && formData.country) {
-        const shippingAddress = {
-          street: formData.address,
-          city: formData.city,
-          state: formData.state,
-          postcode: formData.postcode,
-          country: formData.country
-        };
-        
-        setShippingAddress(shippingAddress);
-        await getShippingQuotes(shippingAddress);
-      }
-    };
-
-    loadShippingQuotes();
+    if (formData.address && formData.city && formData.state && formData.postcode && formData.country) {
+      const shippingAddress = {
+        street: formData.address,
+        city: formData.city,
+        state: formData.state,
+        postcode: formData.postcode,
+        country: formData.country
+      };
+      
+      setShippingAddress(shippingAddress);
+      // Don't recalculate quotes - use the ones already selected in cart
+    }
   }, [formData.address, formData.city, formData.state, formData.postcode, formData.country]);
 
   const handleInputChange = (field: keyof CheckoutFormData, value: string | boolean) => {

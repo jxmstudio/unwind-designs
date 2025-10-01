@@ -34,6 +34,8 @@ export type Product = {
   shipClass?: 'standard' | 'oversized' | 'freight';
   upsells?: string[];
   videoUrl?: string;
+  variantOptions?: any[];
+  variants?: any[];
   originalPrice?: number;
   isOnSale?: boolean;
   salePercentage?: number;
@@ -49,6 +51,31 @@ export type Product = {
   compatibility?: string[];
   createdAt?: Date;
   updatedAt?: Date;
+  // Enhanced product display fields
+  colorOptions?: Array<{
+    value: string;
+    label: string;
+    available: boolean;
+  }>;
+  thicknessOptions?: Array<{
+    value: string;
+    label: string;
+    description: string;
+  }>;
+  faceplateSizeOptions?: Array<{
+    value: string;
+    label: string;
+    available: boolean;
+  }>;
+  shippingInfo?: {
+    freeShippingThreshold: number;
+    freeShippingText: string;
+    freeShippingDetails: string;
+  };
+  guaranteeInfo?: {
+    title: string;
+    details: string;
+  };
   [key: string]: any;
 };
 
@@ -82,6 +109,8 @@ function normalizeProduct(product: DataProduct): Product {
     shipClass: 'shipClass' in product ? product.shipClass : undefined,
     upsells: 'upsells' in product ? (product.upsells || []) : [],
     videoUrl: 'videoUrl' in product ? product.videoUrl : undefined,
+    variantOptions: 'variantOptions' in product ? product.variantOptions : undefined,
+    variants: 'variants' in product ? product.variants : undefined,
     originalPrice: 'originalPrice' in product ? product.originalPrice : undefined,
     isOnSale: 'isOnSale' in product ? product.isOnSale : false,
     salePercentage: 'salePercentage' in product ? product.salePercentage : undefined,
@@ -114,6 +143,21 @@ function normalizeProduct(product: DataProduct): Product {
   }
   if ('compatibility' in product) {
     baseProduct.compatibility = product.compatibility;
+  }
+  if ('colorOptions' in product) {
+    baseProduct.colorOptions = product.colorOptions;
+  }
+  if ('thicknessOptions' in product) {
+    baseProduct.thicknessOptions = product.thicknessOptions;
+  }
+  if ('faceplateSizeOptions' in product) {
+    baseProduct.faceplateSizeOptions = product.faceplateSizeOptions;
+  }
+  if ('shippingInfo' in product) {
+    baseProduct.shippingInfo = product.shippingInfo;
+  }
+  if ('guaranteeInfo' in product) {
+    baseProduct.guaranteeInfo = product.guaranteeInfo;
   }
 
   return baseProduct;
@@ -261,4 +305,16 @@ export function getPurchasableFlatPacks(): Product[] {
 export function getComingSoonFlatPacks(): Product[] {
   return getFlatPackProducts()
     .filter(product => product.comingSoon === true);
+}
+
+// Get upsell products for a given product
+export function getUpsellProducts(product: Product): Product[] {
+  if (!product.upsells || product.upsells.length === 0) {
+    return [];
+  }
+  
+  return listAllProducts()
+    .filter(p => product.upsells?.includes(p.id))
+    .map(normalizeProduct)
+    .filter(p => p.active !== false);
 }

@@ -25,7 +25,7 @@ const defaultFlags: Record<FeatureFlag, boolean> = {
   FEATURE_VIDEO_PLAYER: true,
   FEATURE_UPSELLS: true,
   FEATURE_FLAT_PACK_CONFIGURATOR: false,
-  FEATURE_ENHANCED_GALLERY: true,
+  FEATURE_ENHANCED_GALLERY: false,
   // New flags for text/animation improvements
   FEATURE_TEXT_CLARITY: true,      // Enable improved text contrast
   FEATURE_REDUCED_BLUR: true,      // Reduce excessive backdrop blur
