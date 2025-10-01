@@ -104,8 +104,8 @@ export const baseKitConfigs: Record<BaseKitType, BaseKitConfig> = {
           },
           {
             icon: '🚀',
-            title: 'Most Popular',
-            description: 'Trusted by thousands of adventurers'
+            title: 'Coming Soon',
+            description: 'Pre-order now for early access'
           },
           {
             icon: '🔒',

@@ -164,7 +164,7 @@ export const generalFlatPackProducts: ComponentProduct[] = [
     description: "Our budget-friendly flat pack solution for Toyota Troopcarriers. Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.", // TODO: update description based on final marketing copy
     shortDescription: "Budget-friendly flat pack for weekend adventures",
     price: 3750.00, // Starting price for plain hardwood chest fridge variant
-    images: ["/products/wander-general-1.jpg", "/products/wander-general-2.jpg"], // TODO: update with actual product images
+    images: ["/images/placeholder.svg"], // TODO: update with actual product images
     videoUrl: "/videos/wander-overview.mp4", // TODO: create overview video
     category: "Complete Kits",
     subcategory: "Budget Range",
@@ -197,7 +197,7 @@ export const generalFlatPackProducts: ComponentProduct[] = [
     reviewCount: 189,
     badges: ["Budget", "Popular"],
     shipClass: "oversized",
-    upsells: ["cushion-set-wander", "insulation-kit-basic", "led-strip-warm"],
+    upsells: ["cushion-set-wander"],
     isTroopyPack: true,
     troopyPackSlug: "wander-kit",
     createdAt: new Date("2024-01-10"),
@@ -209,7 +209,7 @@ export const generalFlatPackProducts: ComponentProduct[] = [
     description: "Our most popular mid-range flat pack featuring enhanced hardware, LED lighting, and premium finishes. Perfect balance of features and value for extended adventures.", // TODO: update description based on final marketing copy
     shortDescription: "Most popular mid-range flat pack with enhanced features",
     price: 6700.00, // Starting price for Black Hex chest fridge variant
-    images: ["/products/roam-general-1.jpg", "/products/roam-general-2.jpg"], // TODO: update with actual product images  
+    images: ["/images/placeholder.svg"], // TODO: update with actual product images  
     videoUrl: "/videos/roam-overview.mp4", // TODO: create overview video
     category: "Complete Kits",
     subcategory: "Mid-Range",
@@ -244,7 +244,7 @@ export const generalFlatPackProducts: ComponentProduct[] = [
     reviewCount: 267,
     badges: ["Most Popular", "Enhanced Features"],
     shipClass: "oversized",
-    upsells: ["cushion-set-roam", "insulation-kit-premium", "electrical-kit-advanced"],
+    upsells: ["cushion-set-roam"],
     isTroopyPack: true,
     troopyPackSlug: "roam-kit",
     createdAt: new Date("2024-01-08"),
@@ -256,7 +256,7 @@ export const generalFlatPackProducts: ComponentProduct[] = [
     description: "The ultimate in flat pack luxury featuring premium multi-tone finishes, smart lighting controls, and German-engineered hardware. Professional installation included.", // TODO: update description based on final marketing copy
     shortDescription: "Ultimate luxury flat pack with premium materials",
     price: 9850.00, // Starting price for chest fridge variant
-    images: ["/products/premium-general-1.jpg", "/products/premium-general-2.jpg"], // TODO: update with actual product images
+    images: ["/images/placeholder.svg"], // TODO: update with actual product images
     videoUrl: "/videos/premium-overview.mp4", // TODO: create overview video  
     category: "Complete Kits",
     subcategory: "Premium Range",
@@ -342,7 +342,7 @@ export const sidePanelProducts: ComponentProduct[] = [
     reviewCount: 42,
     badges: ["Custom Fit"],
     shipClass: "oversized",
-    upsells: ["troopy-side-panels-storage", "insulation-kit-basic"],
+    upsells: ["troopy-side-panels-storage"],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
     updatedAt: new Date("2024-01-15")
@@ -420,7 +420,7 @@ export const sidePanelProducts: ComponentProduct[] = [
       { id: "BH-WB", price: 865.00, sku: "BH-WB", available: true, options: { Material: "Black Hex", Bungee: "With Bungee" } }
     ],
     shipClass: "oversized", 
-    upsells: ["storage-organizers", "led-strip-warm"],
+    upsells: [],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
     shippingInfo: {
@@ -489,7 +489,7 @@ export const accessoryProducts: ComponentProduct[] = [
     reviewCount: 94,
     badges: ["Popular", "Multi-Compatible"],
     shipClass: "standard",
-    upsells: ["storage-organizers", "led-strip-warm"],
+    upsells: [],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
     shippingInfo: {
@@ -569,7 +569,7 @@ export const plumbingProducts: ComponentProduct[] = [
     reviewCount: 78,
     badges: ["Quick Install"],
     shipClass: "standard",
-    upsells: ["water-tank-30l", "water-tank-20l"],
+    upsells: [],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"), 
     shippingInfo: {

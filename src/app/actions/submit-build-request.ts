@@ -2,6 +2,7 @@
 
 import { Resend } from "resend";
 import { buildWizardSchema, type BuildWizardData } from "@/lib/build-wizard-schema";
+import { addToGoogleSheets, getCurrentTimestamp, type BuildRequestData } from "@/lib/google-sheets";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -93,10 +94,32 @@ export async function submitBuildRequest(data: BuildWizardData) {
       }
     }
 
-    // TODO: Save to database if DB_URL is configured
-    if (process.env.DATABASE_URL) {
-      // Add database logic here when ready
-      console.log("Database save would happen here");
+    // Save to Google Sheets
+    const sheetsData: BuildRequestData = {
+      firstName: step4.firstName,
+      lastName: step4.lastName,
+      email: step4.email,
+      phone: step4.phone,
+      location: step4.location,
+      message: step4.message,
+      marketingConsent: step4.marketingConsent,
+      projectType: step1.projectType,
+      baseKit: step1.baseKit,
+      vehicleType: step2.vehicleType,
+      fridgeType: step2.fridgeType,
+      finish: step2.finish,
+      features: step2.features,
+      timeline: step3.timeline,
+      budget: step3.budget,
+      installationPreference: step3.installationPreference,
+      submissionDate: getCurrentTimestamp(),
+      source: 'build-wizard'
+    };
+
+    const sheetsResult = await addToGoogleSheets(sheetsData);
+    if (!sheetsResult.success) {
+      console.error("Google Sheets error:", sheetsResult.message);
+      // Don't fail the entire request if Sheets fails
     }
 
     return { success: true, message: "Build request submitted successfully!" };

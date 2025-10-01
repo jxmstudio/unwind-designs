@@ -39,6 +39,11 @@ export function ProductGallery({ images, alt = "Product image" }: ProductGallery
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            onError={(e) => {
+              // Fallback to placeholder if image fails to load
+              const target = e.target as HTMLImageElement;
+              target.src = '/images/placeholder.svg';
+            }}
           />
         </AnimatePresence>
 
@@ -89,6 +94,11 @@ export function ProductGallery({ images, alt = "Product image" }: ProductGallery
                 src={image}
                 alt={`${alt} thumbnail ${index + 1}`}
                 className="w-full h-full object-contain bg-white"
+                onError={(e) => {
+                  // Fallback to placeholder if image fails to load
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/images/placeholder.svg';
+                }}
               />
             </button>
           ))}

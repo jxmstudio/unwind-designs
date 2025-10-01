@@ -638,162 +638,6 @@ export const plumbingFittingProducts: ComponentProduct[] = [
 // Water Heater Products
 export const waterHeaterProducts: ComponentProduct[] = [
   {
-    id: "duoetto-mk2-10l",
-    name: "Duoetto MK2 10L Water Heater",
-    description: "Compact 10L Duoetto water heater with dual power options. Perfect for hot water needs in campervans and caravans.",
-    shortDescription: "10L Duoetto dual power water heater",
-    price: 450.00,
-    images: ["/products/duoetto-mk2-1.jpg", "/products/duoetto-mk2-2.jpg"],
-    category: "Water Heaters",
-    subcategory: "Portable Heaters",
-    tags: ["Duoetto", "10L", "Water Heater", "Dual Power", "Compact"],
-    features: [
-      "10L capacity",
-      "Dual power options",
-      "Compact design",
-      "Easy installation",
-      "Reliable heating",
-      "Perfect for campervans"
-    ],
-    specifications: {
-      "Brand": "Duoetto",
-      "Model": "MK2",
-      "Capacity": "10 Liters",
-      "Power": "12V/240V dual",
-      "Weight": "3.5kg",
-      "Features": "Dual power, compact design"
-    },
-    dimensions: {
-      length: 25,
-      width: 20,
-      height: 30
-    },
-    weight: 3.5,
-    compatibility: ["Campervans", "Caravans", "All vehicles"],
-    installationRequired: true,
-    warranty: "2 years",
-    assemblyTime: "1 hour",
-    sku: "DUOETTO-MK2-001",
-    slug: "duoetto-mk2-10l",
-    inStock: true,
-    stockQuantity: 15,
-    rating: 4.6,
-    reviewCount: 45,
-    badges: ["Dual Power", "Compact"],
-    shipClass: "standard",
-    upsells: ["duoetto-remote-control"],
-    isTroopyPack: false,
-    shippingInfo: {
-      freeShippingThreshold: 450,
-      freeShippingText: "Free Shipping on orders over $450",
-      freeShippingDetails: "Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
-    },
-    guaranteeInfo: {
-      title: "Unwind Guarantee",
-      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty on all products (Refer product description for each item warranty). Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
-    },
-    createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-09-30")
-  },
-  {
-    id: "aqueous-mk2-10l-240v",
-    name: "Aqueous MK2 10L 240V Water Heater",
-    description: "10L Aqueous water heater with 240V power. Reliable hot water solution for mains power applications.",
-    shortDescription: "10L Aqueous 240V water heater",
-    price: 380.00,
-    images: ["/products/aqueous-mk2-240v-1.jpg", "/products/aqueous-mk2-240v-2.jpg"],
-    category: "Water Heaters",
-    subcategory: "240V Heaters",
-    tags: ["Aqueous", "10L", "240V", "Water Heater", "Mains Power"],
-    features: [
-      "10L capacity",
-      "240V mains power",
-      "Reliable heating",
-      "Easy installation",
-      "Energy efficient",
-      "Perfect for mains power"
-    ],
-    specifications: {
-      "Brand": "Aqueous",
-      "Model": "MK2",
-      "Capacity": "10 Liters",
-      "Power": "240V AC",
-      "Weight": "3.2kg",
-      "Features": "Mains power, reliable heating"
-    },
-    dimensions: {
-      length: 25,
-      width: 20,
-      height: 30
-    },
-    weight: 3.2,
-    compatibility: ["Mains power applications", "All vehicles"],
-    installationRequired: true,
-    warranty: "2 years",
-    assemblyTime: "1 hour",
-    sku: "AQUEOUS-MK2-240V-001",
-    slug: "aqueous-mk2-10l-240v",
-    inStock: true,
-    stockQuantity: 12,
-    rating: 4.5,
-    reviewCount: 32,
-    badges: ["240V", "Mains Power"],
-    shipClass: "standard",
-    upsells: ["aqueous-6l-heater"],
-    isTroopyPack: false,
-    createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
-  },
-  {
-    id: "aqueous-6l-heater",
-    name: "Aqueous 6L Water Heater",
-    description: "Compact 6L Aqueous water heater. Perfect for smaller applications where space is limited.",
-    shortDescription: "6L Aqueous compact water heater",
-    price: 280.00,
-    images: ["/products/aqueous-6l-1.jpg", "/products/aqueous-6l-2.jpg"],
-    category: "Water Heaters",
-    subcategory: "Compact Heaters",
-    tags: ["Aqueous", "6L", "Compact", "Water Heater", "Small Space"],
-    features: [
-      "6L compact capacity",
-      "Space-saving design",
-      "Reliable heating",
-      "Easy installation",
-      "Perfect for small spaces",
-      "Energy efficient"
-    ],
-    specifications: {
-      "Brand": "Aqueous",
-      "Model": "6L",
-      "Capacity": "6 Liters",
-      "Power": "12V/240V",
-      "Weight": "2.5kg",
-      "Features": "Compact design, dual power"
-    },
-    dimensions: {
-      length: 20,
-      width: 15,
-      height: 25
-    },
-    weight: 2.5,
-    compatibility: ["Small spaces", "All vehicles"],
-    installationRequired: true,
-    warranty: "2 years",
-    assemblyTime: "45 minutes",
-    sku: "AQUEOUS-6L-001",
-    slug: "aqueous-6l-heater",
-    inStock: true,
-    stockQuantity: 18,
-    rating: 4.4,
-    reviewCount: 28,
-    badges: ["Compact", "Small Space"],
-    shipClass: "standard",
-    upsells: ["duoetto-mk2-10l"],
-    isTroopyPack: false,
-    createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-01-15")
-  },
-  {
     id: "duoetto-remote-control",
     name: "Remote Control for Duoetto Water Heaters",
     description: "Take control of your Duoetto water heater from anywhere with this convenient remote control. Perfect for adjusting temperature settings and operating your water heater without having to access the main unit.\n\n**Key Features:**\n• Wireless remote operation up to 10 meters\n• Easy temperature adjustment\n• Timer functionality for scheduled heating\n• Battery powered for portability\n• Simple installation and setup\n• Compatible with all Duoetto water heater models\n\n**Perfect for:**\n• Campervans and caravans\n• Boats and marine applications\n• Remote installations\n• Convenient temperature control\n\nNever worry about accessing your water heater in tight spaces again. This remote control makes operating your Duoetto heater effortless and convenient.",
@@ -841,7 +685,7 @@ export const waterHeaterProducts: ComponentProduct[] = [
     reviewCount: 19,
     badges: ["Remote Control", "Convenience", "Wireless"],
     shipClass: "standard",
-    upsells: ["duoetto-mk2-10l"],
+    upsells: [],
     isTroopyPack: false,
     shippingInfo: {
       freeShippingThreshold: 450,
@@ -1211,7 +1055,7 @@ export const flooringProducts: ComponentProduct[] = [
     reviewCount: 67,
     badges: ["Professional Grade"],
     shipClass: "oversized",
-    upsells: ["insulation-kit-basic"],
+    upsells: [],
     isTroopyPack: false,
     createdAt: new Date("2024-01-12"),
     shippingInfo: {

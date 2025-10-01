@@ -144,16 +144,18 @@ export function Step3Timeline() {
                     onClick={() => setValue("step3.timeline", timeline.id as 'asap' | '1-3-months' | '3-6-months' | 'flexible', { shouldValidate: true })}
                   >
                     <CardContent className="p-4 text-center">
-                      {timeline.popular && (
-                        <Badge className="mb-2 bg-brown-100 text-brown-700 text-caption">
-                          Popular
-                        </Badge>
-                      )}
-                      <div className="font-semibold text-textPrimary mb-1">
-                        {timeline.title}
-                      </div>
-                      <div className="text-caption text-textSecondary">
-                        {timeline.subtitle}
+                      <div className="flex flex-col items-center">
+                        <div className="font-semibold text-textPrimary mb-1">
+                          {timeline.title}
+                        </div>
+                        <div className="text-caption text-textSecondary mb-2">
+                          {timeline.subtitle}
+                        </div>
+                        {timeline.popular && (
+                          <Badge className="bg-brown-100 text-brown-700 text-caption">
+                            Popular
+                          </Badge>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -196,7 +198,7 @@ export function Step3Timeline() {
                   >
                     <CardContent className="p-5">
                       <div className="flex items-start justify-between mb-2">
-                        <div>
+                        <div className="flex-1">
                           <div className="font-semibold text-textPrimary">
                             {budget.title}
                           </div>
@@ -205,7 +207,7 @@ export function Step3Timeline() {
                           </div>
                         </div>
                         {budget.popular && (
-                          <Badge className="bg-brown-100 text-brown-700 text-caption">
+                          <Badge className="bg-brown-100 text-brown-700 text-caption flex-shrink-0">
                             Popular
                           </Badge>
                         )}
@@ -254,9 +256,9 @@ export function Step3Timeline() {
                   >
                     <CardContent className="p-5">
                       <div className="flex items-center justify-between mb-3">
-                        <div className="text-2xl">{installation.icon}</div>
+                        <div className="text-2xl flex-1">{installation.icon}</div>
                         {installation.popular && (
-                          <Badge className="bg-brown-100 text-brown-700 text-caption">
+                          <Badge className="bg-brown-100 text-brown-700 text-caption flex-shrink-0">
                             Popular
                           </Badge>
                         )}

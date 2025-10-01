@@ -37,7 +37,7 @@ export function TroopyPacksGrid() {
       ],
       badge: "Available Now",
       badgeColor: "bg-green-100 text-green-800",
-      image: "/products/wander-general-1.jpg"
+      image: "/brand/wander-troopy-flat-pack-281517.jpg"
     },
     "roam-kit": {
       name: "Roam Kit", 
@@ -54,7 +54,7 @@ export function TroopyPacksGrid() {
       ],
       badge: "Coming Soon",
       badgeColor: "bg-yellow-100 text-yellow-800",
-      image: "/products/roam-general-1.jpg"
+      image: "/brand/Roam1.jpg"
     },
     "premium-kit": {
       name: "Premium Kit",
@@ -71,7 +71,7 @@ export function TroopyPacksGrid() {
       ],
       badge: "Premium",
       badgeColor: "bg-purple-100 text-purple-800",
-      image: "/products/premium-general-1.jpg"
+      image: "/brand/wandertroop1.jpg"
     }
   };
 
@@ -116,12 +116,24 @@ export function TroopyPacksGrid() {
                 <Card className="h-full bg-cream-400 rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 border border-borderNeutral overflow-hidden group">
                   <div className="relative overflow-hidden">
                     <m.div 
-                      className="h-64 bg-gradient-to-br from-brown-200 to-brown-300 flex items-center justify-center"
+                      className="h-64 bg-gradient-to-br from-brown-200 to-brown-300 flex items-center justify-center relative overflow-hidden"
                       variants={imageReveal}
                       whileHover={isDisabled ? {} : { scale: 1.05 }}
                       transition={{ duration: 0.4 }}
                     >
-                      <div className="text-center text-textPrimary/70">
+                      <img
+                        src={kit.image}
+                        alt={kit.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Fallback to emoji if image fails to load
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                      <div className="text-center text-textPrimary/70 hidden">
                         <div className="text-6xl mb-2">🚐</div>
                         <p className="text-body-small font-medium">{kit.name}</p>
                       </div>
@@ -212,7 +224,7 @@ export function TroopyPacksGrid() {
                         variants={textReveal}
                         className="space-y-3"
                       >
-                      <Link href={`/flat-packs/${kitSlug.replace('-kit', '')}`} className="block">
+                      <Link href={`/products/${kitSlug === 'wander-kit' ? 'wander-troopy-flat-pack' : kitSlug === 'roam-kit' ? 'roam-troopy-flat-pack' : 'premium-troopy-kits'}`} className="block">
                         <m.div
                           variants={buttonHover}
                           whileHover={isDisabled ? {} : "hover"}
@@ -266,7 +278,7 @@ export function TroopyPacksGrid() {
                 className="flex flex-col sm:flex-row gap-4 justify-center"
               >
                 <m.div variants={staggerItem}>
-                  <Link href="/flat-packs/wander">
+                  <Link href="/products/wander-troopy-flat-pack">
                     <m.div
                       variants={buttonHover}
                       whileHover={isDisabled ? {} : "hover"}
@@ -282,7 +294,7 @@ export function TroopyPacksGrid() {
                   </Link>
                 </m.div>
                 <m.div variants={staggerItem}>
-                  <Link href="/flat-packs/roam">
+                  <Link href="/products/roam-troopy-flat-pack">
                     <m.div
                       variants={buttonHover}
                       whileHover={isDisabled ? {} : "hover"}
@@ -298,7 +310,7 @@ export function TroopyPacksGrid() {
                   </Link>
                 </m.div>
                 <m.div variants={staggerItem}>
-                  <Link href="/flat-packs/premium">
+                  <Link href="/products/premium-troopy-kits">
                     <m.div
                       variants={buttonHover}
                       whileHover={isDisabled ? {} : "hover"}

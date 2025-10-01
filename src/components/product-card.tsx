@@ -63,20 +63,28 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden bg-cream-300">
+        {product.images && product.images[0] ? (
+          <img
+            src={product.images[0]}
+            alt={name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Fallback to placeholder if image fails to load
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+              const placeholder = target.nextElementSibling as HTMLElement;
+              if (placeholder) placeholder.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        
+        {/* Placeholder if no image or image fails to load */}
         <div 
-          className="w-full h-full bg-gradient-to-br from-cream-200 to-cream-300 flex items-center justify-center"
-          style={{
-            backgroundImage: product.images[0] ? `url(${product.images[0]})` : 'none',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
+          className={`w-full h-full bg-gradient-to-br from-cream-200 to-cream-300 flex items-center justify-center ${product.images && product.images[0] ? 'hidden' : ''}`}
         >
-          {/* Placeholder if no image */}
-          {!product.images[0] && (
-            <div className="text-textPrimary/80 text-body-small text-center px-4">
-              {category || 'Product Image'}
-            </div>
-          )}
+          <div className="text-textPrimary/80 text-body-small text-center px-4">
+            {category || 'Product Image'}
+          </div>
         </div>
         
         {/* Sale Badge */}

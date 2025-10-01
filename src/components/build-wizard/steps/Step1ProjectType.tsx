@@ -40,28 +40,32 @@ const baseKits = [
     title: "Wander Kit",
     subtitle: "Budget-Friendly",
     price: "From $3,750",
-    color: "bg-green-100 text-green-800"
+    color: "bg-green-100 text-green-800",
+    comingSoon: false
   },
   {
     id: "roam", 
     title: "Roam Kit",
-    subtitle: "Most Popular",
+    subtitle: "Coming Soon",
     price: "From $6,700",
-    color: "bg-blue-100 text-blue-800"
+    color: "bg-yellow-100 text-yellow-800",
+    comingSoon: true
   },
   {
     id: "premium",
     title: "Premium Kit", 
     subtitle: "Ultimate Luxury",
     price: "From $9,850",
-    color: "bg-purple-100 text-purple-800"
+    color: "bg-purple-100 text-purple-800",
+    comingSoon: false
   },
   {
     id: "custom",
     title: "Custom Solution",
     subtitle: "Tailored to You",
     price: "Quote on Request",
-    color: "bg-brown-100 text-brown-800"
+    color: "bg-brown-100 text-brown-800",
+    comingSoon: false
   }
 ];
 
@@ -196,11 +200,11 @@ export function Step1ProjectType() {
                       whileTap={isDisabled ? {} : { scale: 0.98 }}
                     >
                       <Card
-                        className={`cursor-pointer transition-all duration-300 hover:shadow-md ${
+                        className={`cursor-pointer transition-all duration-300 hover:shadow-md relative ${
                           isSelected 
                             ? 'ring-2 ring-brown-500 bg-brown-50 border-brown-300' 
-                            : 'hover:border-brown-300'
-                        }`}
+                            : kit.comingSoon ? 'hover:border-yellow-300' : 'hover:border-brown-300'
+                        } ${kit.comingSoon ? 'opacity-90' : ''}`}
                         onClick={() => setValue("step1.baseKit", kit.id as 'wander' | 'roam' | 'premium' | 'custom', { shouldValidate: true })}
                       >
                         <CardContent className="p-4 text-center">
@@ -213,6 +217,11 @@ export function Step1ProjectType() {
                           <p className="text-body-small text-brown-600 font-medium">
                             {kit.price}
                           </p>
+                          {kit.comingSoon && (
+                            <p className="text-xs text-yellow-600 mt-2 font-medium">
+                              Available for pre-order
+                            </p>
+                          )}
                         </CardContent>
                       </Card>
                     </m.div>
