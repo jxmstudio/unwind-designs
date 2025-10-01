@@ -5,11 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
   shippingCalculatorFormDataSchema, 
-  ShippingCalculatorFormData, 
-  JobType, 
-  StateCode,
-  DEFAULT_PICKUP_LOCATION 
+  ShippingCalculatorFormData
 } from '@/lib/validation/bigpost';
+import { DEFAULT_PICKUP_LOCATION } from '@/lib/bigpost';
+import { JobType, StateCode } from '@/types/bigpost';
 import { AddressForm } from './AddressForm';
 import { ItemsForm } from './ItemsForm';
 import { QuoteOptions } from './QuoteOptions';
