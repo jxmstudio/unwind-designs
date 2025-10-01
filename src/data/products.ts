@@ -305,7 +305,7 @@ export const sidePanelProducts: ComponentProduct[] = [
     description: "Clean, functional side panels designed specifically for Toyota Troopcarriers. These panels provide a finished interior look while protecting the vehicle's original walls.", // TODO: update description, media, pricing
     shortDescription: "Basic side panels for interior finishing",
     price: 850.00, // TODO: update pricing
-    images: ["/products/side-panels-basic-1.jpg", "/products/side-panels-basic-2.jpg"], // TODO: update with actual product images
+    images: ["/images/placeholder.svg"], // TODO: update with actual product images
     category: "Panels",
     subcategory: "Interior Panels",
     tags: ["Panels", "Troopcarrier", "Interior", "Protection"],
@@ -355,10 +355,10 @@ export const sidePanelProducts: ComponentProduct[] = [
     price: 865.00,
     originalPrice: 895.00,
     images: [
-      "/brand/troopy-side-panels-with-added-storage-146756.jpg",
-      "/brand/troopy-side-panels-with-added-storage-151873.jpg",
-      "/brand/troopy-side-panels-with-added-storage-616672.jpg",
-      "/brand/troopy-side-panels-with-added-storage-720531.jpg"
+      "/brand/troopy-side-panels-with-added-storage-637344.jpg",
+      "/brand/troopy-side-panels-with-added-storage-676294.jpg",
+      "/brand/troopy-side-panels-with-added-storage-753557.jpg",
+      "/brand/troopy-side-panels-with-added-storage-883026.jpg"
     ],
     category: "Panels",
     subcategory: "Storage Panels",

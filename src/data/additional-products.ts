@@ -89,9 +89,9 @@ export const utilityPanelProducts: ComponentProduct[] = [
     shortDescription: "Faceless utility panel for 70 Series Landcruiser. Bolts supplied.",
     price: 150.00,
     images: [
-      "/brand/701%20(1).jpg",
-      "/brand/701%20(2).jpg",
-      "/brand/701%20(3).jpg"
+      "/brand/701 (1).jpg",
+      "/brand/701 (2).jpg",
+      "/brand/701 (3).jpg"
     ],
     category: "Utility Panels",
     subcategory: "70 Series",
