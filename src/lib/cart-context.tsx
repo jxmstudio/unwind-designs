@@ -11,6 +11,14 @@ export interface CartItem {
   quantity: number;
   category?: string;
   shortDescription?: string;
+  // Shipping data
+  weight: number;
+  dimensions?: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  shipClass?: 'standard' | 'oversized' | 'freight';
 }
 
 interface ShippingQuote {
@@ -278,9 +286,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         id: item.id,
         name: item.name,
         quantity: item.quantity,
-        weight: 1, // Default weight - should come from product data
-        dimensions: { length: 30, width: 20, height: 10 }, // Default dimensions
-        shipClass: 'standard' as const,
+        weight: item.weight || 1, // Use actual product weight
+        dimensions: item.dimensions || { length: 30, width: 20, height: 10 }, // Use actual dimensions
+        shipClass: item.shipClass || 'standard' as const,
         price: item.price,
       }));
 
@@ -290,16 +298,52 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalValue: state.total,
       });
 
-      const response = await fetch('/api/shipping/quote', {
+      // Convert to BigPost API format
+      const bigPostRequest = {
+        JobType: [2], // DIRECT
+        BuyerIsBusiness: false,
+        BuyerHasForklift: false,
+        ReturnAuthorityToLeaveOptions: true,
+        JobDate: new Date().toISOString(),
+        DepotId: null,
+        PickupLocation: {
+          Name: "Unwind Designs",
+          Address: "123 Test St",
+          AddressLineTwo: "",
+          Locality: {
+            Suburb: "Melbourne",
+            Postcode: "3000",
+            State: "VIC"
+          }
+        },
+        BuyerLocation: {
+          Name: `${shippingAddress.street}`,
+          Address: shippingAddress.street,
+          AddressLineTwo: "",
+          Locality: {
+            Suburb: shippingAddress.city,
+            Postcode: shippingAddress.postcode,
+            State: shippingAddress.state
+          }
+        },
+        Items: cartItems.map(item => ({
+          ItemType: 0, // CARTON
+          Description: item.name,
+          Quantity: item.quantity,
+          Height: item.dimensions?.height || 10,
+          Width: item.dimensions?.width || 20,
+          Length: item.dimensions?.length || 30,
+          Weight: item.weight,
+          Consolidatable: true
+        }))
+      };
+
+      const response = await fetch('/api/bigpost/get-quote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          deliveryAddress: shippingAddress,
-          items: cartItems,
-          totalValue: state.total,
-        }),
+        body: JSON.stringify(bigPostRequest),
       });
 
       if (!response.ok) {
@@ -310,12 +354,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       console.log('Shipping API response:', data);
 
       if (data.success && data.quotes) {
-        dispatch({ type: 'SET_SHIPPING_QUOTES', payload: data.quotes });
+        // Convert BigPost quotes to our format
+        const shippingQuotes: ShippingQuote[] = data.quotes.map((quote: any) => ({
+          service: quote.ServiceCode,
+          price: quote.Price,
+          deliveryDays: quote.EstimatedDeliveryDays,
+          description: quote.Description,
+          carrier: quote.CarrierName,
+          source: data.fallback ? 'fallback' : 'bigpost'
+        }));
+        
+        dispatch({ type: 'SET_SHIPPING_QUOTES', payload: shippingQuotes });
         // Auto-select the first quote
-        if (data.quotes.length > 0) {
-          dispatch({ type: 'SELECT_SHIPPING_QUOTE', payload: data.quotes[0] });
+        if (shippingQuotes.length > 0) {
+          dispatch({ type: 'SELECT_SHIPPING_QUOTE', payload: shippingQuotes[0] });
         }
-        return data.quotes;
+        return shippingQuotes;
       } else {
         dispatch({ type: 'SET_SHIPPING_ERROR', payload: data.error || 'Failed to get shipping quotes' });
         return null;

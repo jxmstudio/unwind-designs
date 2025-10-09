@@ -48,7 +48,11 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
       price: variant.price,
       image: product.images[0] || '',
       category: product.category,
-      shortDescription: product.shortDescription || product.description
+      shortDescription: product.shortDescription || product.description,
+      // Include shipping data
+      weight: product.weight || 1,
+      dimensions: product.dimensions,
+      shipClass: product.shipClass || 'standard'
     };
 
     addItem(cartItem);
@@ -64,7 +68,11 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
           price: productToAdd.price,
           image: productToAdd.images[0] || '',
           category: productToAdd.category,
-          shortDescription: productToAdd.shortDescription || productToAdd.description
+          shortDescription: productToAdd.shortDescription || productToAdd.description,
+          // Include shipping data
+          weight: productToAdd.weight || 1,
+          dimensions: productToAdd.dimensions,
+          shipClass: productToAdd.shipClass || 'standard'
         };
         await addItem(cartItem, item.quantity);
       }
@@ -83,7 +91,11 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
         originalPrice: product.originalPrice,
         image: product.images[0] || '',
         category: product.category,
-        shortDescription: product.shortDescription
+        shortDescription: product.shortDescription,
+        // Include shipping data
+        weight: product.weight || 1,
+        dimensions: product.dimensions,
+        shipClass: product.shipClass || 'standard'
       });
       
       // Show success feedback (you could add a toast here)
