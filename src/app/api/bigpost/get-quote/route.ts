@@ -9,14 +9,31 @@ export async function POST(request: NextRequest) {
   try {
     // Check if BigPost API key is configured
     if (!process.env.BIGPOST_API_KEY && !process.env.BIG_POST_API_KEY) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'BigPost API key not configured. Please contact support.',
-          fallback: true
-        },
-        { status: 503 }
-      );
+      // Return fallback shipping rates
+      return NextResponse.json({
+        success: true,
+        quotes: [
+          {
+            ServiceCode: 'STANDARD',
+            ServiceName: 'Standard Shipping',
+            Price: 25.00,
+            EstimatedDeliveryDays: 3,
+            CarrierId: 1,
+            CarrierName: 'Australia Post',
+            Description: 'Standard delivery within 3-5 business days'
+          },
+          {
+            ServiceCode: 'EXPRESS',
+            ServiceName: 'Express Shipping',
+            Price: 45.00,
+            EstimatedDeliveryDays: 1,
+            CarrierId: 1,
+            CarrierName: 'Australia Post',
+            Description: 'Express delivery within 1-2 business days'
+          }
+        ],
+        fallback: true
+      });
     }
 
     // Parse and validate request body

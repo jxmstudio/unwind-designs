@@ -21,10 +21,10 @@ export function Hero() {
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-40"
           style={{
-            backgroundImage: `url("/brand/stock1.png")`
+            backgroundImage: `url("/brand/wander-troopy-flat-pack-281517.jpg")`
           }}
           role="img"
-          aria-label="Toyota Troopcarrier vehicle with professional fitout in outdoor setting"
+          aria-label="Professional van fitout with storage solutions and modern design"
         />
         
         {/* Enhanced overlay for better text readability */}
@@ -149,32 +149,7 @@ export function Hero() {
       {/* Enhanced decorative elements */}
       <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-cream-400 to-transparent" />
       
-      {/* Enhanced floating icons with better animations */}
-      <motion.div
-        className="absolute top-32 right-20 text-cream-400/30"
-        variants={floating}
-        animate="animate"
-      >
-        <Truck size={48} />
-      </motion.div>
-      
-      <motion.div
-        className="absolute bottom-48 left-20 text-cream-400/30"
-        variants={floating}
-        animate="animate"
-        transition={{ delay: 1 }}
-      >
-        <Wrench size={40} />
-      </motion.div>
-      
-      <motion.div
-        className="absolute top-48 left-32 text-cream-400/30"
-        variants={floating}
-        animate="animate"
-        transition={{ delay: 2 }}
-      >
-        <Shield size={36} />
-      </motion.div>
+      {/* Removed floating icons for cleaner design */}
     </section>
   );
 }

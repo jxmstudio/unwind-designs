@@ -229,50 +229,6 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
                 </div>
               )}
 
-              {/* Description */}
-              {product.description && (
-                <div className="prose prose-sm max-w-none text-textPrimary leading-relaxed">
-                  {product.description.split('\n\n').map((paragraph, index) => {
-                    // Handle bullet points
-                    if (paragraph.includes('•')) {
-                      const lines = paragraph.split('\n');
-                      const title = lines[0].replace('**', '').replace('**', '');
-                      const bulletPoints = lines.slice(1).filter(line => line.trim().startsWith('•'));
-                      
-                      return (
-                        <div key={index} className="mb-4">
-                          {title && (
-                            <h4 className="font-semibold text-textPrimary mb-2">{title}</h4>
-                          )}
-                          <ul className="list-disc pl-6 space-y-1">
-                            {bulletPoints.map((point, bulletIndex) => (
-                              <li key={bulletIndex} className="text-textPrimary">
-                                {point.replace('•', '').trim()}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      );
-                    }
-                    
-                    // Handle bold text
-                    if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                      return (
-                        <h4 key={index} className="font-semibold text-textPrimary mb-2">
-                          {paragraph.replace(/\*\*/g, '')}
-                        </h4>
-                      );
-                    }
-                    
-                    // Regular paragraph
-                    return (
-                      <p key={index} className="mb-4 text-textPrimary">
-                        {paragraph}
-                      </p>
-                    );
-                  })}
-                </div>
-              )}
 
               {/* Quantity Selector */}
               {isPurchasable && (
