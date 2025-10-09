@@ -160,8 +160,8 @@ export function KitConfigurationsGrid({
                       transition={{ duration: 0.4 }}
                     >
                       <div className="text-center text-textPrimary/70">
-                        <div className="text-4xl mb-2">🚐</div>
-                        <p className="text-body-small font-medium">{config.kitType} Kit</p>
+                        <div className="text-body-small font-medium">{config.kitType} Kit</div>
+                        <div className="text-caption text-textSecondary mt-1">Image Coming Soon</div>
                       </div>
                     </m.div>
                     <div className="absolute top-4 left-4 flex flex-col gap-2">

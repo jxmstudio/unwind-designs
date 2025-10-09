@@ -134,8 +134,8 @@ export function TroopyPacksGrid() {
                         }}
                       />
                       <div className="text-center text-textPrimary/70 hidden">
-                        <div className="text-6xl mb-2">🚐</div>
-                        <p className="text-body-small font-medium">{kit.name}</p>
+                        <div className="text-body-small font-medium">{kit.name}</div>
+                        <div className="text-caption text-textSecondary mt-1">Image Coming Soon</div>
                       </div>
                     </m.div>
                     <m.div 
