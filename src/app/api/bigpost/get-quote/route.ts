@@ -17,16 +17,16 @@ function calculateFallbackShippingRates(requestData: any) {
   const pickupState = PickupLocation?.Locality?.State || 'VIC';
   const deliveryState = BuyerLocation?.Locality?.State || 'NSW';
   
-  // Base rates by state distance
+  // Base rates by state distance (improved for heavy items)
   const stateRates = {
-    'VIC': { standard: 15, express: 25 },
-    'NSW': { standard: 20, express: 35 },
-    'QLD': { standard: 25, express: 45 },
-    'SA': { standard: 18, express: 30 },
-    'WA': { standard: 35, express: 60 },
-    'TAS': { standard: 22, express: 40 },
-    'NT': { standard: 30, express: 55 },
-    'ACT': { standard: 20, express: 35 }
+    'VIC': { standard: 25, express: 45 },
+    'NSW': { standard: 30, express: 55 },
+    'QLD': { standard: 35, express: 65 },
+    'SA': { standard: 28, express: 50 },
+    'WA': { standard: 45, express: 80 },
+    'TAS': { standard: 32, express: 60 },
+    'NT': { standard: 40, express: 75 },
+    'ACT': { standard: 30, express: 55 }
   };
   
   // Get base rates
@@ -37,11 +37,13 @@ function calculateFallbackShippingRates(requestData: any) {
   const isSameState = pickupState === deliveryState;
   const isInterstate = !isSameState;
   
-  // Weight-based pricing
+  // Weight-based pricing (improved for heavy items)
   let weightMultiplier = 1;
-  if (totalWeight > 5) weightMultiplier = 1.5;
-  if (totalWeight > 10) weightMultiplier = 2;
-  if (totalWeight > 20) weightMultiplier = 2.5;
+  if (totalWeight > 5) weightMultiplier = 2;
+  if (totalWeight > 10) weightMultiplier = 3;
+  if (totalWeight > 20) weightMultiplier = 4;
+  if (totalWeight > 50) weightMultiplier = 6;
+  if (totalWeight > 100) weightMultiplier = 8;
   
   // Volume-based pricing
   let volumeMultiplier = 1;
@@ -92,8 +94,14 @@ function calculateFallbackShippingRates(requestData: any) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Debug: Log environment variables
+    console.log('Environment check:');
+    console.log('BIGPOST_API_KEY:', process.env.BIGPOST_API_KEY ? 'SET' : 'NOT SET');
+    console.log('BIG_POST_API_KEY:', process.env.BIG_POST_API_KEY ? 'SET' : 'NOT SET');
+    console.log('BIG_POST_API_TOKEN:', process.env.BIG_POST_API_TOKEN ? 'SET' : 'NOT SET');
+    
     // Check if BigPost API key is configured
-    if (!process.env.BIGPOST_API_KEY && !process.env.BIG_POST_API_KEY) {
+    if (!process.env.BIGPOST_API_KEY && !process.env.BIG_POST_API_KEY && !process.env.BIG_POST_API_TOKEN) {
       // Parse request to calculate dynamic fallback rates
       const body = await request.json();
       
