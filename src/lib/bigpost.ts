@@ -98,6 +98,7 @@ class BigPostAPIClient {
           method,
           headers: {
             'Authorization': `Bearer ${BIGPOST_CONFIG.apiKey}`,
+            'X-API-Key': BIGPOST_CONFIG.apiKey,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'User-Agent': 'Unwind-Designs/1.0',
@@ -116,6 +117,15 @@ class BigPostAPIClient {
           } catch {
             errorData = { message: errorText };
           }
+
+          console.error(`BigPost API Error ${response.status}:`, {
+            url: url,
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries()),
+            body: errorText,
+            parsedError: errorData
+          });
 
           if (response.status === 401) {
             throw new BigPostAPIError('Invalid API key', 401, errorData);

@@ -305,7 +305,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         BuyerHasForklift: false,
         ReturnAuthorityToLeaveOptions: true,
         JobDate: new Date().toISOString(),
-        DepotId: null,
+        // DepotId is optional - only include if we have a valid depot ID
         PickupLocation: {
           Name: "Unwind Designs",
           Address: "123 Test St",
