@@ -94,18 +94,20 @@ function calculateFallbackShippingRates(requestData: any) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Debug: Log environment variables
-    console.log('Environment check:');
-    console.log('BIGPOST_API_KEY:', process.env.BIGPOST_API_KEY ? 'SET' : 'NOT SET');
-    console.log('BIG_POST_API_KEY:', process.env.BIG_POST_API_KEY ? 'SET' : 'NOT SET');
-    console.log('BIG_POST_API_TOKEN:', process.env.BIG_POST_API_TOKEN ? 'SET' : 'NOT SET');
+    // Debug: Log environment variables (commented out for production)
+    // console.log('Environment check:');
+    // console.log('BIGPOST_API_KEY:', process.env.BIGPOST_API_KEY ? 'SET' : 'NOT SET');
+    // console.log('BIG_POST_API_KEY:', process.env.BIG_POST_API_KEY ? 'SET' : 'NOT SET');
+    // console.log('BIG_POST_API_TOKEN:', process.env.BIG_POST_API_TOKEN ? 'SET' : 'NOT SET');
+    
+    // Parse request body first
+    const body = await request.json();
+    console.log('Received quote request:', JSON.stringify(body, null, 2));
     
     // Check if BigPost API key is configured
-    if (!process.env.BIGPOST_API_KEY && !process.env.BIG_POST_API_KEY && !process.env.BIG_POST_API_TOKEN) {
-      // Parse request to calculate dynamic fallback rates
-      const body = await request.json();
-      
-      // Calculate shipping based on distance and weight
+    const apiKey = process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || process.env.BIG_POST_API_TOKEN;
+    if (!apiKey || apiKey === 'disabled' || apiKey === 'your_bigpost_api_token_here') {
+      // Use fallback system - no validation needed
       const quotes = calculateFallbackShippingRates(body);
       
       return NextResponse.json({
@@ -115,10 +117,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Parse and validate request body
-    const body = await request.json();
-    console.log('Received quote request:', JSON.stringify(body, null, 2));
-    
+    // Validate request body for BigPost API
     const validationResult = getQuoteRequestSchema.safeParse(body);
     
     if (!validationResult.success) {
