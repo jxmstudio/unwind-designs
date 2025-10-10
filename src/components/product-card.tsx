@@ -64,10 +64,12 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden bg-cream-300">
         {product.images && product.images[0] ? (
-          <img
+          <motion.img
             src={product.images[0]}
             alt={name}
             className="w-full h-full object-cover"
+            whileHover={{ scale: isDisabled ? 1 : 1.1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             onError={(e) => {
               // Fallback to placeholder if image fails to load
               const target = e.target as HTMLImageElement;
@@ -149,15 +151,22 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-center gap-1 mb-2">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
-              <Star
+              <motion.div
                 key={i}
-                size={14}
-                className={`${
-                  i < Math.floor(rating)
-                    ? "text-yellow-400 fill-current"
-                    : "text-cream-200"
-                }`}
-              />
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05, duration: 0.3, ease: "easeOut" }}
+                whileHover={{ scale: 1.2, rotate: 15 }}
+              >
+                <Star
+                  size={14}
+                  className={`${
+                    i < Math.floor(rating)
+                      ? "text-yellow-400 fill-current"
+                      : "text-cream-200"
+                  }`}
+                />
+              </motion.div>
             ))}
           </div>
           <span className="text-caption text-textPrimary/80 ml-1">

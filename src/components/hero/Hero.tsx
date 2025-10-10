@@ -136,13 +136,31 @@ export function Hero() {
         >
           <div className="flex gap-1">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star 
-                key={i} 
-                className={`w-5 h-5 ${i < 4 ? 'fill-yellow-400 text-yellow-400' : 'text-white/60'}`} 
-              />
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ 
+                  delay: 1 + i * 0.1, 
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 200
+                }}
+              >
+                <Star 
+                  className={`w-5 h-5 ${i < 4 ? 'fill-yellow-400 text-yellow-400' : 'text-white/60'}`} 
+                />
+              </motion.div>
             ))}
           </div>
-          <span className="text-body-small font-medium">4.9/5 from 200+ reviews</span>
+          <motion.span 
+            className="text-body-small font-medium"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.5, duration: 0.5 }}
+          >
+            4.9/5 from 200+ reviews
+          </motion.span>
         </motion.div>
       </motion.div>
 

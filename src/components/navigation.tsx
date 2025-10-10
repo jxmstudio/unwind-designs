@@ -180,13 +180,17 @@ export function Navigation() {
                   <motion.span 
                     className="absolute -top-1 -right-1 w-5 h-5 bg-error-500 text-white text-caption rounded-full flex items-center justify-center font-semibold shadow-medium"
                     initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ 
-                      type: "spring", 
-                      stiffness: 500, 
-                      damping: 30,
-                      duration: isDisabled ? 0 : 0.3
+                    animate={{ 
+                      scale: [1, 1.2, 1],
                     }}
+                    transition={{ 
+                      scale: {
+                        repeat: Infinity,
+                        duration: 2,
+                        ease: "easeInOut"
+                      }
+                    }}
+                    key={state.itemCount}
                   >
                     {state.itemCount}
                   </motion.span>

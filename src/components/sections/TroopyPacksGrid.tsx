@@ -224,18 +224,29 @@ export function TroopyPacksGrid() {
                         variants={textReveal}
                         className="space-y-3"
                       >
-                      <Link href={`/products/${kitSlug === 'wander-kit' ? 'wander-troopy-flat-pack' : kitSlug === 'roam-kit' ? 'roam-troopy-flat-pack' : 'premium-troopy-kits'}`} className="block">
+                      {kitSlug === 'roam-kit' ? (
                         <m.div
-                          variants={buttonHover}
-                          whileHover={isDisabled ? {} : "hover"}
-                          whileTap={isDisabled ? {} : "tap"}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.2 }}
+                          className="w-full bg-yellow-100 text-yellow-800 py-4 px-6 rounded-xl text-center font-semibold border-2 border-yellow-200"
                         >
-                          <Button className="w-full !bg-brown-500 hover:!bg-darkBrown !text-white !font-semibold !border-0">
-                            View Configurations
-                            <ArrowRight className="ml-2 w-4 h-4" />
-                          </Button>
+                          🚀 Coming Soon - Notify Me
                         </m.div>
-                      </Link>
+                      ) : (
+                        <Link href={`/products/${kitSlug === 'wander-kit' ? 'wander-troopy-flat-pack' : 'premium-troopy-kits'}`} className="block">
+                          <m.div
+                            variants={buttonHover}
+                            whileHover={isDisabled ? {} : "hover"}
+                            whileTap={isDisabled ? {} : "tap"}
+                          >
+                            <Button className="w-full !bg-brown-500 hover:!bg-darkBrown !text-white !font-semibold !border-0">
+                              View Configurations
+                              <ArrowRight className="ml-2 w-4 h-4" />
+                            </Button>
+                          </m.div>
+                        </Link>
+                      )}
                       </m.div>
 
                       <m.div
@@ -294,20 +305,19 @@ export function TroopyPacksGrid() {
                   </Link>
                 </m.div>
                 <m.div variants={staggerItem}>
-                  <Link href="/products/roam-troopy-flat-pack">
-                    <m.div
-                      variants={buttonHover}
-                      whileHover={isDisabled ? {} : "hover"}
-                      whileTap={isDisabled ? {} : "tap"}
+                  <m.div
+                    variants={buttonHover}
+                    whileHover={isDisabled ? {} : { scale: 1.02 }}
+                    whileTap={isDisabled ? {} : { scale: 0.98 }}
+                  >
+                    <Button 
+                      size="lg" 
+                      disabled
+                      className="bg-gray-300 text-gray-500 px-8 py-3 font-semibold rounded-xl cursor-not-allowed opacity-60"
                     >
-                      <Button 
-                        size="lg" 
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 font-semibold rounded-xl"
-                      >
-                        View Roam Kit
-                      </Button>
-                    </m.div>
-                  </Link>
+                      Roam Kit - Coming Soon
+                    </Button>
+                  </m.div>
                 </m.div>
                 <m.div variants={staggerItem}>
                   <Link href="/products/premium-troopy-kits">
