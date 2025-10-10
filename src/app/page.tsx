@@ -5,7 +5,6 @@ import { ValueProps } from "@/components/sections/ValueProps";
 import { FeaturedSlider } from "@/components/sections/FeaturedSlider";
 import { ServicesChips } from "@/components/sections/ServicesChips";
 import { TroopyPromo } from "@/components/sections/TroopyPromo";
-import { GalleryPreview } from "@/components/sections/GalleryPreview";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Footer } from "@/components/footer";
 import { AnimationProvider } from "@/components/anim";
@@ -23,7 +22,6 @@ export default function Home() {
           <TroopyPromo />
           <FeaturedSlider />
           <ServicesChips />
-          <GalleryPreview />
           <Testimonials />
         </div>
         <Case />

@@ -2,11 +2,10 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Settings, Star, Truck, Calculator, Package, Wrench, Shield } from "lucide-react";
+import { ArrowRight, Star, Truck, Calculator, Package, Wrench, Shield } from "lucide-react";
 import { sectionReveal, staggerContainer, staggerItem } from "@/lib/motion";
 import { useFeatureFlag } from "@/lib/feature-flags";
 import Link from "next/link";
-import Image from "next/image";
 
 export function TroopyPromo() {
   const configuratorEnabled = useFeatureFlag('FEATURE_FLAT_PACK_CONFIGURATOR');
@@ -21,15 +20,14 @@ export function TroopyPromo() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+          className="max-w-5xl mx-auto"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {/* Left Content */}
           <motion.div 
-            className="space-y-8"
+            className="space-y-8 text-center"
             variants={staggerItem}
           >
             <div>
@@ -56,7 +54,7 @@ export function TroopyPromo() {
 
             {/* Enhanced Features Grid */}
             <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto"
               variants={staggerItem}
             >
               <div className="flex items-center gap-3 p-3 bg-cream-300 rounded-lg">
@@ -136,7 +134,7 @@ export function TroopyPromo() {
 
             {/* CTA */}
             <motion.div 
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-4 justify-center"
               variants={staggerItem}
             >
               <motion.div
@@ -182,7 +180,7 @@ export function TroopyPromo() {
 
             {/* Trust indicators */}
             <motion.div 
-              className="flex items-center gap-6 pt-4"
+              className="flex items-center justify-center gap-6 pt-4"
               variants={staggerItem}
             >
               <div className="flex items-center gap-2">
@@ -194,54 +192,6 @@ export function TroopyPromo() {
                 <span className="text-body-small text-textSecondary">Free consultation</span>
               </div>
             </motion.div>
-          </motion.div>
-
-          {/* Right Image */}
-          <motion.div 
-            className="relative"
-            variants={staggerItem}
-          >
-            <div className="relative">
-              {/* Main image container */}
-              <div className="w-full h-96 lg:h-[500px] bg-gradient-to-br from-brown-200 to-brown-300 rounded-2xl shadow-large overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center text-textSecondary">
-                                     <div className="mb-4">
-                       <Image 
-                         src="/brand/unwind_designs_logo.jpg" 
-                         alt="Unwind Designs Logo" 
-                         width={128}
-                         height={43}
-                         className="mx-auto"
-                         style={{ height: 'auto' }}
-                       />
-                     </div>
-                    <p className="text-lg font-medium">Troopy Configurator</p>
-                    <p className="text-body-small text-textSecondary">Interactive 3D Preview</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Floating elements */}
-              <motion.div
-                className="absolute -top-4 -right-4 w-24 h-24 bg-cream-300 rounded-full border-2 border-borderNeutral shadow-medium flex items-center justify-center"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <Settings className="w-8 h-8 text-brown-500" />
-              </motion.div>
-              
-              <motion.div
-                className="absolute -bottom-4 -left-4 w-20 h-20 bg-brown-500 rounded-full shadow-medium flex items-center justify-center"
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <Star className="w-6 h-6 text-cream-400 fill-current" />
-              </motion.div>
-              
-              {/* Decorative grid */}
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23c9b9a6%22 fill-opacity=%220.1%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
-            </div>
           </motion.div>
         </motion.div>
       </div>
