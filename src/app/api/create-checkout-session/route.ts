@@ -24,13 +24,26 @@ const CheckoutSessionSchema = z.object({
 
 export async function POST(request: NextRequest) {
   // Early environment checks
+  console.log('=== STRIPE DEBUG INFO ===');
   console.log('Stripe instance:', !!stripe);
   console.log('STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
+  console.log('STRIPE_SECRET_KEY length:', process.env.STRIPE_SECRET_KEY?.length || 0);
+  console.log('STRIPE_SECRET_KEY starts with sk_:', process.env.STRIPE_SECRET_KEY?.startsWith('sk_') || false);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('========================');
   
   if (!stripe) {
     console.error('Stripe is not initialized. Check STRIPE_SECRET_KEY environment variable.');
     return NextResponse.json(
-      { error: 'Payment system is not configured. Please contact support.' },
+      { 
+        error: 'Payment system is not configured. Please contact support.',
+        debug: {
+          stripeInstance: !!stripe,
+          hasSecretKey: !!process.env.STRIPE_SECRET_KEY,
+          keyLength: process.env.STRIPE_SECRET_KEY?.length || 0,
+          keyPrefix: process.env.STRIPE_SECRET_KEY?.substring(0, 10) || 'N/A'
+        }
+      },
       { status: 503 }
     );
   }
