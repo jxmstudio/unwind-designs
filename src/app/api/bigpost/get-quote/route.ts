@@ -93,9 +93,11 @@ function calculateFallbackShippingRates(requestData: any) {
 }
 
 export async function POST(request: NextRequest) {
+  let body: any;
+  
   try {
-    // Parse request body first
-    const body = await request.json();
+    // Parse request body ONCE at the start
+    body = await request.json();
     console.log('[BIGPOST API] Received quote request:', JSON.stringify(body, null, 2));
     
     // Validate request body
@@ -109,12 +111,13 @@ export async function POST(request: NextRequest) {
         success: true,
         quotes: fallbackQuotes,
         fallback: true,
-        reason: 'validation_failed'
+        reason: 'validation_failed',
+        validationErrors: validationResult.error.issues
       });
     }
 
     const validatedRequest = validationResult.data;
-    console.log('[BIGPOST API] Calling BigPost API...');
+    console.log('[BIGPOST API] Validation passed! Calling BigPost API...');
     
     // Call BigPost API
     const response = await bigPostAPI.getQuote(validatedRequest);
@@ -150,7 +153,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Success with real quotes!
-    console.log('[BIGPOST API] Returning', response.Quotes.length, 'real quotes');
+    console.log('[BIGPOST API] SUCCESS! Returning', response.Quotes.length, 'real BigPost quotes');
     return NextResponse.json({
       success: true,
       quotes: response.Quotes,
@@ -159,13 +162,11 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('[BIGPOST API] Error caught:', error);
+    console.error('[BIGPOST API] Exception caught:', error);
     
-    // On ANY error, return fallback so checkout doesn't break
-    try {
-      const body = await request.json();
+    // Use the body we already parsed (if available)
+    if (body) {
       const fallbackQuotes = calculateFallbackShippingRates(body);
-      
       return NextResponse.json({
         success: true,
         quotes: fallbackQuotes,
@@ -173,25 +174,26 @@ export async function POST(request: NextRequest) {
         reason: 'exception',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    } catch (fallbackError) {
-      // Last resort - return basic shipping rate
-      return NextResponse.json({
-        success: true,
-        quotes: [
-          {
-            ServiceCode: 'STANDARD',
-            ServiceName: 'Standard Shipping',
-            Price: 35.00,
-            EstimatedDeliveryDays: 5,
-            CarrierId: 1,
-            CarrierName: 'Australia Post',
-            Description: 'Standard delivery within 5-7 business days'
-          }
-        ],
-        fallback: true,
-        reason: 'critical_error'
-      });
     }
+    
+    // Last resort - body wasn't even parsed
+    return NextResponse.json({
+      success: true,
+      quotes: [
+        {
+          ServiceCode: 'STANDARD',
+          ServiceName: 'Standard Shipping',
+          Price: 35.00,
+          EstimatedDeliveryDays: 5,
+          CarrierId: 1,
+          CarrierName: 'Australia Post',
+          Description: 'Standard delivery within 5-7 business days'
+        }
+      ],
+      fallback: true,
+      reason: 'critical_error',
+      error: error instanceof Error ? error.message : 'Failed to parse request'
+    });
   }
 }
 
