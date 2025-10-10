@@ -82,6 +82,16 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
   const handleAddToCart = async () => {
     if (!isPurchasable) return;
     
+    // If product has variant options, require a variant to be selected
+    if (product.variantOptions && product.variantOptions.length > 0) {
+      if (!selectedVariant) {
+        return; // Don't add to cart if no variant selected
+      }
+      // Use the variant add to cart handler instead
+      await handleAddToCartVariant(selectedVariant, quantity);
+      return;
+    }
+    
     setIsAddingToCart(true);
     try {
       addItem({
@@ -288,11 +298,13 @@ export function ProductPage({ product, relatedProducts = [] }: ProductPageProps)
                 ) : (
                   <Button
                     onClick={handleAddToCart}
-                    disabled={!isPurchasable || isAddingToCart}
+                    disabled={!isPurchasable || isAddingToCart || (product.variantOptions && product.variantOptions.length > 0 && !selectedVariant)}
                     className="w-full bg-accent-500 hover:bg-accent-600 text-white font-semibold py-4 text-lg rounded-xl transition-all duration-300 disabled:opacity-50"
                   >
                     {isAddingToCart ? (
                       "Adding to Cart..."
+                    ) : (product.variantOptions && product.variantOptions.length > 0 && !selectedVariant) ? (
+                      "Please select all options"
                     ) : (
                       <>
                         <ShoppingCart className="w-5 h-5 mr-2" />
