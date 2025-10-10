@@ -34,7 +34,7 @@ export async function submitContactForm(data: {
       
       const emailResult = await resend.emails.send({
         from: "Unwind Designs <onboarding@resend.dev>",
-        to: ["jxmstudioweb@gmail.com"],
+        to: ["Info@unwinddesigns.com.au"],
         subject: `New Contact Form from ${data.name}`,
         html: emailContent,
         replyTo: data.email,
