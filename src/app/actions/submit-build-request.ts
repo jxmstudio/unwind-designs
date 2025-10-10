@@ -46,7 +46,7 @@ export async function submitBuildRequest(data: BuildWizardData) {
     if (process.env.RESEND_API_KEY) {
       const emailResult = await resend.emails.send({
         from: "Unwind Designs <onboarding@resend.dev>",
-        to: ["Info@unwinddesigns.com.au"],
+        to: ["jxmstudioweb@gmail.com"], // Temp: Resend test domain only allows sending to verified email  
         subject: `New Build Request from ${step4.firstName} ${step4.lastName}`,
         html: emailContent,
         replyTo: step4.email,

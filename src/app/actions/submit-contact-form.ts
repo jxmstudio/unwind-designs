@@ -34,7 +34,7 @@ export async function submitContactForm(data: {
       
       const emailResult = await resend.emails.send({
         from: "Unwind Designs <onboarding@resend.dev>",
-        to: ["Info@unwinddesigns.com.au"],
+        to: ["jxmstudioweb@gmail.com"], // Temp: Resend test domain only allows sending to verified email
         subject: `New Contact Form from ${data.name}`,
         html: emailContent,
         replyTo: data.email,
