@@ -158,51 +158,7 @@ export interface ComponentProduct {
 
 // General Flat Pack Products (simplified versions for overview)
 export const generalFlatPackProducts: ComponentProduct[] = [
-  {
-    id: "wander-troopy-flat-pack-general",
-    name: "Wander Troopy Flat Pack",
-    description: "Our budget-friendly flat pack solution for Toyota Troopcarriers. Perfect for weekend adventures with reliable storage and basic amenities. Multiple finish options available.", // TODO: update description based on final marketing copy
-    shortDescription: "Budget-friendly flat pack for weekend adventures",
-    price: 3750.00, // Starting price for plain hardwood chest fridge variant
-    images: ["/images/placeholder.svg"], // TODO: update with actual product images
-    videoUrl: "/videos/wander-overview.mp4", // TODO: create overview video
-    category: "Complete Kits",
-    subcategory: "Budget Range",
-    tags: ["Flat Pack", "Troopcarrier", "Budget", "Weekend", "Marine Grade"],
-    features: [
-      "Multiple fridge configuration options",
-      "Three finish choices available",
-      "Marine-grade plywood construction",
-      "Tool-free assembly system",
-      "Slide-out storage drawers",
-      "Built-in power management"
-    ],
-    specifications: {
-      "Material": "Marine-grade plywood",
-      "Configurations": "Chest or upright fridge options",
-      "Finishes": "Plain hardwood, Eucalyptus Black Hex, Birch Black Hex",
-      "Assembly": "4-6 hours typical",
-      "Compatibility": "Toyota Troopcarrier"
-    },
-    weight: 45.0,
-    compatibility: ["Toyota Troopcarrier"],
-    installationRequired: true,
-    warranty: "2-3 years depending on finish",
-    assemblyTime: "4-6 hours",
-    sku: "WK-GENERAL-001",
-    slug: "wander-troopy-flat-pack-general",
-    inStock: true,
-    stockQuantity: 25,
-    rating: 4.6,
-    reviewCount: 189,
-    badges: ["Budget", "Popular"],
-    shipClass: "oversized",
-    upsells: ["cushion-set-wander"],
-    isTroopyPack: true,
-    troopyPackSlug: "wander-kit",
-    createdAt: new Date("2024-01-10"),
-    updatedAt: new Date("2024-01-15")
-  },
+  // Removed duplicate wander-troopy-flat-pack-general (use wander-troopy-flat-pack from flatpacks.ts instead)
   {
     id: "roam-troopy-flat-pack-general", 
     name: "Roam Troopy Flat Pack",
