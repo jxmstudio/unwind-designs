@@ -1,9 +1,9 @@
 "use server";
 
+import { Resend } from "resend";
 import { addToGoogleSheets, getCurrentTimestamp, type ContactFormData } from "@/lib/google-sheets";
 
-// Email functionality disabled for now - only Google Sheets
-// const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function submitContactForm(data: {
   name: string;
@@ -28,8 +28,22 @@ export async function submitContactForm(data: {
       };
     }
 
-    // Email functionality disabled for now
-    // TODO: Add email functionality back when RESEND_API_KEY is configured
+    // Send email using Resend
+    if (process.env.RESEND_API_KEY) {
+      const emailContent = createContactEmailContent(data);
+      
+      const emailResult = await resend.emails.send({
+        from: "Contact Form <noreply@unwinddesigns.com.au>",
+        to: ["jxmstudioweb@gmail.com"],
+        subject: `New Contact Form from ${data.name}`,
+        html: emailContent,
+        replyTo: data.email,
+      });
+
+      if (emailResult.error) {
+        console.error("Email send error:", emailResult.error);
+      }
+    }
 
     // Save to Google Sheets
     const sheetsData: ContactFormData = {
