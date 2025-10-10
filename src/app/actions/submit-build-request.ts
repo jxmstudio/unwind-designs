@@ -45,7 +45,7 @@ export async function submitBuildRequest(data: BuildWizardData) {
     // Send email using Resend
     if (process.env.RESEND_API_KEY) {
       const emailResult = await resend.emails.send({
-        from: "Build Requests <noreply@unwinddesigns.com.au>",
+        from: "Unwind Designs <onboarding@resend.dev>",
         to: ["jxmstudioweb@gmail.com"],
         subject: `New Build Request from ${step4.firstName} ${step4.lastName}`,
         html: emailContent,

@@ -33,7 +33,7 @@ export async function submitContactForm(data: {
       const emailContent = createContactEmailContent(data);
       
       const emailResult = await resend.emails.send({
-        from: "Contact Form <noreply@unwinddesigns.com.au>",
+        from: "Unwind Designs <onboarding@resend.dev>",
         to: ["jxmstudioweb@gmail.com"],
         subject: `New Contact Form from ${data.name}`,
         html: emailContent,
