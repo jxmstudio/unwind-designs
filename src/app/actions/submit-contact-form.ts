@@ -56,8 +56,11 @@ export async function submitContactForm(data: {
 
     const sheetsResult = await addToGoogleSheets(sheetsData);
     if (!sheetsResult.success) {
-      console.error("Google Sheets error:", sheetsResult.message);
+      console.error("❌ Google Sheets error:", sheetsResult.message);
+      console.error("❌ Full error:", sheetsResult.error);
       // Don't fail the entire request if Sheets fails
+    } else {
+      console.log("✅ Google Sheets: Data saved successfully");
     }
 
     return { success: true, message: "Message sent successfully! We'll get back to you soon." };
