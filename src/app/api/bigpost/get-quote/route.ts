@@ -94,109 +94,104 @@ function calculateFallbackShippingRates(requestData: any) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Debug: Log environment variables (commented out for production)
-    // console.log('Environment check:');
-    // console.log('BIGPOST_API_KEY:', process.env.BIGPOST_API_KEY ? 'SET' : 'NOT SET');
-    // console.log('BIG_POST_API_KEY:', process.env.BIG_POST_API_KEY ? 'SET' : 'NOT SET');
-    // console.log('BIG_POST_API_TOKEN:', process.env.BIG_POST_API_TOKEN ? 'SET' : 'NOT SET');
-    
     // Parse request body first
     const body = await request.json();
-    console.log('Received quote request:', JSON.stringify(body, null, 2));
+    console.log('[BIGPOST API] Received quote request:', JSON.stringify(body, null, 2));
     
-    // Check if BigPost API key is configured
-    const apiKey = process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || process.env.BIG_POST_API_TOKEN;
-    if (!apiKey || apiKey === 'disabled' || apiKey === 'your_bigpost_api_token_here') {
-      // Use fallback system - no validation needed
-      const quotes = calculateFallbackShippingRates(body);
-      
-      return NextResponse.json({
-        success: true,
-        quotes,
-        fallback: true
-      });
-    }
-
-    // Validate request body for BigPost API
+    // Validate request body
     const validationResult = getQuoteRequestSchema.safeParse(body);
     
     if (!validationResult.success) {
-      console.error('Validation failed:', validationResult.error.issues);
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Validation failed',
-          validationErrors: validationResult.error.issues.map(issue => ({
-            field: issue.path.join('.'),
-            message: issue.message
-          }))
-        },
-        { status: 422 }
-      );
+      console.error('[BIGPOST API] Validation failed:', validationResult.error.issues);
+      // Return fallback on validation error
+      const fallbackQuotes = calculateFallbackShippingRates(body);
+      return NextResponse.json({
+        success: true,
+        quotes: fallbackQuotes,
+        fallback: true,
+        reason: 'validation_failed'
+      });
     }
 
     const validatedRequest = validationResult.data;
+    console.log('[BIGPOST API] Calling BigPost API...');
     
     // Call BigPost API
     const response = await bigPostAPI.getQuote(validatedRequest);
     
-    console.log('BigPost API response:', JSON.stringify(response, null, 2));
-    console.log('Response.Success:', response.Success);
-    console.log('Response.Quotes:', response.Quotes);
-    console.log('Quotes length:', response.Quotes?.length || 0);
+    console.log('[BIGPOST API] Response Success:', response.Success);
+    console.log('[BIGPOST API] Quotes count:', response.Quotes?.length || 0);
     
     if (!response.Success) {
-      console.error('BigPost API returned error:', response.ErrorMessage);
+      console.error('[BIGPOST API] API returned error:', response.ErrorMessage);
       // Use fallback on API error
       const fallbackQuotes = calculateFallbackShippingRates(body);
       return NextResponse.json({
         success: true,
         quotes: fallbackQuotes,
         fallback: true,
+        reason: 'api_error',
         apiError: response.ErrorMessage
       });
     }
 
     // If API succeeded but returned no quotes, use fallback
     if (!response.Quotes || response.Quotes.length === 0) {
-      console.log('BigPost API returned no quotes, using fallback');
+      console.log('[BIGPOST API] No quotes returned, using fallback');
       const fallbackQuotes = calculateFallbackShippingRates(body);
       
-      const fallbackResponse = {
+      return NextResponse.json({
         success: true,
         quotes: fallbackQuotes,
         fallback: true,
+        reason: 'no_quotes',
         requestId: response.RequestId
-      };
-      
-      console.log('Sending fallback response:', JSON.stringify(fallbackResponse, null, 2));
-      return NextResponse.json(fallbackResponse);
+      });
     }
 
-    const quotesResponse = {
+    // Success with real quotes!
+    console.log('[BIGPOST API] Returning', response.Quotes.length, 'real quotes');
+    return NextResponse.json({
       success: true,
       quotes: response.Quotes,
       requestId: response.RequestId,
       fallback: false
-    };
-    
-    console.log('Sending response:', JSON.stringify(quotesResponse, null, 2));
-
-    return NextResponse.json(quotesResponse);
+    });
 
   } catch (error) {
-    console.error('Get quote API error:', error);
+    console.error('[BIGPOST API] Error caught:', error);
     
-    const { statusCode, message, validationErrors } = handleBigPostError(error);
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: message,
-        ...(validationErrors && { validationErrors })
-      },
-      { status: statusCode }
-    );
+    // On ANY error, return fallback so checkout doesn't break
+    try {
+      const body = await request.json();
+      const fallbackQuotes = calculateFallbackShippingRates(body);
+      
+      return NextResponse.json({
+        success: true,
+        quotes: fallbackQuotes,
+        fallback: true,
+        reason: 'exception',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    } catch (fallbackError) {
+      // Last resort - return basic shipping rate
+      return NextResponse.json({
+        success: true,
+        quotes: [
+          {
+            ServiceCode: 'STANDARD',
+            ServiceName: 'Standard Shipping',
+            Price: 35.00,
+            EstimatedDeliveryDays: 5,
+            CarrierId: 1,
+            CarrierName: 'Australia Post',
+            Description: 'Standard delivery within 5-7 business days'
+          }
+        ],
+        fallback: true,
+        reason: 'critical_error'
+      });
+    }
   }
 }
 
