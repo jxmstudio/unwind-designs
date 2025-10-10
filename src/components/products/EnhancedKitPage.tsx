@@ -55,11 +55,6 @@ export function EnhancedKitPage({
   const { addItem } = useCart();
   const products = getTroopyPackBySlug(kitSlug);
   const galleryRef = useRef<HTMLDivElement | null>(null);
-  
-  // Set default selected variant to the first product
-  if (!selectedVariant && products.length > 0) {
-    setSelectedVariant(products[0]);
-  }
 
   const handleVariantSelect = (product: FlatPackProduct | ComponentProduct) => {
     setSelectedVariant(product);
@@ -289,7 +284,9 @@ export function EnhancedKitPage({
           <div className="space-y-8">
             {/* Configuration Options */}
             <div>
-              <h2 className="text-2xl font-bold text-textPrimary mb-6">Choose Your Configuration</h2>
+              <h2 className="text-2xl font-bold text-textPrimary mb-6">
+                Finish <span className="text-error-500">*Required</span>
+              </h2>
               <div className="space-y-4">
                 {products.map((product) => (
                   <Card 
@@ -332,6 +329,19 @@ export function EnhancedKitPage({
             </div>
 
             {/* Selected Variant Details */}
+            {!selectedVariant && (
+              <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl shadow-lg p-6">
+                <div className="text-center">
+                  <div className="text-xl font-semibold text-amber-900 mb-2">
+                    ⚠️ Please Select a Configuration
+                  </div>
+                  <p className="text-amber-700">
+                    Choose a finish and fridge type from the options above to continue
+                  </p>
+                </div>
+              </div>
+            )}
+
             {selectedVariant && (
               <div className="bg-white rounded-2xl shadow-lg p-6">
                 <div className="flex justify-between items-start mb-6">

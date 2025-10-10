@@ -28,11 +28,6 @@ export function TroopyPackDetail({
   const [selectedVariant, setSelectedVariant] = useState<FlatPackProduct | ComponentProduct | null>(null);
   const { addItem } = useCart();
   const products = getTroopyPackBySlug(kitSlug);
-  
-  // Set default selected variant to the first product
-  if (!selectedVariant && products.length > 0) {
-    setSelectedVariant(products[0]);
-  }
 
   const handleVariantSelect = (product: FlatPackProduct | ComponentProduct) => {
     setSelectedVariant(product);
@@ -99,7 +94,9 @@ export function TroopyPackDetail({
 
           {/* Variant Selection */}
           <div>
-            <h3 className="text-lg font-semibold text-textPrimary mb-4">Choose Configuration:</h3>
+            <h3 className="text-lg font-semibold text-textPrimary mb-4">
+              Finish <span className="text-error-500">*Required</span>
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {products.map((product) => (
                 <Card 
@@ -133,6 +130,19 @@ export function TroopyPackDetail({
           </div>
 
           {/* Price and CTA */}
+          {!selectedVariant && (
+            <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-6">
+              <div className="text-center">
+                <div className="text-lg font-semibold text-amber-900 mb-2">
+                  ⚠️ Please Select a Configuration
+                </div>
+                <p className="text-amber-700 text-body-small">
+                  Choose a finish and fridge type from the options above to continue
+                </p>
+              </div>
+            </div>
+          )}
+          
           {selectedVariant && (
             <div className="bg-cream-100 rounded-xl p-6">
               <div className="flex items-baseline justify-between mb-4">
@@ -157,7 +167,7 @@ export function TroopyPackDetail({
                   </div>
                 ) : (
                   <Button 
-                    className="w-full bg-accent-500 hover:bg-accent-600 text-white font-semibold py-3 rounded-xl"
+                    className="w-full bg-accent-500 hover:bg-accent-600 text-white font-semibold py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={!selectedVariant.inStock}
                     onClick={handleAddToCart}
                   >
@@ -166,7 +176,7 @@ export function TroopyPackDetail({
                 )}
                 <Button 
                   variant="outline" 
-                  className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white font-semibold py-3 rounded-xl"
+                  className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white font-semibold py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={selectedVariant.comingSoon}
                 >
                   {selectedVariant.comingSoon ? 'Coming Soon' : 'Configure & Buy'}
