@@ -34,6 +34,25 @@ export default function ShippingPage() {
             </motion.p>
           </motion.div>
 
+          {/* Shipping Calculator Notice */}
+          <Card className="bg-gradient-to-r from-brown-100 to-cream-300 border-brown-300 mb-12">
+            <CardContent className="p-8 text-center">
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-16 h-16 bg-brown-500 rounded-full flex items-center justify-center">
+                  <Truck className="w-8 h-8 text-white" />
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold text-textPrimary mb-3">
+                Real-Time Shipping Calculation
+              </h3>
+              <p className="text-lg text-textPrimary/80 max-w-3xl mx-auto leading-relaxed">
+                Shipping costs are calculated automatically at checkout based on your delivery address, 
+                item weight, dimensions, and chosen carrier. We use <strong>BigPost API</strong> to provide 
+                you with the most accurate and competitive shipping rates from trusted Australian carriers.
+              </p>
+            </CardContent>
+          </Card>
+
           {/* Shipping Options */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <Card className="bg-cream-300 border-borderNeutral">
@@ -49,7 +68,7 @@ export default function ShippingPage() {
                   Reliable delivery across Australia
                 </p>
                 <p className="text-textPrimary font-medium text-body-small">
-                  Free on orders over $500
+                  Calculated at checkout
                 </p>
               </CardContent>
             </Card>
@@ -62,12 +81,12 @@ export default function ShippingPage() {
                 <CardTitle className="text-lg text-textPrimary">Express Shipping</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-body font-bold text-brown-500 mb-2">1-2 Business Days</p>
+                <p className="text-body font-bold text-brown-500 mb-2">1-3 Business Days</p>
                 <p className="text-textSecondary text-body-small mb-4">
                   Priority delivery for urgent orders
                 </p>
                 <p className="text-textPrimary font-medium text-body-small">
-                  Additional $15.00
+                  Calculated at checkout
                 </p>
               </CardContent>
             </Card>
@@ -91,49 +110,64 @@ export default function ShippingPage() {
             </Card>
           </div>
 
-          {/* Shipping Rates Table */}
+          {/* Factors Affecting Shipping Cost */}
           <Card className="bg-cream-300 border-borderNeutral mb-12">
             <CardHeader>
-              <CardTitle className="text-xl text-textPrimary">Shipping Rates</CardTitle>
+              <CardTitle className="text-xl text-textPrimary">What Affects Your Shipping Cost?</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-borderNeutral">
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Destination</th>
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Standard</th>
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Express</th>
-                      <th className="text-left py-3 px-4 font-medium text-textPrimary text-body-small">Free Shipping</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b border-borderNeutral/50">
-                      <td className="py-3 px-4 text-textPrimary text-body-small">Metro Areas (VIC, NSW, QLD, SA, WA)</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">$12.00</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">$27.00</td>
-                      <td className="py-3 px-4 text-green-600 font-medium text-body-small">Orders $500+</td>
-                    </tr>
-                    <tr className="border-b border-borderNeutral/50">
-                      <td className="py-3 px-4 text-textPrimary text-body-small">Regional Areas (NT, TAS)</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">$18.00</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">$33.00</td>
-                      <td className="py-3 px-4 text-green-600 font-medium text-body-small">Orders $500+</td>
-                    </tr>
-                    <tr className="border-b border-borderNeutral/50">
-                      <td className="py-3 px-4 text-textPrimary text-body-small">Remote Areas</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">$25.00</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">$40.00</td>
-                      <td className="py-3 px-4 text-green-600 font-medium text-body-small">Orders $500+</td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-4 text-textPrimary text-body-small">International</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">Calculated</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">Calculated</td>
-                      <td className="py-3 px-4 text-textSecondary text-body-small">Not available</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-brown-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Package className="w-5 h-5 text-brown-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-body font-medium text-textPrimary mb-2">Weight & Dimensions</h3>
+                    <p className="text-textSecondary text-body-small">
+                      Heavier and larger items cost more to ship. Our flat packs are carefully packaged 
+                      to minimize shipping costs while ensuring safe delivery.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-brown-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-brown-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-body font-medium text-textPrimary mb-2">Delivery Location</h3>
+                    <p className="text-textSecondary text-body-small">
+                      Metro areas generally have lower rates than regional or remote locations. 
+                      Distance from our warehouse also affects the final cost.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-brown-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Truck className="w-5 h-5 text-brown-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-body font-medium text-textPrimary mb-2">Carrier Selection</h3>
+                    <p className="text-textSecondary text-body-small">
+                      We partner with multiple carriers including Australia Post, StarTrack, and specialty 
+                      freight services to offer you the best rates and service levels.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-brown-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-5 h-5 text-brown-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-body font-medium text-textPrimary mb-2">Service Speed</h3>
+                    <p className="text-textSecondary text-body-small">
+                      Express delivery costs more than standard shipping. You'll see all available 
+                      options with real-time pricing during checkout.
+                    </p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -194,27 +228,31 @@ export default function ShippingPage() {
               <h2 className="text-xl font-semibold text-textPrimary mb-6">Shipping Policies</h2>
               <div className="space-y-4">
                 <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Dynamic Pricing</h3>
+                  <p className="text-textSecondary text-body-small">
+                    All shipping costs are calculated in real-time based on your exact delivery address, 
+                    package weight, dimensions, and selected carrier.
+                  </p>
+                </div>
+                <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
                   <h3 className="text-body-small font-medium text-textPrimary mb-2">Delivery Times</h3>
                   <p className="text-textSecondary text-body-small">
-                    Delivery times are estimates and may vary due to weather, holidays, or remote locations.
+                    Delivery times are estimates and may vary due to weather, holidays, or remote locations. 
+                    You'll see estimated delivery dates during checkout.
                   </p>
                 </div>
                 <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
-                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Signature Required</h3>
+                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Signature & Insurance</h3>
                   <p className="text-textSecondary text-body-small">
-                    Orders over $200 require a signature upon delivery for security.
-                  </p>
-                </div>
-                <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
-                  <h3 className="text-body-small font-medium text-textPrimary mb-2">Remote Areas</h3>
-                  <p className="text-textSecondary text-body-small">
-                    Additional delivery charges may apply for remote or hard-to-reach locations.
+                    High-value orders may require signature upon delivery. Insurance options are available 
+                    for added protection of your items.
                   </p>
                 </div>
                 <div className="bg-cream-300 p-4 rounded-lg border border-borderNeutral">
                   <h3 className="text-body-small font-medium text-textPrimary mb-2">International Shipping</h3>
                   <p className="text-textSecondary text-body-small">
-                    International orders may be subject to customs duties and import taxes.
+                    International orders may be subject to customs duties and import taxes. 
+                    Rates calculated based on destination and package specifications.
                   </p>
                 </div>
               </div>
