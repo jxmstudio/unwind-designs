@@ -216,12 +216,14 @@ export function WaterTank90LPage({ product }: WaterTank90LPageProps) {
 
               <Button
                 onClick={handleAddToCart}
-                disabled={isAddingToCart}
+                disabled={isAddingToCart || !isVariantComplete}
                 className="w-full bg-brown-600 hover:bg-brown-700 text-white py-3 text-lg font-medium rounded-xl"
                 size="lg"
               >
                 {isAddingToCart ? (
                   "Adding to Cart..."
+                ) : !isVariantComplete ? (
+                  "Please select a color"
                 ) : product.requiresEmailOrder ? (
                   "Contact Us to Order"
                 ) : (

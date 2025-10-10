@@ -3,83 +3,8 @@
 
 import { ComponentProduct } from './products';
 
-// Side Panel Products (added to support /products/troopy-side-panels-with-storage)
-export const sidePanelProducts: ComponentProduct[] = [
-  {
-    id: "troopy-side-panels-with-storage",
-    name: "Troopy Side Panels with added storage",
-    description: "Our updated internal storage panels are now available!\n\nMaximise storage in your Troopy. Black hex finish for added durability. CNC cut for a precision fit. Come pre cut to original 4 panels. Bungee cord is an optional addition. Matching rear door panels are included with all orders. M5 Nutserts, black bolts and washers are provided (nutsert tool required).\n\nAll our side panels come in a 6.5mm Black Hex on Birch Plywood. This is a premium plywood product, the hex finish is ultra durable. The reveals allow you to maximise storage in your troopy. Get creative and use this space to neatly tuck away your electrical system, mount compressors or just tuck away all those extra travel items.\n\nAll of the mounting holes are pre drilled for an easy installation. Depending on the condition of your Troopy some holes may have to be slightly enlarged. The provided washers will always cover the holes. All the reveals are assembled by simply slotting the tabs together and adding screws to the pre drilled locations. Very simple assembly.",
-    shortDescription: "Storage side panels with reveals + rear door panels",
-    price: 865.00,
-    originalPrice: 895.00,
-    images: [
-      "/brand/troopy-side-panels-with-added-storage-637344.jpg",
-      "/brand/troopy-side-panels-with-added-storage-676294.jpg",
-      "/brand/troopy-side-panels-with-added-storage-753557.jpg",
-      "/brand/troopy-side-panels-with-added-storage-883026.jpg"
-    ],
-    category: "Panels",
-    subcategory: "Storage Panels",
-    tags: ["Panels", "Troopcarrier", "Storage", "Black Hex", "Bungee"],
-    features: [
-      "3 reveals each side with boxes",
-      "Matching rear door panels included",
-      "M5 nutserts, bolts and washers included",
-      "CNC cut for precision fit",
-      "Durable Black Hex finish"
-    ],
-    specifications: {
-      "Material": "6.5mm Black Hex on Birch plywood",
-      "Rear Doors": "Included",
-      "Hardware": "M5 nutserts, bolts, washers included",
-      "Compatibility": "Toyota Troopcarrier"
-    },
-    dimensions: {
-      length: 200,
-      width: 120,
-      height: 8
-    },
-    weight: 35.0,
-    compatibility: ["Toyota Troopcarrier"],
-    installationRequired: true,
-    warranty: "1 year",
-    assemblyTime: "3-4 hours",
-    sku: "SP-STOR-001",
-    slug: "troopy-side-panels-with-storage",
-    inStock: true,
-    stockQuantity: 12,
-    rating: 4.7,
-    reviewCount: 38,
-    badges: ["Popular", "Enhanced Storage"],
-    shipClass: "oversized",
-    upsells: ["troopy-floor"],
-    isTroopyPack: false,
-    variantOptions: [
-      {
-        name: "Material",
-        values: [
-          { value: "Plain Birch", label: "Plain Birch", available: true },
-          { value: "Black Hex", label: "Black Hex", available: true }
-        ]
-      },
-      {
-        name: "Bungee",
-        values: [
-          { value: "No Bungee", label: "No Bungee", available: true },
-          { value: "With Bungee", label: "With Bungee", available: true }
-        ]
-      }
-    ],
-    variants: [
-      { id: "PB-NB", price: 850.00, sku: "PB-NB", available: true, options: { Material: "Plain Birch", Bungee: "No Bungee" } },
-      { id: "PB-WB", price: 865.00, sku: "PB-WB", available: true, options: { Material: "Plain Birch", Bungee: "With Bungee" } },
-      { id: "BH-NB", price: 850.00, sku: "BH-NB", available: true, options: { Material: "Black Hex", Bungee: "No Bungee" } },
-      { id: "BH-WB", price: 865.00, sku: "BH-WB", available: true, options: { Material: "Black Hex", Bungee: "With Bungee" } }
-    ],
-    createdAt: new Date("2024-01-12"),
-    updatedAt: new Date("2024-09-30")
-  }
-];
+// Side Panel Products - REMOVED (no longer available in shop)
+export const sidePanelProducts: ComponentProduct[] = [];
 // Utility Panel Products
 export const utilityPanelProducts: ComponentProduct[] = [
   {

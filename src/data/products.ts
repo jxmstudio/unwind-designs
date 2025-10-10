@@ -1021,13 +1021,13 @@ export const allComponentProducts: ComponentProduct[] = [
 // Import additional products
 import { allAdditionalProducts } from './additional-products';
 
-// Combined ALL products (flat packs + upsells + components + test products + additional products)
+// Combined ALL products (flat packs + upsells + components + additional products)
+// Test products removed - no longer needed in production
 export const allProducts = [
   ...allFlatPacks,
   ...allUpsellProducts,
   ...allComponentProducts,
-  ...allAdditionalProducts,
-  ...testProducts
+  ...allAdditionalProducts
 ];
 
 // Helper functions for component products
