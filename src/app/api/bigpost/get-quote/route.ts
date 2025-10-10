@@ -140,22 +140,49 @@ export async function POST(request: NextRequest) {
     // Call BigPost API
     const response = await bigPostAPI.getQuote(validatedRequest);
     
+    console.log('BigPost API response:', JSON.stringify(response, null, 2));
+    console.log('Response.Success:', response.Success);
+    console.log('Response.Quotes:', response.Quotes);
+    console.log('Quotes length:', response.Quotes?.length || 0);
+    
     if (!response.Success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: response.ErrorMessage || 'Failed to get quotes',
-          requestId: response.RequestId
-        },
-        { status: 400 }
-      );
+      console.error('BigPost API returned error:', response.ErrorMessage);
+      // Use fallback on API error
+      const fallbackQuotes = calculateFallbackShippingRates(body);
+      return NextResponse.json({
+        success: true,
+        quotes: fallbackQuotes,
+        fallback: true,
+        apiError: response.ErrorMessage
+      });
     }
 
-    return NextResponse.json({
+    // If API succeeded but returned no quotes, use fallback
+    if (!response.Quotes || response.Quotes.length === 0) {
+      console.log('BigPost API returned no quotes, using fallback');
+      const fallbackQuotes = calculateFallbackShippingRates(body);
+      
+      const fallbackResponse = {
+        success: true,
+        quotes: fallbackQuotes,
+        fallback: true,
+        requestId: response.RequestId
+      };
+      
+      console.log('Sending fallback response:', JSON.stringify(fallbackResponse, null, 2));
+      return NextResponse.json(fallbackResponse);
+    }
+
+    const quotesResponse = {
       success: true,
-      quotes: response.Quotes || [],
-      requestId: response.RequestId
-    });
+      quotes: response.Quotes,
+      requestId: response.RequestId,
+      fallback: false
+    };
+    
+    console.log('Sending response:', JSON.stringify(quotesResponse, null, 2));
+
+    return NextResponse.json(quotesResponse);
 
   } catch (error) {
     console.error('Get quote API error:', error);

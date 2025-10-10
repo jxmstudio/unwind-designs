@@ -3,12 +3,11 @@
 import { useCart } from "@/lib/cart-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Truck, CreditCard, Shield, Package } from "lucide-react";
+import { Truck, CreditCard, Package } from "lucide-react";
 
 interface CheckoutSummaryProps {
   orderOptions: {
     paymentSurcharge: string;
-    shippingInsurance: string;
     specialInstructions: string;
   };
 }
@@ -26,15 +25,6 @@ export function CheckoutSummary({ orderOptions }: CheckoutSummaryProps) {
       total += state.total * 0.035;
     }
     
-    // Add shipping insurance
-    if (orderOptions.shippingInsurance === 'basic') {
-      total += 50;
-    } else if (orderOptions.shippingInsurance === 'standard') {
-      total += 119;
-    } else if (orderOptions.shippingInsurance === 'premium') {
-      total += 250;
-    }
-    
     return total;
   };
 
@@ -47,16 +37,8 @@ export function CheckoutSummary({ orderOptions }: CheckoutSummaryProps) {
     return 0;
   };
 
-  const getShippingInsuranceAmount = () => {
-    if (orderOptions.shippingInsurance === 'basic') return 50;
-    if (orderOptions.shippingInsurance === 'standard') return 119;
-    if (orderOptions.shippingInsurance === 'premium') return 250;
-    return 0;
-  };
-
   const total = calculateTotal();
   const paymentSurcharge = getPaymentSurchargeAmount();
-  const shippingInsurance = getShippingInsuranceAmount();
 
   return (
     <Card className="bg-gradient-to-br from-cream-50 to-cream-100 border-2 border-brown-200">
@@ -109,17 +91,6 @@ export function CheckoutSummary({ orderOptions }: CheckoutSummaryProps) {
               <span className="font-medium text-brown-700">Payment Fee</span>
             </div>
             <span className="font-semibold text-blue-600">${paymentSurcharge.toFixed(2)}</span>
-          </div>
-        )}
-
-        {/* Shipping Insurance */}
-        {shippingInsurance > 0 && (
-          <div className="flex justify-between items-center py-2 border-t border-brown-200">
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-purple-600" />
-              <span className="font-medium text-brown-700">Insurance</span>
-            </div>
-            <span className="font-semibold text-purple-600">${shippingInsurance.toFixed(2)}</span>
           </div>
         )}
 

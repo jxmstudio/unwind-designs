@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { AUSTRALIAN_SUBURBS } from '@/data/australian-addresses';
 
 interface AddressSearchResult {
   value: string;
@@ -18,7 +19,7 @@ interface UseAddressAutocompleteOptions {
 }
 
 export function useAddressAutocomplete({
-  debounceMs = 300,
+  debounceMs = 150, // Reduced from 300ms since we're searching locally
   minQueryLength = 2,
   type = 'suburb',
   state
@@ -28,64 +29,50 @@ export function useAddressAutocomplete({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  const abortControllerRef = useRef<AbortController | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const searchAddresses = useCallback(async (searchQuery: string) => {
+  const searchAddresses = useCallback((searchQuery: string) => {
     if (searchQuery.length < minQueryLength) {
       setResults([]);
       return;
     }
 
-    // Cancel previous request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Create new abort controller
-    abortControllerRef.current = new AbortController();
     setIsLoading(true);
     setError(null);
 
     try {
-      const params = new URLSearchParams({
-        q: searchQuery,
-        type,
-        ...(state && { state })
-      });
+      // Search local Australian suburbs data (instant, no API call!)
+      const normalizedQuery = searchQuery.toLowerCase().trim();
+      
+      const filteredResults = AUSTRALIAN_SUBURBS
+        .filter(suburb => {
+          // Match suburb name or postcode
+          const matchesName = suburb.suburb.toLowerCase().includes(normalizedQuery);
+          const matchesPostcode = suburb.postcode.includes(normalizedQuery);
+          const matchesState = !state || suburb.state === state;
+          
+          return (matchesName || matchesPostcode) && matchesState;
+        })
+        .slice(0, 10) // Limit to 10 results for performance
+        .map(suburb => ({
+          value: `${suburb.suburb}, ${suburb.state} ${suburb.postcode}`,
+          label: `${suburb.suburb}, ${suburb.state} ${suburb.postcode}`,
+          description: suburb.state,
+          suburb: suburb.suburb,
+          postcode: suburb.postcode,
+          state: suburb.state,
+        }));
 
-      const response = await fetch(`/api/bigpost/address-search?${params}`, {
-        signal: abortControllerRef.current.signal
-      });
-
-      if (!response.ok) {
-        console.warn(`Address search failed with status ${response.status}`);
-        // Don't throw error, just return empty results
-        setResults([]);
-        setError(null);
-        return;
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        setResults(data.results);
-        setError(null);
-      } else {
-        console.warn('Address search failed:', data.error);
-        setResults([]);
-        setError(null); // Don't show error to user, just return empty results
-      }
+      setResults(filteredResults);
+      setError(null);
     } catch (err) {
-      if (err instanceof Error && err.name !== 'AbortError') {
-        console.error('Address search error:', err);
-        setError('Search failed. Please try again.');
-        setResults([]);
-      }
+      console.error('Local address search error:', err);
+      setError('Search failed. Please try again.');
+      setResults([]);
     } finally {
       setIsLoading(false);
     }
-  }, [minQueryLength, type, state]);
+  }, [minQueryLength, state]);
 
   // Debounced search effect
   useEffect(() => {
@@ -110,9 +97,6 @@ export function useAddressAutocomplete({
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }

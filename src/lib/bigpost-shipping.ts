@@ -164,7 +164,7 @@ export interface BigPostTrackingResponse {
   error?: string;
 }
 
-// Configuration
+// Configuration - Updated to match Big Post API documentation
 const BIGPOST_CONFIG = {
   baseUrl: process.env.BIGPOST_API_URL || 'https://api.bigpost.com.au',
   apiToken: process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || '',
@@ -172,13 +172,13 @@ const BIGPOST_CONFIG = {
   retries: 2,
   // Default pickup location for Unwind Designs
   defaultPickupLocation: {
-    name: "Unwind Designs",
-    address: "123 Workshop Street",
-    addressLineTwo: "",
-    locality: {
-      suburb: "Melbourne",
-      postcode: "3000",
-      state: "VIC"
+    Name: "Unwind Designs",
+    Address: "123 Workshop Street",
+    AddressLineTwo: "",
+    Locality: {
+      Suburb: "Melbourne",
+      Postcode: "3000",
+      State: "VIC"
     }
   }
 };
@@ -287,6 +287,7 @@ export class BigPostClient {
           ...options,
           headers: {
             'Authorization': `Bearer ${BIGPOST_CONFIG.apiToken}`,
+            'AccessToken': BIGPOST_CONFIG.apiToken,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'User-Agent': 'Unwind-Designs/1.0',
@@ -368,39 +369,57 @@ export class BigPostClient {
 
     try {
       // Quote request structure based on BigPost Swagger API documentation
-      const quoteRequest: QuoteRequest = {
-        jobType: [1, 2], // Depot and Direct
-        buyerIsBusiness: options.buyerIsBusiness || false,
-        buyerHasForklift: options.buyerHasForklift || false,
-        returnAuthorityToLeaveOptions: options.returnAuthorityToLeaveOptions || true,
-        jobDate: options.jobDate || new Date().toISOString(),
-        pickupLocation: options.pickupLocation || BIGPOST_CONFIG.defaultPickupLocation,
-        buyerLocation: buyerLocation,
-        items: items
+      const quoteRequest = {
+        JobType: undefined, // If left blank, quotes for all job types will be returned
+        BuyerIsBusiness: options.buyerIsBusiness || false,
+        BuyerHasForklift: options.buyerHasForklift || false,
+        ReturnAuthorityToLeaveOptions: options.returnAuthorityToLeaveOptions || true,
+        JobDate: options.jobDate || new Date().toISOString(),
+        DepotId: undefined, // If blank, closest depot to buyer will be used
+        PickupLocation: options.pickupLocation || BIGPOST_CONFIG.defaultPickupLocation,
+        BuyerLocation: buyerLocation,
+        Items: items
       };
 
       console.log('BigPost API request:', JSON.stringify(quoteRequest, null, 2));
 
-      const response = await this.makeRequest<any>('/api/quote', {
+      const response = await this.makeRequest<any>('/api/getquote', {
         method: 'POST',
         body: JSON.stringify(quoteRequest),
       });
 
       console.log('BigPost API response:', response);
 
-      // Transform response to our format
-      if (response && response.quotes) {
-        const transformedQuotes = response.quotes.map((quote: any) => ({
-          service: quote.serviceName || quote.service || 'Standard Shipping',
-          price: quote.price || quote.totalPrice || 0,
-          deliveryDays: quote.estimatedDeliveryDays || quote.deliveryDays || 3,
-          description: quote.description || 'BigPost delivery',
-          carrier: quote.carrierName || quote.carrier || 'BigPost',
-          restrictions: quote.restrictions || [],
+      // Transform response to our format (handles both Success/Quotes and DeliveryOptions)
+      if (response && Array.isArray(response.DeliveryOptions)) {
+        const transformedQuotes = response.DeliveryOptions.map((quote: any) => ({
+          service: quote.ServiceName || quote.serviceName || quote.Service || 'Standard Shipping',
+          price: quote.Price || quote.TotalPrice || quote.price || quote.totalPrice || 0,
+          deliveryDays: quote.EstimatedDeliveryDays || quote.DeliveryDays || 3,
+          description: quote.Description || 'BigPost delivery',
+          carrier: quote.CarrierName || quote.carrier || 'BigPost',
+          restrictions: quote.Restrictions || [],
           source: 'bigpost',
-          carrierId: quote.carrierId,
-          serviceCode: quote.serviceCode,
-          authorityToLeave: quote.authorityToLeave || false,
+          carrierId: quote.CarrierId,
+          serviceCode: quote.ServiceCode,
+          authorityToLeave: quote.RequiresAuthorityToLeave || quote.AuthorityToLeave || false,
+          originalQuote: quote
+        }));
+        return { success: true, quotes: transformedQuotes };
+      }
+
+      if (response && response.Success && response.Quotes) {
+        const transformedQuotes = response.Quotes.map((quote: any) => ({
+          service: quote.ServiceName || quote.service || 'Standard Shipping',
+          price: quote.Price || quote.price || 0,
+          deliveryDays: quote.EstimatedDeliveryDays || quote.deliveryDays || 3,
+          description: quote.Description || quote.description || 'BigPost delivery',
+          carrier: quote.CarrierName || quote.carrier || 'BigPost',
+          restrictions: quote.Restrictions || quote.restrictions || [],
+          source: 'bigpost',
+          carrierId: quote.CarrierId,
+          serviceCode: quote.ServiceCode,
+          authorityToLeave: quote.AuthorityToLeave || quote.RequiresAuthorityToLeave || false,
           originalQuote: quote
         }));
 
@@ -411,7 +430,7 @@ export class BigPostClient {
       } else {
         return {
           success: false,
-          error: 'No quotes returned from BigPost API',
+          error: response?.ErrorMessage || 'No quotes returned from BigPost API',
         };
       }
       
@@ -451,57 +470,43 @@ export class BigPostClient {
     }
 
     try {
-      // Job booking structure based on search results
+      // Job booking structure based on Big Post API documentation
       const jobRequest = {
-        orderDetails: {
-          contactName: jobData.contactName,
-          buyerEmail: jobData.buyerEmail,
-          buyerMobilePhone: jobData.buyerMobilePhone,
-          reference: jobData.reference,
-          items: jobData.items.map(item => ({
-            description: item.description,
-            quantity: item.quantity,
-            weight: item.weight,
-            length: item.length,
-            width: item.width,
-            height: item.height,
-            itemType: item.itemType
-          })),
-          pickupLocation: {
-            name: jobData.pickupLocation.name,
-            address: jobData.pickupLocation.address,
-            suburb: jobData.pickupLocation.locality?.suburb,
-            postcode: jobData.pickupLocation.locality?.postcode,
-            state: jobData.pickupLocation.locality?.state
-          },
-          deliveryLocation: {
-            name: jobData.buyerLocation.name,
-            address: jobData.buyerLocation.address,
-            suburb: jobData.buyerLocation.locality?.suburb,
-            postcode: jobData.buyerLocation.locality?.postcode,
-            state: jobData.buyerLocation.locality?.state
-          },
-          jobType: 'delivery',
-          authorityToLeave: jobData.authorityToLeave,
-          specialInstructions: jobData.specialInstructions
-        }
+        ContactName: jobData.contactName,
+        BuyerEmail: jobData.buyerEmail,
+        BuyerMobilePhone: jobData.buyerMobilePhone,
+        BuyerOtherPhone: jobData.buyerOtherPhone,
+        CarrierId: jobData.carrierId,
+        Reference: jobData.reference,
+        JobType: jobData.jobType,
+        DepotId: jobData.depotId,
+        ContainsDangerousGoods: jobData.containsDangerousGoods,
+        BuyerHasForklift: jobData.buyerHasForklift,
+        HasDeclaredCarParts: jobData.hasDeclaredCarParts,
+        SpecialInstructions: jobData.specialInstructions,
+        PickupLocation: jobData.pickupLocation,
+        BuyerLocation: jobData.buyerLocation,
+        Items: jobData.items,
+        AuthorityToLeave: jobData.authorityToLeave,
+        ServiceCode: jobData.serviceCode,
+        SourceType: jobData.sourceType
       };
 
-      const response = await this.makeRequest<any>('/book-job', {
+      const response = await this.makeRequest<any>('/api/createjob', {
         method: 'POST',
         body: JSON.stringify(jobRequest),
       });
 
-      if (response.jobId || response.id) {
+      if (response.Success && response.JobId) {
         return {
           success: true,
-          jobId: response.jobId || response.id,
-          carrierConsignmentNumber: response.trackingNumber || response.consignmentNumber,
+          jobId: response.JobId,
+          carrierConsignmentNumber: response.CarrierConsignmentNumber,
         };
       } else {
         return {
           success: false,
-          error: response.error || response.message || 'Failed to create job',
+          error: response.ErrorMessage || 'Failed to create job',
         };
       }
       
@@ -689,7 +694,7 @@ export class BigPostClient {
   }
 
   /**
-   * Convert cart items to API items
+   * Convert cart items to API items - Updated to match Big Post API documentation
    */
   private convertCartItemsToApiItems(cartItems: Array<{
     id: string;
@@ -700,15 +705,14 @@ export class BigPostClient {
     shipClass?: 'standard' | 'oversized' | 'freight';
   }>): ApiItemModel[] {
     return cartItems.map(item => ({
-      itemType: this.getApiItemType(item.shipClass || 'standard'),
-      description: item.name,
-      quantity: item.quantity,
-      height: item.dimensions?.height || 10,
-      width: item.dimensions?.width || 20,
-      length: item.dimensions?.length || 30,
-      weight: item.weight || 1,
-      consolidatable: true,
-      isMhp: item.shipClass === 'oversized' || item.shipClass === 'freight'
+      ItemType: this.getApiItemType(item.shipClass || 'standard'),
+      Description: item.name,
+      Quantity: item.quantity,
+      Height: item.dimensions?.height || 10,
+      Width: item.dimensions?.width || 20,
+      Length: item.dimensions?.length || 30,
+      Weight: item.weight || 1,
+      Consolidatable: true
     }));
   }
 
@@ -727,7 +731,7 @@ export class BigPostClient {
   }
 
   /**
-   * Convert shipping address to API location
+   * Convert shipping address to API location - Updated to match Big Post API documentation
    */
   convertShippingAddressToApiLocation(address: {
     street: string;
@@ -741,12 +745,12 @@ export class BigPostClient {
     const formattedSuburb = address.city.substring(0, 30); // Max 30 characters
     
     return {
-      name: `${formattedSuburb} ${address.postcode}`, // Max 255 characters
-      address: formattedAddress,
-      locality: {
-        suburb: formattedSuburb,
-        postcode: address.postcode,
-        state: address.state.toUpperCase() // Ensure state is uppercase
+      Name: `${formattedSuburb} ${address.postcode}`, // Max 255 characters
+      Address: formattedAddress,
+      Locality: {
+        Suburb: formattedSuburb,
+        Postcode: address.postcode,
+        State: address.state.toUpperCase() // Ensure state is uppercase
       }
     };
   }

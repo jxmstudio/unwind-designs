@@ -423,6 +423,62 @@ export const AUSTRALIAN_POSTCODES = {
   ]
 };
 
+// Australian suburbs with postcodes for instant search (no API needed!)
+export const AUSTRALIAN_SUBURBS = [
+  // VIC - Major Melbourne suburbs
+  { suburb: 'Melbourne', postcode: '3000', state: 'VIC' },
+  { suburb: 'Carlton', postcode: '3053', state: 'VIC' },
+  { suburb: 'Fitzroy', postcode: '3065', state: 'VIC' },
+  { suburb: 'Richmond', postcode: '3121', state: 'VIC' },
+  { suburb: 'South Yarra', postcode: '3141', state: 'VIC' },
+  { suburb: 'Prahran', postcode: '3181', state: 'VIC' },
+  { suburb: 'St Kilda', postcode: '3182', state: 'VIC' },
+  { suburb: 'Brighton', postcode: '3186', state: 'VIC' },
+  { suburb: 'Frankston', postcode: '3199', state: 'VIC' },
+  { suburb: 'Geelong', postcode: '3220', state: 'VIC' },
+  { suburb: 'Ballarat', postcode: '3350', state: 'VIC' },
+  { suburb: 'Bendigo', postcode: '3550', state: 'VIC' },
+  
+  // NSW - Major Sydney suburbs
+  { suburb: 'Sydney', postcode: '2000', state: 'NSW' },
+  { suburb: 'Parramatta', postcode: '2150', state: 'NSW' },
+  { suburb: 'Bondi', postcode: '2026', state: 'NSW' },
+  { suburb: 'Manly', postcode: '2095', state: 'NSW' },
+  { suburb: 'Chatswood', postcode: '2067', state: 'NSW' },
+  { suburb: 'Liverpool', postcode: '2170', state: 'NSW' },
+  { suburb: 'Penrith', postcode: '2750', state: 'NSW' },
+  { suburb: 'Newcastle', postcode: '2300', state: 'NSW' },
+  { suburb: 'Wollongong', postcode: '2500', state: 'NSW' },
+  
+  // QLD - Major Brisbane suburbs
+  { suburb: 'Brisbane', postcode: '4000', state: 'QLD' },
+  { suburb: 'Gold Coast', postcode: '4217', state: 'QLD' },
+  { suburb: 'Cairns', postcode: '4870', state: 'QLD' },
+  { suburb: 'Townsville', postcode: '4810', state: 'QLD' },
+  { suburb: 'Toowoomba', postcode: '4350', state: 'QLD' },
+  
+  // SA - Major Adelaide suburbs
+  { suburb: 'Adelaide', postcode: '5000', state: 'SA' },
+  { suburb: 'Glenelg', postcode: '5045', state: 'SA' },
+  { suburb: 'Mount Gambier', postcode: '5290', state: 'SA' },
+  
+  // WA - Major Perth suburbs
+  { suburb: 'Perth', postcode: '6000', state: 'WA' },
+  { suburb: 'Fremantle', postcode: '6160', state: 'WA' },
+  { suburb: 'Bunbury', postcode: '6230', state: 'WA' },
+  
+  // TAS - Major Hobart suburbs
+  { suburb: 'Hobart', postcode: '7000', state: 'TAS' },
+  { suburb: 'Launceston', postcode: '7250', state: 'TAS' },
+  
+  // NT
+  { suburb: 'Darwin', postcode: '0800', state: 'NT' },
+  { suburb: 'Alice Springs', postcode: '0870', state: 'NT' },
+  
+  // ACT
+  { suburb: 'Canberra', postcode: '2600', state: 'ACT' },
+];
+
 // Common street types for autocomplete
 export const STREET_TYPES = [
   'Street', 'Road', 'Avenue', 'Drive', 'Lane', 'Court', 'Place', 'Crescent',

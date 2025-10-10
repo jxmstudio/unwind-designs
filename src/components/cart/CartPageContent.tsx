@@ -36,7 +36,6 @@ export function CartPageContent() {
   // Order options state
   const [orderOptions, setOrderOptions] = useState({
     paymentSurcharge: '',
-    shippingInsurance: '',
     specialInstructions: ''
   });
 
@@ -476,30 +475,6 @@ export function CartPageContent() {
                 </Select>
               </div>
 
-              {/* Shipping Insurance */}
-              <div className="space-y-2">
-                <Label htmlFor="shippingInsurance" className="flex items-center gap-2">
-                  Shipping Insurance *
-                  <HelpCircle className="w-4 h-4 text-gray-400" />
-                </Label>
-                <Select
-                  value={orderOptions.shippingInsurance}
-                  onValueChange={(value) => setOrderOptions(prev => ({ ...prev, shippingInsurance: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="-- Please select --" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">NO INSURANCE - I UNDERSTAND THE RISKS</SelectItem>
-                    <SelectItem value="basic">Basic Insurance - $50.00</SelectItem>
-                    <SelectItem value="standard">Standard Insurance - $119.00</SelectItem>
-                    <SelectItem value="premium">Premium Insurance - $250.00</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-gray-500">
-                  Terms and conditions apply. Please read before checkout.
-                </p>
-              </div>
             </CardContent>
           </Card>
         </div>

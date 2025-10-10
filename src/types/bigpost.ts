@@ -1,24 +1,24 @@
 // BigPost API Types - Generated from Swagger specification
 // https://api.bigpost.com.au/swagger/index.html
 
-// Enums
+// Enums - Updated to match Big Post API documentation
 export enum JobType {
-  DEPOT = 1,
-  DIRECT = 2,
-  HOME_DELIVERY = 3
+  DEPOT = 1,        // Depot delivery
+  DIRECT = 2,       // Direct delivery  
+  HOME_DELIVERY = 3 // Home delivery (BuyerIsBusiness must be false)
 }
 
 export enum ItemType {
-  CARTON = 0,
-  SKID = 1,
-  PALLET = 2,
-  PACK = 3,
-  CRATE = 4,
-  ROLL = 5,
-  SATCHEL = 6,
-  STILLAGE = 7,
-  TUBE = 8,
-  BAG = 9
+  CARTON = 0,     // Carton
+  SKID = 1,       // Skid
+  PALLET = 2,     // Pallet
+  PACK = 3,       // Pack
+  CRATE = 4,      // Crate
+  ROLL = 5,       // Roll
+  SATCHEL = 6,    // Satchel
+  STILLAGE = 7,   // Stillage
+  TUBE = 8,       // Tube
+  BAG = 9         // Bag
 }
 
 export enum StateCode {
@@ -59,14 +59,14 @@ export interface ApiItemModel {
   Consolidatable?: boolean; // optional
 }
 
-// Quote Request
+// Quote Request - Updated to match API documentation
 export interface GetQuoteRequest {
   JobType?: JobType; // optional - if left blank, quotes for all job types will be returned
-  BuyerIsBusiness?: boolean; // optional
+  BuyerIsBusiness?: boolean; // optional - must be false for Home Delivery (JobType=3)
   BuyerHasForklift?: boolean; // optional
-  ReturnAuthorityToLeaveOptions?: boolean; // optional
-  JobDate?: string; // ISO date, optional
-  DepotId?: number; // optional
+  ReturnAuthorityToLeaveOptions?: boolean; // optional - if true, provides quotes for services where goods can be left without signature (items must be 40kg or less)
+  JobDate?: string; // ISO date, optional - date for job pickup
+  DepotId?: number; // optional - Big Post ID of depot, if blank closest depot to buyer will be used
   PickupLocation: ApiLocationModel; // required
   BuyerLocation: ApiLocationModel; // required
   Items: ApiItemModel[]; // required
@@ -92,10 +92,10 @@ export interface GetQuoteResponse {
   RequestId?: string;
 }
 
-// Job Creation
+// Job Creation - Updated to match API documentation
 export interface CreateJobRequest {
   ContactName: string; // max 50 chars, required
-  BuyerEmail: string; // email format, required
+  BuyerEmail: string; // email format, required - must match regex: \w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*
   BuyerMobilePhone?: string; // max 10 chars, optional
   BuyerOtherPhone?: string; // max 10 chars, optional
   CarrierId: string; // required
@@ -110,7 +110,7 @@ export interface CreateJobRequest {
   BuyerLocation: ApiLocationModel; // required
   Items: ApiItemModel[]; // required
   AuthorityToLeave: boolean; // required
-  ServiceCode?: string; // optional
+  ServiceCode?: string; // optional - pass from chosen quote if provided
   SourceType: number; // required
 }
 

@@ -102,8 +102,11 @@ export async function POST(request: NextRequest) {
       cancel_url: cancelUrl || `${siteUrl}/checkout/cancelled`,
       metadata: {
         source: 'unwind-designs-website',
-        items: JSON.stringify(items),
-        shippingCost: shippingCost?.toString() || '0',
+        items: JSON.stringify(items.map(item => ({
+          ...item,
+          price: Math.round(item.price * 100), // Store price in cents
+        }))),
+        shippingCost: Math.round((shippingCost || 0) * 100).toString(), // Store in cents
         shippingMethod: shippingMethod || 'Standard Shipping',
       },
       shipping_address_collection: {

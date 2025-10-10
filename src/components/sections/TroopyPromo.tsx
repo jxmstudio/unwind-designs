@@ -6,6 +6,7 @@ import { ArrowRight, Settings, Star, Truck, Calculator, Package, Wrench, Shield 
 import { sectionReveal, staggerContainer, staggerItem } from "@/lib/motion";
 import { useFeatureFlag } from "@/lib/feature-flags";
 import Link from "next/link";
+import Image from "next/image";
 
 export function TroopyPromo() {
   const configuratorEnabled = useFeatureFlag('FEATURE_FLAT_PACK_CONFIGURATOR');
@@ -205,11 +206,14 @@ export function TroopyPromo() {
               <div className="w-full h-96 lg:h-[500px] bg-gradient-to-br from-brown-200 to-brown-300 rounded-2xl shadow-large overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center text-textSecondary">
-                                         <div className="mb-4">
-                       <img 
+                                     <div className="mb-4">
+                       <Image 
                          src="/brand/unwind_designs_logo.jpg" 
                          alt="Unwind Designs Logo" 
-                         className="w-32 h-auto mx-auto"
+                         width={128}
+                         height={43}
+                         className="mx-auto"
+                         style={{ height: 'auto' }}
                        />
                      </div>
                     <p className="text-lg font-medium">Troopy Configurator</p>

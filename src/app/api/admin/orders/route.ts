@@ -3,7 +3,7 @@ import { orderService } from '@/lib/orders';
 
 export async function GET() {
   try {
-    const orders = orderService.getAllOrders();
+    const orders = await orderService.getAllOrders();
     return NextResponse.json({ orders });
   } catch (error) {
     console.error('Failed to fetch orders:', error);

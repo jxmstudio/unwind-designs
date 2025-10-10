@@ -15,9 +15,9 @@ import {
   BigPostErrorResponse
 } from '@/types/bigpost';
 
-// Configuration
+// Configuration - Updated to match Big Post API documentation
 const BIGPOST_CONFIG = {
-  baseUrl: process.env.BIGPOST_BASE_URL || process.env.BIGPOST_API_URL || 'https://app.bigpost.com.au',
+  baseUrl: process.env.BIGPOST_BASE_URL || process.env.BIGPOST_API_URL || 'https://api.bigpost.com.au',
   apiKey: process.env.BIGPOST_API_KEY || process.env.BIG_POST_API_KEY || process.env.BIG_POST_API_TOKEN || '',
   timeout: 30000, // 30 seconds
   retries: 2
@@ -99,6 +99,7 @@ class BigPostAPIClient {
           headers: {
             'Authorization': `Bearer ${BIGPOST_CONFIG.apiKey}`,
             'X-API-Key': BIGPOST_CONFIG.apiKey,
+            'AccessToken': BIGPOST_CONFIG.apiKey,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'User-Agent': 'Unwind-Designs/1.0',
@@ -177,31 +178,67 @@ class BigPostAPIClient {
     );
   }
 
-  // Get shipping quotes
+  // Get shipping quotes - Updated endpoint to match API documentation
   async getQuote(request: GetQuoteRequest): Promise<GetQuoteResponse> {
     try {
-      console.log('BigPost getQuote request:', JSON.stringify(request, null, 2));
+      // Use loose type to normalize different V2 shapes
+      const raw: any = await this.makeRequest<any>('/api/getquote', 'POST', request);
       
-      const response = await this.makeRequest<GetQuoteResponse>('/api/getquote', 'POST', request);
+      // V2 API returns { Object: { DeliveryOptions: [...] }, Errors: null }
+      const responseData = raw.Object || raw;  // Handle wrapped response
       
-      console.log('BigPost getQuote response:', JSON.stringify(response, null, 2));
+      if (responseData && Array.isArray(responseData.DeliveryOptions)) {
+        const quotes: any[] = [];
+        
+        // Flatten the nested structure: DeliveryOptions -> CarrierOptions
+        for (const deliveryOption of responseData.DeliveryOptions) {
+          if (Array.isArray(deliveryOption.CarrierOptions)) {
+            for (const carrierOption of deliveryOption.CarrierOptions) {
+              const eta = carrierOption.Eta ? new Date(carrierOption.Eta) : null;
+              const deliveryDays = eta ? Math.ceil((eta.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
+              
+              quotes.push({
+                ServiceCode: carrierOption.ServiceCode ?? '',
+                ServiceName: carrierOption.ServiceName ?? 'Shipping',
+                Price: carrierOption.Total ?? carrierOption.Charge ?? 0,
+                EstimatedDeliveryDays: deliveryDays,
+                CarrierId: carrierOption.CarrierId?.toString() ?? '',
+                CarrierName: carrierOption.CarrierName ?? '',
+                Description: carrierOption.ServiceName ?? '',
+                AuthorityToLeave: carrierOption.RequiresAuthorityToLeave ?? false,
+                JobType: deliveryOption.JobType ?? deliveryOption.JobTypeEnum,
+                DepotId: deliveryOption.DepotId,
+                Eta: carrierOption.Eta,
+                Charge: carrierOption.Charge,
+                Tax: carrierOption.Tax,
+                Total: carrierOption.Total
+              });
+            }
+          }
+        }
+        
+        const normalized: GetQuoteResponse = {
+          Success: true,
+          Quotes: quotes,
+          RequestId: raw.RequestId ?? raw.requestId,
+          PickupLocality: responseData.PickupLocality,
+          BuyerLocality: responseData.BuyerLocality
+        } as GetQuoteResponse;
+        return normalized;
+      }
       
-      return response;
+      // If already in expected shape, return as-is
+      return raw as GetQuoteResponse;
     } catch (error) {
       console.error('BigPost getQuote error:', error);
       throw error;
     }
   }
 
-  // Create a job
+  // Create a job - Updated endpoint to match API documentation
   async createJob(request: CreateJobRequest): Promise<CreateJobResponse> {
     try {
-      console.log('BigPost createJob request:', JSON.stringify(request, null, 2));
-      
       const response = await this.makeRequest<CreateJobResponse>('/api/createjob', 'POST', request);
-      
-      console.log('BigPost createJob response:', JSON.stringify(response, null, 2));
-      
       return response;
     } catch (error) {
       console.error('BigPost createJob error:', error);

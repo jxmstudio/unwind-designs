@@ -1,51 +1,39 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
-import { getOrderByPaymentIntentId } from '@/lib/db/orders'
-
-export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
+import { NextRequest, NextResponse } from 'next/server';
+import { orderService } from '@/lib/orders';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ sessionId: string }> }
+  { params }: { params: { sessionId: string } }
 ) {
   try {
-    const { sessionId } = await params
+    const { sessionId } = params;
 
     if (!sessionId) {
-      return NextResponse.json({ error: 'Session ID is required' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Session ID is required' },
+        { status: 400 }
+      );
     }
 
-    if (!stripe) {
-      return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 })
-    }
+    console.log('Fetching order for session ID:', sessionId);
 
-    // Get the checkout session from Stripe
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['payment_intent']
-    })
-
-    if (!session.payment_intent) {
-      return NextResponse.json({ error: 'No payment intent found' }, { status: 404 })
-    }
-
-    const paymentIntentId = typeof session.payment_intent === 'string' 
-      ? session.payment_intent 
-      : session.payment_intent.id
-
-    // Get the order from Supabase using the payment intent ID
-    const order = await getOrderByPaymentIntentId(paymentIntentId)
+    const order = await orderService.getOrderBySessionId(sessionId);
 
     if (!order) {
-      return NextResponse.json({ error: 'Order not found' }, { status: 404 })
+      console.log('No order found for session ID:', sessionId);
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(order)
+    console.log('Order found:', order.id);
+    return NextResponse.json(order);
   } catch (error) {
-    console.error('Error fetching order by session ID:', error)
+    console.error('Error fetching order by session ID:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch order' },
+      { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 }

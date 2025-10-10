@@ -116,7 +116,7 @@ export function ProductCard({ product }: ProductCardProps) {
         
         {/* Add to Cart Overlay or Coming Soon Badge */}
         <motion.div 
-          className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+          className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none"
           initial={{ opacity: 0 }}
           whileHover={{ opacity: 1 }}
         >
@@ -124,6 +124,7 @@ export function ProductCard({ product }: ProductCardProps) {
             initial={{ y: 20, opacity: 0 }}
             whileHover={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.2 }}
+            className="pointer-events-auto"
           >
             {!isPurchasable ? (
               <div className="bg-amber-500 text-white font-semibold px-4 py-2 rounded-xl shadow-medium transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 text-caption">
@@ -189,19 +190,19 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Quick View Button */}
-        <Link href={`/products/${product.slug}`}>
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
+        <motion.div
+          whileHover={{ scale: isDisabled ? 1 : 1.02 }}
+          whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+        >
+          <Link href={`/products/${product.slug}`} className="block">
             <Button
               variant="outline"
               className="w-full border-brown-500 text-brown-500 hover:bg-brown-500 hover:border-brown-500 hover:text-white font-semibold transition-colors"
             >
               View Details
             </Button>
-          </motion.div>
-        </Link>
+          </Link>
+        </motion.div>
       </div>
     </motion.div>
   );

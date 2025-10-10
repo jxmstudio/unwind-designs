@@ -26,6 +26,7 @@ export function BrandLogo({
         width={width}
         height={height}
         className="rounded-lg shadow-soft"
+        style={{ height: 'auto' }}
         priority={priority}
         onError={() => setImageError(true)}
         aria-label="Unwind Designs"

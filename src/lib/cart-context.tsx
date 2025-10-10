@@ -300,7 +300,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       // Convert to BigPost API format
       const bigPostRequest = {
-        JobType: [2], // DIRECT
+        JobType: 2, // DIRECT (single integer, not array)
         BuyerIsBusiness: false,
         BuyerHasForklift: false,
         ReturnAuthorityToLeaveOptions: true,
@@ -353,16 +353,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
       console.log('Shipping API response:', data);
 
-      if (data.success && data.quotes) {
+      if (data.success && data.quotes && data.quotes.length > 0) {
         // Convert BigPost quotes to our format
         const shippingQuotes: ShippingQuote[] = data.quotes.map((quote: any) => ({
-          service: quote.ServiceCode,
-          price: quote.Price,
-          deliveryDays: quote.EstimatedDeliveryDays,
-          description: quote.Description,
-          carrier: quote.CarrierName,
+          service: quote.ServiceCode || quote.ServiceName || 'Shipping',
+          price: quote.Price || quote.Total || quote.price || 0,
+          deliveryDays: quote.EstimatedDeliveryDays || quote.deliveryDays || 5,
+          description: quote.Description || quote.ServiceName || quote.description || 'Delivery service',
+          carrier: quote.CarrierName || quote.carrier || 'Carrier',
           source: data.fallback ? 'fallback' : 'bigpost'
         }));
+        
+        console.log('Mapped shipping quotes:', shippingQuotes);
         
         dispatch({ type: 'SET_SHIPPING_QUOTES', payload: shippingQuotes });
         // Auto-select the first quote
@@ -371,7 +373,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
         return shippingQuotes;
       } else {
-        dispatch({ type: 'SET_SHIPPING_ERROR', payload: data.error || 'Failed to get shipping quotes' });
+        console.warn('No shipping quotes available:', data);
+        dispatch({ type: 'SET_SHIPPING_ERROR', payload: data.error || 'No shipping quotes available' });
         return null;
       }
     } catch (error) {

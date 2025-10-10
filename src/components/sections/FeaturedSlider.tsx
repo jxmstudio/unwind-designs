@@ -8,54 +8,58 @@ import { sectionReveal, staggerContainer, staggerItem } from "@/lib/motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
+// Import actual product data
+import { allProducts } from "@/data/products";
+
+// Get featured products from actual product data
 const featuredProducts = [
   {
-    id: "1",
-    name: "Roam Troopy Flat Pack",
-    price: 5950.00,
-    originalPrice: 6500.00,
-    image: "",
+    id: "wander-troopy-flat-pack",
+    name: "Wander Troopy Flat Pack",
+    price: 3750.00,
+    originalPrice: 4400.00,
+    image: "/brand/wander-troopy-flat-pack-346203.jpg",
     rating: 4.8,
-    reviewCount: 78,
+    reviewCount: 189,
     badge: "Best Seller",
     badgeColor: "bg-amber-500",
-    category: "Storage"
+    category: "Complete Kits"
   },
   {
-    id: "2",
-    name: "Bushman DC85-X 85L Caravan Fridge",
-    price: 1473.00,
-    originalPrice: 1600.00,
-    image: "",
-    rating: 4.9,
-    reviewCount: 134,
-    badge: "Sale",
-    badgeColor: "bg-red-500",
-    category: "Appliances"
+    id: "roam-troopy-flat-pack-general",
+    name: "Roam Troopy Flat Pack",
+    price: 6700.00,
+    originalPrice: 7200.00,
+    image: "/images/placeholder.svg", // Will be updated when actual images are available
+    rating: 4.8,
+    reviewCount: 267,
+    badge: "Most Popular",
+    badgeColor: "bg-blue-500",
+    category: "Complete Kits"
   },
   {
-    id: "3",
+    id: "troopy-side-panels-storage",
     name: "Troopy Side Panels with Storage",
     price: 850.00,
     originalPrice: 950.00,
-    image: "",
+    image: "/brand/troopy-side-panels-with-added-storage-637344.jpg",
     rating: 4.7,
-    reviewCount: 156,
-    badge: "New",
+    reviewCount: 38,
+    badge: "Popular",
     badgeColor: "bg-green-500",
-    category: "Storage"
+    category: "Panels"
   },
   {
-    id: "4",
-    name: "12V Dimmable Reading Light",
-    price: 80.00,
-    originalPrice: null,
-    image: "",
-    rating: 4.8,
-    reviewCount: 127,
-    badge: null,
-    badgeColor: "",
-    category: "Lighting"
+    id: "cushion-set-troopy-kits",
+    name: "Cushion Set For Troopy Flat Packs",
+    price: 850.00,
+    originalPrice: 895.00,
+    image: "/brand/cushion-set-for-troopy-flat-packs-312040.jpg",
+    rating: 4.7,
+    reviewCount: 94,
+    badge: "Accessory",
+    badgeColor: "bg-purple-500",
+    category: "Accessories"
   }
 ];
 
@@ -133,13 +137,21 @@ export function FeaturedSlider() {
                               className="w-full h-full object-cover rounded-lg"
                               loading="lazy"
                               decoding="async"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                const fallback = target.nextElementSibling as HTMLElement;
+                                if (fallback) fallback.style.display = 'block';
+                              }}
                             />
-                          ) : (
-                            <div className="text-textSecondary text-center">
-                              <div className="text-4xl mb-2" role="img" aria-label="Vehicle icon">🚐</div>
-                              <p className="text-body-small">{product.category}</p>
-                            </div>
-                          )}
+                          ) : null}
+                          <div 
+                            className="text-textSecondary text-center"
+                            style={{ display: product.image ? 'none' : 'block' }}
+                          >
+                            <div className="text-4xl mb-2" role="img" aria-label="Vehicle icon">🚐</div>
+                            <p className="text-body-small">{product.category}</p>
+                          </div>
                         </div>
                         
                         {/* Badge */}
@@ -202,13 +214,17 @@ export function FeaturedSlider() {
 
                         {/* CTA */}
                         <div className="flex gap-3">
-                          <Button className="bg-brown-500 hover:bg-darkBrown text-cream-400 px-6 py-3 rounded-xl">
-                            <ShoppingCart className="w-4 h-4 mr-2" />
-                            Add to Cart
-                          </Button>
-                          <Button variant="outline" className="border-borderNeutral text-textPrimary hover:bg-brown-100 px-6 py-3 rounded-xl">
-                            Quick View
-                          </Button>
+                          <Link href={`/product/${product.id}`}>
+                            <Button className="bg-brown-500 hover:bg-darkBrown text-cream-400 px-6 py-3 rounded-xl">
+                              <ShoppingCart className="w-4 h-4 mr-2" />
+                              Add to Cart
+                            </Button>
+                          </Link>
+                          <Link href={`/product/${product.id}`}>
+                            <Button variant="outline" className="border-borderNeutral text-textPrimary hover:bg-brown-100 px-6 py-3 rounded-xl">
+                              Quick View
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     </div>

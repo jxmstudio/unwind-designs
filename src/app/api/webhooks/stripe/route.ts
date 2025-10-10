@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
 import { orderService } from '@/lib/orders';
+import { emailService } from '@/lib/email';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
@@ -99,38 +100,57 @@ export async function POST(request: NextRequest) {
             const shippingCost = session.metadata?.shippingCost ? parseFloat(session.metadata.shippingCost) : 0;
             const shippingMethod = session.metadata?.shippingMethod || 'Standard Shipping';
             
-            const order = orderService.createOrder({
+            const order = await orderService.createOrder({
               customerEmail: session.customer_details.email || 'unknown@example.com',
               customerName: session.customer_details.name || 'Customer',
               shippingAddress: {
-                name: session.collected_information?.shipping_details?.name || session.customer_details.name || 'Customer',
-                line1: session.collected_information?.shipping_details?.address?.line1 || '',
-                line2: session.collected_information?.shipping_details?.address?.line2 || undefined,
-                city: session.collected_information?.shipping_details?.address?.city || '',
-                state: session.collected_information?.shipping_details?.address?.state || '',
-                postal_code: session.collected_information?.shipping_details?.address?.postal_code || '',
-                country: session.collected_information?.shipping_details?.address?.country || 'AU',
+                name: session.shipping_details?.name || session.customer_details.name || 'Customer',
+                line1: session.shipping_details?.address?.line1 || '',
+                line2: session.shipping_details?.address?.line2 || undefined,
+                city: session.shipping_details?.address?.city || '',
+                state: session.shipping_details?.address?.state || '',
+                postal_code: session.shipping_details?.address?.postal_code || '',
+                country: session.shipping_details?.address?.country || 'AU',
               },
               items: items.map((item: any) => ({
                 id: item.id,
                 name: item.name,
-                price: item.price,
+                price: item.price / 100, // Convert from cents
                 quantity: item.quantity,
                 image: item.images?.[0],
               })),
               shipping: {
                 method: shippingMethod,
-                cost: shippingCost,
+                cost: shippingCost / 100, // Convert from cents
               },
               payment: {
                 amount: (session.amount_total || 0) / 100, // Convert from cents
                 currency: session.currency || 'aud',
                 stripePaymentIntentId: session.payment_intent as string,
+                stripeSessionId: session.id,
                 status: 'paid',
               },
             });
             
             console.log('📦 Order created from checkout session:', order.id);
+            
+            // Send confirmation email
+            const emailSent = await emailService.sendOrderConfirmation({
+              orderId: order.id,
+              customerName: order.customerName,
+              customerEmail: order.customerEmail,
+              items: order.items,
+              subtotal: order.payment.amount - order.shipping.cost,
+              shipping: order.shipping,
+              total: order.payment.amount,
+              shippingAddress: order.shippingAddress,
+            });
+            
+            if (emailSent) {
+              console.log('✅ Confirmation email sent to:', order.customerEmail);
+            } else {
+              console.warn('⚠️ Failed to send confirmation email');
+            }
           } catch (error) {
             console.error('Failed to create order from checkout session:', error);
           }

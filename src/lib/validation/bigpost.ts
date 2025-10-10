@@ -45,21 +45,21 @@ export const apiItemModelSchema = z.object({
 // Job type validation
 export const jobTypeSchema = z.nativeEnum(JobType);
 
-// Quote request validation
+// Quote request validation - Updated to match API documentation
 export const getQuoteRequestSchema = z.object({
-  JobType: z.array(jobTypeSchema).min(1, 'At least one job type is required'),
-  BuyerIsBusiness: z.boolean().optional(),
+  JobType: jobTypeSchema.optional(), // Single integer, not array - if left blank, quotes for all job types will be returned
+  BuyerIsBusiness: z.boolean().optional(), // must be false for Home Delivery (JobType=3)
   BuyerHasForklift: z.boolean().optional(),
-  ReturnAuthorityToLeaveOptions: z.boolean().optional(),
-  JobDate: z.string().datetime().optional(),
-  DepotId: z.number().int().optional(),
+  ReturnAuthorityToLeaveOptions: z.boolean().optional(), // if true, provides quotes for services where goods can be left without signature (items must be 40kg or less)
+  JobDate: z.string().datetime().optional(), // date for job pickup
+  DepotId: z.number().int().optional(), // Big Post ID of depot, if blank closest depot to buyer will be used
   PickupLocation: apiLocationModelSchema,
   BuyerLocation: apiLocationModelSchema,
   Items: z.array(apiItemModelSchema).min(1, 'At least one item is required')
 }).refine(
   (data) => {
-    // If JobType includes HOME_DELIVERY (3), BuyerIsBusiness must be false
-    if (data.JobType.includes(JobType.HOME_DELIVERY) && data.BuyerIsBusiness === true) {
+    // If JobType is HOME_DELIVERY (3), BuyerIsBusiness must be false
+    if (data.JobType === JobType.HOME_DELIVERY && data.BuyerIsBusiness === true) {
       return false;
     }
     return true;
@@ -70,15 +70,18 @@ export const getQuoteRequestSchema = z.object({
   }
 );
 
-// Job creation request validation
+// Job creation request validation - Updated to match API documentation
 export const createJobRequestSchema = z.object({
   ContactName: z.string().max(50, 'Contact name must be 50 characters or less').min(1, 'Contact name is required'),
-  BuyerEmail: z.string().email('Invalid email format'),
+  BuyerEmail: z.string().regex(
+    /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
+    'Email must match Big Post format: \\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*'
+  ),
   BuyerMobilePhone: z.string().max(10, 'Mobile phone must be 10 characters or less').optional(),
   BuyerOtherPhone: z.string().max(10, 'Other phone must be 10 characters or less').optional(),
   CarrierId: z.string().min(1, 'Carrier ID is required'),
   Reference: z.string().max(50, 'Reference must be 50 characters or less').optional(),
-  JobType: z.array(jobTypeSchema).min(1, 'At least one job type is required'),
+  JobType: jobTypeSchema, // Single job type, not array
   DepotId: z.number().int().optional(),
   ContainsDangerousGoods: z.boolean(),
   BuyerHasForklift: z.boolean(),
@@ -88,7 +91,7 @@ export const createJobRequestSchema = z.object({
   BuyerLocation: apiLocationModelSchema,
   Items: z.array(apiItemModelSchema).min(1, 'At least one item is required'),
   AuthorityToLeave: z.boolean(),
-  ServiceCode: z.string().optional(),
+  ServiceCode: z.string().optional(), // pass from chosen quote if provided
   SourceType: z.number().int()
 });
 
@@ -135,7 +138,7 @@ export const shippingCalculatorFormDataSchema = z.object({
   pickupLocation: addressFormDataSchema,
   buyerLocation: addressFormDataSchema,
   items: z.array(itemFormDataSchema).min(1, 'At least one item is required'),
-  jobType: z.array(jobTypeSchema).min(1, 'At least one job type is required'),
+  jobType: jobTypeSchema.optional(), // Single integer, not array
   buyerIsBusiness: z.boolean().optional(),
   buyerHasForklift: z.boolean().optional(),
   returnAuthorityToLeaveOptions: z.boolean().optional(),
@@ -143,8 +146,8 @@ export const shippingCalculatorFormDataSchema = z.object({
   depotId: z.number().int().optional()
 }).refine(
   (data) => {
-    // If JobType includes HOME_DELIVERY (3), BuyerIsBusiness must be false
-    if (data.jobType.includes(JobType.HOME_DELIVERY) && data.buyerIsBusiness === true) {
+    // If JobType is HOME_DELIVERY (3), BuyerIsBusiness must be false
+    if (data.jobType === JobType.HOME_DELIVERY && data.buyerIsBusiness === true) {
       return false;
     }
     return true;
