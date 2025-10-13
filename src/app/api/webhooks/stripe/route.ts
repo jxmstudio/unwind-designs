@@ -100,6 +100,27 @@ export async function POST(request: NextRequest) {
             const shippingCost = session.metadata?.shippingCost ? parseFloat(session.metadata.shippingCost) : 0;
             const shippingMethod = session.metadata?.shippingMethod || 'Standard Shipping';
             
+            // SECURITY: Validate shipping address if it was locked
+            if (session.metadata?.shippingAddressLocked === 'true' && session.metadata?.calculatedShippingAddress) {
+              const calculatedAddress = JSON.parse(session.metadata.calculatedShippingAddress);
+              const actualAddress = session.shipping_details?.address;
+              
+              // Compare postcodes (main indicator of shipping cost)
+              if (actualAddress && calculatedAddress.postcode !== actualAddress.postal_code) {
+                console.error('🚨 SHIPPING ADDRESS MISMATCH DETECTED!');
+                console.error('   Calculated for:', calculatedAddress.postcode, calculatedAddress.city);
+                console.error('   Actually shipping to:', actualAddress.postal_code, actualAddress.city);
+                console.error('   Shipping cost charged:', shippingCost / 100);
+                console.error('   Customer:', session.customer_details?.email);
+                console.error('   Order ID:', session.id);
+                
+                // TODO: Send alert email to admin or refund difference
+                // For now, log it for manual review
+              } else {
+                console.log('✅ Shipping address matches calculated address');
+              }
+            }
+            
             const order = await orderService.createOrder({
               customerEmail: session.customer_details.email || 'unknown@example.com',
               customerName: session.customer_details.name || 'Customer',

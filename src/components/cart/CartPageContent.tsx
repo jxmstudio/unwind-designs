@@ -65,6 +65,11 @@ export function CartPageContent() {
       return;
     }
 
+    if (!state.shipping.address) {
+      alert('Please enter a shipping address first');
+      return;
+    }
+
     try {
       // Create checkout session with Stripe directly
       const response = await fetch('/api/create-checkout-session', {
@@ -85,6 +90,8 @@ export function CartPageContent() {
           cancelUrl: `${window.location.origin}/checkout/cancelled`,
           shippingCost: state.shipping.selectedQuote.price,
           shippingMethod: state.shipping.selectedQuote.service,
+          // Pass the shipping address that was used for quote calculation
+          shippingAddress: state.shipping.address,
         }),
       });
 

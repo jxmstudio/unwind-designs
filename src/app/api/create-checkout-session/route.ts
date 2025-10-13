@@ -20,6 +20,13 @@ const CheckoutSessionSchema = z.object({
   cancelUrl: z.string().url().optional(),
   shippingCost: z.number().min(0).optional(),
   shippingMethod: z.string().optional(),
+  shippingAddress: z.object({
+    street: z.string(),
+    city: z.string(),
+    state: z.string(),
+    postcode: z.string(),
+    country: z.string(),
+  }).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -54,7 +61,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { items, customerEmail, successUrl, cancelUrl, shippingCost, shippingMethod } = validationResult.data;
+    const { items, customerEmail, successUrl, cancelUrl, shippingCost, shippingMethod, shippingAddress } = validationResult.data;
 
     // Convert cart items to Stripe line items
     const lineItems = items.map((item) => ({
@@ -92,8 +99,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
+    // Prepare shipping options based on whether we have a pre-calculated address
+    const sessionConfig: any = {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
@@ -109,11 +116,31 @@ export async function POST(request: NextRequest) {
         shippingCost: Math.round((shippingCost || 0) * 100).toString(), // Store in cents
         shippingMethod: shippingMethod || 'Standard Shipping',
       },
-      shipping_address_collection: {
-        allowed_countries: ['AU'], // Australia only for now
-      },
       billing_address_collection: 'required',
-    });
+    };
+
+    // If shipping address provided from cart, store it and use it for validation
+    if (shippingAddress) {
+      // Store the calculated shipping address in metadata for validation
+      sessionConfig.metadata.calculatedShippingAddress = JSON.stringify(shippingAddress);
+      sessionConfig.metadata.shippingAddressLocked = 'true';
+      
+      // Still collect shipping address for delivery, but we'll validate it matches
+      sessionConfig.shipping_address_collection = {
+        allowed_countries: ['AU'],
+      };
+      
+      console.log('⚠️ Shipping calculated for:', shippingAddress);
+      console.log('   Stripe will collect address - webhook will validate it matches');
+    } else {
+      // No pre-calculated address, collect it normally
+      sessionConfig.shipping_address_collection = {
+        allowed_countries: ['AU'],
+      };
+    }
+
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     return NextResponse.json({
       sessionId: session.id,
