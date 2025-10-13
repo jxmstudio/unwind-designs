@@ -3,9 +3,10 @@
 
 // Enums - Updated to match Big Post API documentation
 export enum JobType {
-  DEPOT = 1,        // Depot delivery
-  DIRECT = 2,       // Direct delivery  
-  HOME_DELIVERY = 3 // Home delivery (BuyerIsBusiness must be false)
+  DEPOT = 1,        // Depot delivery (customer picks up from depot)
+  DIRECT = 2        // Direct delivery (home or business delivery)
+  // Note: API only accepts 1, 2, or null (for all options)
+  // There is NO JobType 3 - use null to get all delivery options
 }
 
 export enum ItemType {

@@ -250,13 +250,14 @@ export function formatForBigPostAPI(normalizedData: any) {
   // Check if this needs pallet shipping (over 40kg)
   const needsPallet = normalizedData.items.some((item: any) => item.weight > 40);
   
-  // JobType: 1=DEPOT, 2=DIRECT, 3=HOME_DELIVERY
-  // Use HOME_DELIVERY (3) for regular customers, DIRECT (2) for heavy items
-  const jobType = needsPallet ? 2 : 3;
+  // JobType: 1=DEPOT, 2=DIRECT, null=ALL
+  // BigPost API only accepts 1, 2, or null (NOT 3!)
+  // Use null to get all available shipping options
+  const jobType = null; // Let BigPost return all available options
 
   return {
     JobType: jobType,
-    BuyerIsBusiness: needsPallet, // Must be false for HOME_DELIVERY (JobType=3)
+    BuyerIsBusiness: needsPallet, // Set true for heavy items that might need business delivery
     BuyerHasForklift: needsPallet, // Enable forklift for heavy deliveries
     ReturnAuthorityToLeaveOptions: !needsPallet, // Enable for items 40kg or less
     PickupLocation: {
