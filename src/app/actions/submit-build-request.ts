@@ -24,9 +24,22 @@ export async function submitBuildRequest(data: BuildWizardData) {
       if (validationError instanceof Error) {
         console.error("Error details:", validationError.message);
       }
+      
+      // Extract specific field errors from Zod validation
+      let errorDetails = "Please check all form fields are filled correctly.";
+      if (validationError && typeof validationError === 'object' && 'issues' in validationError) {
+        const issues = (validationError as any).issues;
+        if (Array.isArray(issues) && issues.length > 0) {
+          errorDetails = issues.map((issue: any) => 
+            `${issue.path.join('.')}: ${issue.message}`
+          ).join(', ');
+          console.error("Specific validation errors:", errorDetails);
+        }
+      }
+      
       return {
         success: false,
-        message: "Please check all form fields are filled correctly."
+        message: errorDetails
       };
     }
     
