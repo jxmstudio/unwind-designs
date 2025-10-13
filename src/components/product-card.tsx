@@ -48,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <motion.div 
-      className="group bg-cream-400 rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 overflow-hidden border border-borderNeutral hover:border-brown-300"
+      className="group bg-cream-400 rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 overflow-hidden border border-borderNeutral hover:border-brown-300 flex flex-col h-full"
       whileHover={{ 
         y: isDisabled ? 0 : -4,
         transition: { duration: safeAnimation.duration || 0.3 }
@@ -96,10 +96,10 @@ export function ProductCard({ product }: ProductCardProps) {
           </Badge>
         )}
         
-        {/* Quick Actions */}
+        {/* Quick Actions - Always visible on mobile */}
         <motion.div 
-          className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          initial={{ opacity: 0, scale: 0.8 }}
+          className="absolute top-3 right-3 flex flex-col gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300"
+          initial={{ opacity: 1, scale: 1 }}
           whileHover={{ opacity: 1, scale: 1 }}
         >
           <motion.div
@@ -109,7 +109,8 @@ export function ProductCard({ product }: ProductCardProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="w-10 h-10 p-0 bg-cream-400/90 hover:bg-cream-400 text-textPrimary hover:text-brown-500 rounded-full shadow-soft"
+              className="w-9 h-9 sm:w-10 sm:h-10 p-0 bg-cream-400/90 hover:bg-cream-400 text-textPrimary hover:text-brown-500 rounded-full shadow-soft"
+              aria-label="Add to wishlist"
             >
               <Heart size={16} />
             </Button>
@@ -146,7 +147,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-1">
         {/* Rating */}
         <div className="flex items-center gap-1 mb-2">
           <div className="flex items-center">
@@ -175,43 +176,61 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Product Name */}
-        <h3 className="text-body-small font-medium text-textPrimary mb-2 line-clamp-2 group-hover:text-brown-500 transition-colors">
+        <h3 className="text-sm sm:text-body-small font-medium text-textPrimary mb-2 line-clamp-2 min-h-[2.5rem] group-hover:text-brown-500 transition-colors">
           {name}
         </h3>
 
         {/* Status Badge */}
         {!isPurchasable && (
-          <Badge className="bg-amber-500 text-white font-semibold border-0 mb-2 text-caption">
+          <Badge className="bg-amber-500 text-white font-semibold border-0 mb-2 text-xs sm:text-caption">
             {comingSoon ? 'Coming Soon' : 'Unavailable'}
           </Badge>
         )}
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-lg font-bold text-brown-500">
+          <span className="text-base sm:text-lg font-bold text-brown-500">
             {formatPrice(price)}
           </span>
           {originalPrice && originalPrice > price && (
-            <span className="text-body-small text-textPrimary/80 line-through">
+            <span className="text-xs sm:text-body-small text-textPrimary/80 line-through">
               {formatPrice(originalPrice)}
             </span>
           )}
         </div>
 
-        {/* Quick View Button */}
-        <motion.div
-          whileHover={{ scale: isDisabled ? 1 : 1.02 }}
-          whileTap={{ scale: isDisabled ? 1 : 0.98 }}
-        >
-          <Link href={`/products/${product.slug}`} className="block">
-            <Button
-              variant="outline"
-              className="w-full border-brown-500 text-brown-500 hover:bg-brown-500 hover:border-brown-500 hover:text-white font-semibold transition-colors"
+        {/* Action Buttons - Stacked on mobile - pushed to bottom */}
+        <div className="flex flex-col sm:flex-row gap-2 mt-auto">
+          {isPurchasable && (
+            <motion.div
+              whileHover={{ scale: isDisabled ? 1 : 1.02 }}
+              whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+              className="sm:flex-1"
             >
-              View Details
-            </Button>
-          </Link>
-        </motion.div>
+              <Button
+                onClick={handleAddToCart}
+                className="w-full bg-brown-500 hover:bg-darkBrown text-white font-semibold transition-colors text-xs px-3 py-1.5 h-9 rounded-md"
+              >
+                <ShoppingCart size={14} className="mr-1.5" />
+                Add to Cart
+              </Button>
+            </motion.div>
+          )}
+          <motion.div
+            whileHover={{ scale: isDisabled ? 1 : 1.02 }}
+            whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+            className="sm:flex-1"
+          >
+            <Link href={`/products/${product.slug}`} className="block w-full">
+              <Button
+                variant="outline"
+                className="w-full border-2 border-brown-500 text-brown-500 hover:bg-brown-500 hover:border-brown-500 hover:text-white font-semibold transition-colors text-xs px-3 py-1.5 h-9 rounded-md box-border"
+              >
+                View Details
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
       </div>
     </motion.div>
   );

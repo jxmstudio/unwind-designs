@@ -6,42 +6,24 @@ import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
 import { staggerContainer, staggerItem, sectionReveal } from "@/lib/motion";
 
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Sarah Mitchell",
-    role: "Adventure Photographer",
-    avatar: "",
-    rating: 5,
-    quote: "Unwind Designs transformed my Troopy into the perfect mobile studio. The storage solutions are ingenious and the quality is outstanding. Couldn't be happier with the result!",
-    location: "Melbourne, VIC"
-  },
-  {
-    id: 2,
-    name: "Mike Thompson",
-    role: "4WD Enthusiast",
-    avatar: "",
-    rating: 5,
-    quote: "Professional service from start to finish. The team understood exactly what I needed for my remote adventures. The electrical system has been flawless in the outback.",
-    location: "Perth, WA"
-  },
-  {
-    id: 3,
-    name: "Emma Rodriguez",
-    role: "Travel Blogger",
-    avatar: "",
-    rating: 5,
-    quote: "Incredible attention to detail and craftsmanship. My van fitout has exceeded all expectations. The customer service throughout the process was exceptional.",
-    location: "Brisbane, QLD"
-  }
-];
+// Testimonials will be added from real customer feedback
+// Contact info@unwinddesigns.com.au to submit your review
+const testimonials: Array<{
+  id: number;
+  name: string;
+  role: string;
+  avatar: string;
+  rating: number;
+  quote: string;
+  location: string;
+}> = [];
 
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || testimonials.length === 0) return;
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -51,11 +33,13 @@ export function Testimonials() {
   }, [isAutoPlaying]);
 
   const nextTestimonial = () => {
+    if (testimonials.length === 0) return;
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
     setIsAutoPlaying(false);
   };
 
   const prevTestimonial = () => {
+    if (testimonials.length === 0) return;
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
     setIsAutoPlaying(false);
   };
@@ -64,6 +48,11 @@ export function Testimonials() {
     setCurrentIndex(index);
     setIsAutoPlaying(false);
   };
+
+  // Don't render section if no testimonials
+  if (testimonials.length === 0) {
+    return null;
+  }
 
   return (
     <motion.section 

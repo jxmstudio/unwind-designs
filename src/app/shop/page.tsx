@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
@@ -20,8 +21,17 @@ import {
 } from '@/lib/product-utils';
 
 export default function ShopPage() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams?.get('category');
+  
   const [activeFilter, setActiveFilter] = useState<'all' | 'flat-packs' | 'accessories' | 'coming-soon'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  
+  // Update category filter when URL parameter changes
+  useEffect(() => {
+    setCategoryFilter(categoryParam);
+  }, [categoryParam]);
   
   const allProducts = listAllProducts();
   const purchasableProducts = getPurchasableProducts();
@@ -48,6 +58,23 @@ export default function ShopPage() {
         break;
       default:
         products = allProducts;
+    }
+
+    // Apply category filter from URL
+    if (categoryFilter) {
+      products = products.filter(product => {
+        const productCategory = 'category' in product ? product.category.toLowerCase() : '';
+        const categoryMatch = categoryFilter.toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/-systems?$/, ''); // Handle "water-systems" -> "water"
+        
+        // Match category or tags
+        return (
+          productCategory.includes(categoryMatch) ||
+          productCategory.replace(/\s+/g, '-').includes(categoryMatch) ||
+          product.tags?.some(tag => tag.toLowerCase().includes(categoryMatch))
+        );
+      });
     }
 
     // Apply search filter

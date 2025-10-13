@@ -163,18 +163,18 @@ export function CartPageContent() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      {/* Header */}
-      <div className="mb-8">
-        <Link href="/shop" className="inline-flex items-center text-brown-500 hover:text-darkBrown mb-4">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Continue Shopping
-        </Link>
-        <h1 className="text-4xl font-bold text-textPrimary">Shopping Cart</h1>
-        <p className="text-lg text-textSecondary mt-2">
-          {state.itemCount} item{state.itemCount !== 1 ? 's' : ''} in your cart
-        </p>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        {/* Header */}
+        <div className="mb-6 sm:mb-8">
+          <Link href="/shop" className="inline-flex items-center text-brown-500 hover:text-darkBrown mb-3 sm:mb-4 text-sm sm:text-base">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Continue Shopping
+          </Link>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-textPrimary">Shopping Cart</h1>
+          <p className="text-base sm:text-lg text-textSecondary mt-2">
+            {state.itemCount} item{state.itemCount !== 1 ? 's' : ''} in your cart
+          </p>
+        </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
@@ -182,78 +182,83 @@ export function CartPageContent() {
           <div className="bg-cream-400 rounded-2xl p-6 shadow-soft border border-borderNeutral">
             <h2 className="text-xl font-semibold text-textPrimary mb-6">Cart Items</h2>
             
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {state.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex gap-4 p-4 bg-cream-300 rounded-lg border border-borderNeutral"
+                  className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-3 sm:p-4 bg-cream-300 rounded-lg border border-borderNeutral"
                 >
-                  {/* Product Image */}
-                  <div className="w-24 h-24 bg-cream-200 rounded-lg flex-shrink-0 flex items-center justify-center">
-                    {item.image ? (
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    ) : (
-                      <span className="text-caption text-textSecondary text-center">
-                        {item.category || 'Image'}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Product Details */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-textPrimary text-lg mb-2">
-                      {item.name}
-                    </h3>
-                    <p className="text-brown-500 font-semibold text-lg mb-3">
-                      ${item.price.toFixed(2)}
-                    </p>
-                    
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-body-small font-medium text-textPrimary">Quantity:</span>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                          className="w-10 h-10 p-0 border-borderNeutral hover:bg-brown-100"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </Button>
-                        
-                        <span className="w-12 text-center text-lg font-medium text-textPrimary">
-                          {item.quantity}
+                  {/* Top row on mobile: Image + Details */}
+                  <div className="flex gap-3 sm:gap-4 flex-1">
+                    {/* Product Image */}
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-cream-200 rounded-lg flex-shrink-0 flex items-center justify-center">
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      ) : (
+                        <span className="text-xs sm:text-caption text-textSecondary text-center px-1">
+                          {item.category || 'Image'}
                         </span>
-                        
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                          className="w-10 h-10 p-0 border-borderNeutral hover:bg-brown-100"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </Button>
+                      )}
+                    </div>
+
+                    {/* Product Details */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-textPrimary text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 line-clamp-2">
+                        {item.name}
+                      </h3>
+                      <p className="text-brown-500 font-semibold text-base sm:text-lg mb-2 sm:mb-3">
+                        ${item.price.toFixed(2)}
+                      </p>
+                      
+                      {/* Quantity Controls */}
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <span className="text-xs sm:text-body-small font-medium text-textPrimary">Qty:</span>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                            className="w-8 h-8 sm:w-10 sm:h-10 p-0 border-borderNeutral hover:bg-brown-100"
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
+                          </Button>
+                          
+                          <span className="w-10 sm:w-12 text-center text-base sm:text-lg font-medium text-textPrimary">
+                            {item.quantity}
+                          </span>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                            className="w-8 h-8 sm:w-10 sm:h-10 p-0 border-borderNeutral hover:bg-brown-100"
+                            aria-label="Increase quantity"
+                          >
+                            <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Item Total & Remove */}
-                  <div className="text-right">
-                    <p className="text-lg font-semibold text-brown-500 mb-3">
+                  {/* Bottom row on mobile: Total & Remove */}
+                  <div className="flex sm:flex-col justify-between sm:justify-start items-center sm:items-end sm:text-right gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-borderNeutral/30">
+                    <p className="text-base sm:text-lg font-semibold text-brown-500">
                       ${(item.price * item.quantity).toFixed(2)}
                     </p>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleRemoveItem(item.id)}
-                      className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                      className="text-red-600 hover:bg-red-50 hover:text-red-700 text-xs sm:text-sm min-h-[36px]"
                     >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Remove
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                      <span className="sm:inline">Remove</span>
                     </Button>
                   </div>
                 </div>
@@ -483,11 +488,11 @@ export function CartPageContent() {
         <div className="lg:col-span-1">
           <CheckoutSummary orderOptions={orderOptions} />
           
-          <div className="mt-6 space-y-4">
+          <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
             <Button
               onClick={handleCheckout}
               disabled={!state.shipping.selectedQuote}
-              className={`w-full py-4 text-lg ${
+              className={`w-full py-3 sm:py-4 text-base sm:text-lg min-h-[52px] font-semibold ${
                 state.shipping.selectedQuote 
                   ? 'bg-brown-500 hover:bg-darkBrown text-cream-400' 
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -496,20 +501,13 @@ export function CartPageContent() {
               {state.shipping.selectedQuote ? (
                 <div className="flex items-center justify-center gap-2">
                   <span>Pay with Stripe</span>
-                  <span className="text-sm opacity-90">
+                  <span className="text-xs sm:text-sm opacity-90">
                     (${(() => {
                       let total = state.total + (state.shipping.selectedQuote?.price || 0);
                       if (orderOptions.paymentSurcharge === 'credit-card') {
                         total += state.total * 0.025;
                       } else if (orderOptions.paymentSurcharge === 'paypal') {
                         total += state.total * 0.035;
-                      }
-                      if (orderOptions.shippingInsurance === 'basic') {
-                        total += 50;
-                      } else if (orderOptions.shippingInsurance === 'standard') {
-                        total += 119;
-                      } else if (orderOptions.shippingInsurance === 'premium') {
-                        total += 250;
                       }
                       return total.toFixed(2);
                     })()})

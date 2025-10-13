@@ -9,9 +9,9 @@ import { Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-darkBrown text-cream-400">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+    <footer className="bg-darkBrown text-cream-400 relative z-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="mb-6">
@@ -140,21 +140,21 @@ export function Footer() {
         </div>
 
         {/* Newsletter Section */}
-        <div className="mt-16 pt-8 border-t border-brown-600">
+        <div className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-brown-600">
           <div className="max-w-2xl">
-            <h3 className="text-xl font-semibold text-cream-400 mb-4">
+            <h3 className="text-lg sm:text-xl font-semibold text-cream-400 mb-3 sm:mb-4">
               Stay Updated
             </h3>
-            <p className="text-cream-300 mb-6">
+            <p className="text-sm sm:text-base text-cream-300 mb-4 sm:mb-6">
               Get the latest product updates, installation tips, and adventure stories delivered to your inbox.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 bg-brown-600 border-brown-500 text-cream-400 placeholder-cream-300 focus:border-cream-400 focus:ring-cream-400/20"
+                className="flex-1 bg-brown-600 border-brown-500 text-cream-400 placeholder-cream-300 focus:border-cream-400 focus:ring-cream-400/20 min-h-[44px]"
               />
-              <Button className="bg-brown-500 hover:bg-brown-400 text-darkBrown px-6">
+              <Button className="bg-brown-500 hover:bg-brown-400 text-darkBrown px-6 min-h-[44px] font-semibold">
                 Subscribe
               </Button>
             </div>
@@ -162,32 +162,32 @@ export function Footer() {
         </div>
 
         {/* Contact Info & Social */}
-        <div className="mt-12 pt-8 border-t border-brown-600">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-brown-600">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
             {/* Contact Information */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-brown-400" />
-                <span className="text-cream-300">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-brown-400 flex-shrink-0 mt-0.5" />
+                <span className="text-sm sm:text-base text-cream-300">
                   Export Drive, Brooklyn, VIC, Australia, Victoria
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-brown-400" />
-                <span className="text-cream-300">
+                <Phone className="w-5 h-5 text-brown-400 flex-shrink-0" />
+                <a href="tel:0417362209" className="text-sm sm:text-base text-cream-300 hover:text-cream-200 transition-colors">
                   0417 362 209
-                </span>
+                </a>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-brown-400" />
-                <span className="text-cream-300">
+                <Mail className="w-5 h-5 text-brown-400 flex-shrink-0" />
+                <a href="mailto:Info@unwinddesigns.com.au" className="text-sm sm:text-base text-cream-300 hover:text-cream-200 transition-colors break-all">
                   Info@unwinddesigns.com.au
-                </span>
+                </a>
               </div>
             </div>
 
             {/* Social Media */}
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-start lg:justify-end">
               <div className="flex space-x-4">
                 {[
                   { icon: Facebook, href: "https://www.facebook.com/profile.php?id=100087206017018", label: "Facebook" },
@@ -198,12 +198,12 @@ export function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 bg-brown-600 hover:bg-brown-500 rounded-full flex items-center justify-center text-cream-400 hover:text-cream-300 transition-all duration-300 group"
+                    className="w-12 h-12 sm:w-14 sm:h-14 bg-brown-600 hover:bg-brown-500 rounded-full flex items-center justify-center text-cream-400 hover:text-cream-300 transition-all duration-300 group"
                     whileHover={{ y: -3, scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     aria-label={social.label}
                   >
-                    <social.icon className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                    <social.icon className="w-5 h-5 sm:w-6 sm:h-6 group-hover:rotate-12 transition-transform duration-300" />
                   </motion.a>
                 ))}
               </div>
@@ -214,19 +214,21 @@ export function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-brown-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-body-small text-cream-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
+            <p className="text-xs sm:text-body-small text-cream-300 text-center md:text-left">
               © 2025 Unwind Designs. All rights reserved.
             </p>
-            <div className="flex items-center space-x-6 text-body-small text-cream-300">
-              <Link href="/policies/privacy" className="hover:text-cream-400 transition-colors">
+            <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 md:gap-6 text-xs sm:text-body-small text-cream-300">
+              <Link href="/policies/privacy" className="hover:text-cream-400 transition-colors whitespace-nowrap">
                 Privacy Policy
               </Link>
-              <Link href="/policies/terms" className="hover:text-cream-400 transition-colors">
+              <span className="hidden sm:inline">•</span>
+              <Link href="/policies/terms" className="hover:text-cream-400 transition-colors whitespace-nowrap">
                 Terms of Service
               </Link>
-              <Link href="/sitemap" className="hover:text-cream-400 transition-colors">
+              <span className="hidden sm:inline">•</span>
+              <Link href="/sitemap" className="hover:text-cream-400 transition-colors whitespace-nowrap">
                 Sitemap
               </Link>
             </div>

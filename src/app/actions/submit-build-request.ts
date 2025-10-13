@@ -4,12 +4,22 @@ import { Resend } from "resend";
 import { buildWizardSchema, type BuildWizardData } from "@/lib/build-wizard-schema";
 import { addToGoogleSheets, getCurrentTimestamp, type BuildRequestData } from "@/lib/google-sheets";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Only initialize Resend if API key is available
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function submitBuildRequest(data: BuildWizardData) {
   try {
     // Validate the data
-    const validatedData = buildWizardSchema.parse(data);
+    let validatedData;
+    try {
+      validatedData = buildWizardSchema.parse(data);
+    } catch (validationError) {
+      console.error("Validation error:", validationError);
+      return {
+        success: false,
+        message: "Please check all form fields are filled correctly."
+      };
+    }
     
     // Extract form data
     const { step1, step2, step3, step4 } = validatedData;
@@ -39,22 +49,36 @@ export async function submitBuildRequest(data: BuildWizardData) {
       marketingConsent: step4.marketingConsent,
     };
 
+    // Log all submission data to console for debugging/backup
+    console.log("=== BUILD REQUEST SUBMISSION ===");
+    console.log(JSON.stringify(projectDetails, null, 2));
+    console.log("================================");
+    
     // Create email content
     const emailContent = createEmailContent(projectDetails);
     
-    // Send email using Resend
-    if (process.env.RESEND_API_KEY) {
-      const emailResult = await resend.emails.send({
-        from: "Unwind Designs <onboarding@resend.dev>",
-        to: ["Info@unwinddesigns.com.au"],
-        subject: `New Build Request from ${step4.firstName} ${step4.lastName}`,
-        html: emailContent,
-        replyTo: step4.email,
-      });
+    // Send email using Resend (optional - won't fail if not configured)
+    if (resend) {
+      try {
+        const emailResult = await resend.emails.send({
+          from: "Unwind Designs <onboarding@resend.dev>",
+          to: ["Info@unwinddesigns.com.au"],
+          subject: `New Build Request from ${step4.firstName} ${step4.lastName}`,
+          html: emailContent,
+          replyTo: step4.email,
+        });
 
-      if (emailResult.error) {
-        console.error("Email send error:", emailResult.error);
+        if (emailResult.error) {
+          console.error("Email send error:", emailResult.error);
+        } else {
+          console.log("✅ Email sent successfully");
+        }
+      } catch (emailError) {
+        console.error("Email service error:", emailError);
+        // Don't fail the entire request if email fails
       }
+    } else {
+      console.warn("⚠️ RESEND_API_KEY not configured - email not sent");
     }
 
     // Send to Slack webhook if configured
@@ -94,41 +118,64 @@ export async function submitBuildRequest(data: BuildWizardData) {
       }
     }
 
-    // Save to Google Sheets
-    const sheetsData: BuildRequestData = {
-      firstName: step4.firstName,
-      lastName: step4.lastName,
-      email: step4.email,
-      phone: step4.phone,
-      location: step4.location,
-      message: step4.message,
-      marketingConsent: step4.marketingConsent,
-      projectType: step1.projectType,
-      baseKit: step1.baseKit,
-      vehicleType: step2.vehicleType,
-      fridgeType: step2.fridgeType,
-      finish: step2.finish,
-      features: step2.features,
-      timeline: step3.timeline,
-      budget: step3.budget,
-      installationPreference: step3.installationPreference,
-      submissionDate: getCurrentTimestamp(),
-      source: 'build-wizard'
-    };
+    // Save to Google Sheets (optional - won't fail if not configured)
+    try {
+      const sheetsData: BuildRequestData = {
+        firstName: step4.firstName,
+        lastName: step4.lastName,
+        email: step4.email,
+        phone: step4.phone,
+        location: step4.location,
+        message: step4.message,
+        marketingConsent: step4.marketingConsent,
+        projectType: step1.projectType,
+        baseKit: step1.baseKit,
+        vehicleType: step2.vehicleType,
+        fridgeType: step2.fridgeType,
+        finish: step2.finish,
+        features: step2.features,
+        timeline: step3.timeline,
+        budget: step3.budget,
+        installationPreference: step3.installationPreference,
+        submissionDate: getCurrentTimestamp(),
+        source: 'build-wizard'
+      };
 
-    const sheetsResult = await addToGoogleSheets(sheetsData);
-    if (!sheetsResult.success) {
-      console.error("Google Sheets error:", sheetsResult.message);
-      // Don't fail the entire request if Sheets fails
+      const sheetsResult = await addToGoogleSheets(sheetsData);
+      if (!sheetsResult.success) {
+        console.error("Google Sheets error:", sheetsResult.message);
+        console.warn("⚠️ Google Sheets not configured - data logged to console only");
+      } else {
+        console.log("✅ Data saved to Google Sheets successfully");
+      }
+    } catch (sheetsError) {
+      console.error("Google Sheets service error:", sheetsError);
+      console.warn("⚠️ Google Sheets failed - data logged to console only");
     }
 
     return { success: true, message: "Build request submitted successfully!" };
     
   } catch (error) {
     console.error("Submit build request error:", error);
+    
+    // Provide more specific error messages
+    let errorMessage = "Failed to submit build request. Please try again.";
+    
+    if (error instanceof Error) {
+      if (error.message.includes('validation')) {
+        errorMessage = "Please check all form fields are filled correctly.";
+      } else if (error.message.includes('RESEND') || error.message.includes('email')) {
+        errorMessage = "Email service not configured. Contact support.";
+      } else if (error.message.includes('Google Sheets')) {
+        errorMessage = "Data storage not configured. Contact support.";
+      } else {
+        errorMessage = `Error: ${error.message}`;
+      }
+    }
+    
     return { 
       success: false, 
-      message: "Failed to submit build request. Please try again." 
+      message: errorMessage
     };
   }
 }

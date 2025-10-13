@@ -5,59 +5,77 @@ import { CheckCircle, Wrench, Shield } from "lucide-react";
 
 interface ProductDescriptionProps {
   descriptionHtml?: string;
-  productName: string;
+  description?: string;
+  productName?: string;
+  features?: string[];
+  specifications?: Record<string, string>;
 }
 
-export function ProductDescription({ descriptionHtml, productName }: ProductDescriptionProps) {
-  const defaultDescription = `
-    <p><strong>In Stock</strong> — ready for worldwide shipping or local pickup from Brooklyn VIC</p>
-    <p>Upright fridge variant available now.</p>
+// Helper function to convert plain text description to HTML
+function formatDescriptionToHtml(description: string): string {
+  if (!description) return '';
+  
+  // If it already looks like HTML, return as-is
+  if (description.includes('<p>') || description.includes('<h')) {
+    return description;
+  }
+  
+  // Convert plain text to HTML
+  // Split by double newlines for paragraphs
+  const paragraphs = description.split(/\n\n+/);
+  
+  let html = '';
+  
+  paragraphs.forEach(para => {
+    para = para.trim();
+    if (!para) return;
     
-    <p>A flat pack Troopy kit like no other. We proudly present our ${productName} — a premium finish, DIY assembled flat pack with all the features you asked for!</p>
-    
-    <h3>What to Expect</h3>
-    <ul>
-      <li>✨ <strong>Easy Assembly:</strong> Setup designed for all skill levels.</li>
-      <li>🔧 <strong>Quality Craftsmanship:</strong> Durable materials for long-lasting adventures.</li>
-      <li>⚡ <strong>Thoughtful Design:</strong> Maximum storage and convenience.</li>
-    </ul>
-    
-    <h3>About this Flat Pack</h3>
-    <p>Our Roam range is the premium option for those seeking ultimate durability and aesthetics. Built from premium Birch plywood, the Roam range is designed to outlive your adventures.</p>
-    
-    <h3>Benefits</h3>
-    <ul>
-      <li>Swiss-designed cabinetry connectors — full installation in a weekend, no experience required.</li>
-      <li>Maximum functionality with accessible storage inside and outside your Troopy.</li>
-      <li>Unique day bed setup for rainy-day comfort, while maintaining access to under-bed storage.</li>
-      <li>Shower cabinet access from the driver's side window (sliding or gullwing).</li>
-      <li>Built from black hex face plywood (extremely durable flooring material). Also available in White and Plain Birch.</li>
-    </ul>
-    
-    <h3>Key Dimensions</h3>
-    <ul>
-      <li><strong>Fridge Space:</strong> approx 850×460 mm (larger fridge? Contact us for pre-orders).</li>
-      <li><strong>Bed Dimensions:</strong> approx 1900×950 mm.</li>
-      <li><strong>Walkway:</strong> approx 360 mm wide (comfortable clearance).</li>
-      <li><strong>Weight:</strong> approx 130 kg.</li>
-    </ul>
-    
-    <h3>Manufacturing Partner</h3>
-    <p>Produced with No Goat for Jack, a mechanical engineer/industrial designer with a premium manufacturing facility. Using state-of-the-art machinery, we deliver a premium product at an affordable price.</p>
-    
-    <h3>Installation & Shipping</h3>
-    <ul>
-      <li>Installation available by request in Brooklyn VIC and Perth.</li>
-      <li>Pickup free from Brooklyn VIC.</li>
-      <li>Shipping available Australia-wide, to ~200 depot locations or direct to your door.</li>
-      <li><strong>Note:</strong> checkout quotes may not always be accurate; contact us for better rates.</li>
-    </ul>
-    
-    <h3>Questions?</h3>
-    <p>📞 Call Karim: <a href="tel:0417362209" className="text-accent-600 hover:text-accent-700 font-medium">0417 362 209</a></p>
-  `;
+    // Check if it's a header (starts with ##, **, or all caps followed by colon)
+    if (para.startsWith('##')) {
+      html += `<h3>${para.replace(/^##\s*/, '')}</h3>\n`;
+    } else if (para.match(/^\*\*[^*]+\*\*:?$/)) {
+      html += `<h3>${para.replace(/\*\*/g, '')}</h3>\n`;
+    } else if (para.match(/^[A-Z][A-Z\s&]+:$/)) {
+      html += `<h3>${para.replace(/:$/, '')}</h3>\n`;
+    }
+    // Check if it's a bulleted list
+    else if (para.includes('\n•') || para.includes('\n-') || para.includes('\n*')) {
+      const items = para.split(/\n[•\-*]\s*/);
+      html += '<ul>\n';
+      items.forEach(item => {
+        item = item.trim();
+        if (item) {
+          // Convert **text** to <strong>text</strong>
+          item = item.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+          html += `<li>${item}</li>\n`;
+        }
+      });
+      html += '</ul>\n';
+    }
+    // Regular paragraph
+    else {
+      // Convert **text** to <strong>text</strong>
+      para = para.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // Convert newlines to <br>
+      para = para.replace(/\n/g, '<br>');
+      html += `<p>${para}</p>\n`;
+    }
+  });
+  
+  return html;
+}
 
-  const content = descriptionHtml || defaultDescription;
+export function ProductDescription({ descriptionHtml, description, productName, features, specifications }: ProductDescriptionProps) {
+  // Use either descriptionHtml or description
+  const rawContent = descriptionHtml || description || '';
+  
+  // Convert description to HTML if it's plain text
+  const content = formatDescriptionToHtml(rawContent);
+
+  // Don't render if there's no content
+  if (!content || content.trim() === '') {
+    return null;
+  }
 
   return (
     <motion.section
@@ -67,6 +85,7 @@ export function ProductDescription({ descriptionHtml, productName }: ProductDesc
       viewport={{ once: true }}
       className="bg-white rounded-2xl p-8 shadow-soft border border-borderNeutral"
     >
+      <h2 className="text-2xl font-bold text-textPrimary mb-6">Product Description</h2>
       <div className="prose prose-lg max-w-none">
         <div 
           dangerouslySetInnerHTML={{ __html: content }}

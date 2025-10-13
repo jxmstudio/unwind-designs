@@ -21,7 +21,7 @@ export function Hero() {
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-40"
           style={{
-            backgroundImage: `url("/brand/wander-troopy-flat-pack-281517.jpg")`
+            backgroundImage: `url("/brand/home.png")`
           }}
           role="img"
           aria-label="Professional van fitout with storage solutions and modern design"
@@ -40,16 +40,16 @@ export function Hero() {
         animate="visible"
       >
         <motion.h1 
-          className="text-display-1 sm:text-5xl lg:text-6xl xl:text-7xl text-white mb-8 drop-shadow-2xl"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white mb-6 sm:mb-8 drop-shadow-2xl leading-tight"
           variants={fadeUp}
         >
           <span className="block">Crafting Quality, Personalized</span>
-          <span className="block text-cream-100 mt-3">Van & 4x4 Fitouts</span>
-          <span className="block text-cream-200 mt-3">For Your Unique Lifestyle</span>
+          <span className="block text-cream-100 mt-2 sm:mt-3">Van & 4x4 Fitouts</span>
+          <span className="block text-cream-200 mt-2 sm:mt-3">For Your Unique Lifestyle</span>
         </motion.h1>
         
         <motion.p 
-          className="text-lg sm:text-xl lg:text-2xl text-white mb-16 max-w-4xl mx-auto drop-shadow-lg font-medium"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-white mb-8 sm:mb-12 lg:mb-16 max-w-4xl mx-auto drop-shadow-lg font-medium px-4"
           variants={fadeUp}
         >
           Transform your vehicle into the ultimate adventure companion. From storage solutions 
@@ -57,23 +57,24 @@ export function Hero() {
         </motion.p>
         
         <motion.div 
-          className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
+          className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-8 sm:mb-12 lg:mb-16 w-full px-4"
           variants={staggerItem}
         >
           <motion.div
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.96 }}
             transition={{ duration: 0.2 }}
+            className="w-full sm:w-auto"
           >
-            <Link href="/flat-packs">
+            <Link href="/flat-packs" className="w-full sm:w-auto">
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-2 border-white text-white hover:bg-white hover:text-darkBrown px-12 py-6 text-xl font-semibold rounded-2xl bg-white/20 shadow-soft hover:shadow-medium transition-all duration-300"
+                className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-darkBrown px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl font-semibold rounded-2xl bg-white/20 shadow-soft hover:shadow-medium transition-all duration-300 min-h-[56px]"
                 aria-label="Browse our flat pack product collection"
               >
                 Shop Flat Packs
-                <ArrowRight className="ml-3" size={24} aria-hidden="true" />
+                <ArrowRight className="ml-2 sm:ml-3" size={20} aria-hidden="true" />
               </Button>
             </Link>
           </motion.div>
@@ -82,12 +83,13 @@ export function Hero() {
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.96 }}
             transition={{ duration: 0.2 }}
+            className="w-full sm:w-auto"
           >
-            <Link href="/start-your-build">
+            <Link href="/start-your-build" className="w-full sm:w-auto">
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-2 border-white text-white hover:bg-white hover:text-darkBrown px-12 py-6 text-xl font-semibold rounded-2xl bg-white/20 shadow-soft hover:shadow-medium transition-all duration-300"
+                className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-darkBrown px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl font-semibold rounded-2xl bg-white/20 shadow-soft hover:shadow-medium transition-all duration-300 min-h-[56px]"
                 aria-label="Begin custom fitout consultation process"
               >
                 Start Your Build
@@ -98,34 +100,34 @@ export function Hero() {
 
         {/* Enhanced trust indicators with better styling */}
         <motion.div 
-          className="flex flex-wrap justify-center items-center gap-6 text-white mb-8"
+          className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-white mb-6 sm:mb-8 px-4"
           variants={staggerItem}
         >
           <motion.div 
-            className="flex items-center gap-3 bg-white/25 px-6 py-3 rounded-full border border-white/30 shadow-soft"
+            className="flex items-center gap-2 sm:gap-3 bg-white/25 px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-white/30 shadow-soft"
             whileHover={{ scale: 1.05, y: -2 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="w-3 h-3 bg-success-400 rounded-full animate-pulse" />
-            <span className="font-medium">Professional Installation</span>
+            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-success-400 rounded-full animate-pulse" />
+            <span className="font-medium text-sm sm:text-base">Professional Installation</span>
           </motion.div>
           
           <motion.div 
-            className="flex items-center gap-3 bg-white/25 px-6 py-3 rounded-full border border-white/30 shadow-soft"
+            className="flex items-center gap-2 sm:gap-3 bg-white/25 px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-white/30 shadow-soft"
             whileHover={{ scale: 1.05, y: -2 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="w-3 h-3 bg-warning-400 rounded-full animate-pulse" />
-            <span className="font-medium">Custom Design</span>
+            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-warning-400 rounded-full animate-pulse" />
+            <span className="font-medium text-sm sm:text-base">Custom Design</span>
           </motion.div>
           
           <motion.div 
-            className="flex items-center gap-3 bg-white/25 px-6 py-3 rounded-full border border-white/30 shadow-soft"
+            className="flex items-center gap-2 sm:gap-3 bg-white/25 px-4 sm:px-6 py-2 sm:py-3 rounded-full border border-white/30 shadow-soft"
             whileHover={{ scale: 1.05, y: -2 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="w-3 h-3 bg-info-400 rounded-full animate-pulse" />
-            <span className="font-medium">Warranty Included</span>
+            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-info-400 rounded-full animate-pulse" />
+            <span className="font-medium text-sm sm:text-base">Warranty Included</span>
           </motion.div>
         </motion.div>
 

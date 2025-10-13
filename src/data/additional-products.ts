@@ -623,6 +623,74 @@ export const waterHeaterProducts: ComponentProduct[] = [
     },
     createdAt: new Date("2024-01-12"),
     updatedAt: new Date("2024-01-15")
+  },
+  {
+    id: "duoetto-mk2-water-heater",
+    name: "Duoetto MK2 Digital Dual Voltage (12v/240v) Electric 10L Storage Water Heater",
+    description: "The ultimate dual-voltage water heater for your campervan or caravan. The Duoetto MK2 gives you hot water on demand, whether you're on 12V battery power or connected to 240V mains power.\n\n**Dual Voltage Flexibility:**\n• 12V DC operation from your vehicle battery (perfect for off-grid)\n• 240V AC operation when connected to mains power\n• Automatic voltage detection and switching\n• Efficient heating in both modes\n\n**Key Features:**\n• 10L capacity - perfect for showers, dishes, and washing\n• Digital temperature control (30°C - 75°C)\n• LED display shows current temperature\n• Quick heat-up time: 12V (45-60 min), 240V (20-25 min)\n• Premium stainless steel tank construction\n• Compact design saves valuable space\n• Over-temperature protection\n• Dry-run protection\n\n**Technical Specifications:**\n• Capacity: 10 Liters\n• Power: 12V DC (300W) / 240V AC (1200W)\n• Temperature Range: 30-75°C\n• Heat-up Time: 12V (45-60 min) / 240V (20-25 min)\n• Dimensions: 380mm x 260mm x 260mm\n• Weight: 6.5kg (empty)\n• Tank Material: Stainless steel 304\n\n**Perfect For:**\n• Campervans and motorhomes\n• Caravans and RVs\n• Boats and marine applications\n• Off-grid living\n• 4WD touring setups\n\n**What's Included:**\n• Duoetto MK2 water heater\n• Digital controller\n• Mounting brackets\n• Installation manual\n\nPickup available at Export Drive (Usually ready in 2-4 days).",
+    shortDescription: "10L dual voltage (12V/240V) electric water heater with digital control",
+    price: 425.00,
+    images: ["/brand/water1.png", "/brand/water2.png", "/brand/water3.png"],
+    category: "Water Heaters",
+    subcategory: "Storage Water Heaters",
+    tags: ["Duoetto", "Water Heater", "Dual Voltage", "12V", "240V", "Digital", "10L", "Campervan", "Caravan"],
+    features: [
+      "Dual voltage operation (12V/240V)",
+      "10L stainless steel tank",
+      "Digital temperature control",
+      "LED display",
+      "Quick heat-up time",
+      "Compact design",
+      "Over-temperature protection",
+      "Dry-run protection",
+      "Energy efficient"
+    ],
+    specifications: {
+      "Brand": "Duoetto",
+      "Model": "MK2",
+      "Capacity": "10 Liters",
+      "Power 12V": "300W",
+      "Power 240V": "1200W",
+      "Temperature Range": "30-75°C",
+      "Heat-up Time 12V": "45-60 minutes",
+      "Heat-up Time 240V": "20-25 minutes",
+      "Tank Material": "Stainless Steel 304",
+      "Weight Empty": "6.5kg",
+      "Dimensions": "380mm x 260mm x 260mm",
+      "Protection": "Over-temperature, Dry-run",
+      "Display": "Digital LED"
+    },
+    dimensions: {
+      length: 38,
+      width: 26,
+      height: 26
+    },
+    weight: 6.5,
+    compatibility: ["Campervans", "Caravans", "Motorhomes", "Boats", "4WD", "Off-grid installations"],
+    installationRequired: true,
+    warranty: "2 years",
+    assemblyTime: "2-3 hours",
+    sku: "DUOETTO-MK2-001",
+    slug: "duoetto-mk2-water-heater",
+    inStock: true,
+    stockQuantity: 15,
+    rating: 4.6,
+    reviewCount: 43,
+    badges: ["Dual Voltage", "Digital Control", "Premium Quality"],
+    shipClass: "standard",
+    upsells: ["duoetto-remote-control", "seaflo-water-pump"],
+    isTroopyPack: false,
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping on orders over $450*",
+      freeShippingDetails: "Free Shipping on orders over $450 *Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 2 year warranty. Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    },
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-10-13")
   }
 ];
 
@@ -1009,6 +1077,78 @@ export const flooringProducts: ComponentProduct[] = [
   }
 ];
 
+// Lighting Products
+export const lightingProducts: ComponentProduct[] = [
+  {
+    id: "12v-dimmable-reading-light",
+    name: "12V Dimmable Reading Light",
+    description: "Perfect LED reading light for your campervan, caravan, or boat. This 12V dimmable light provides the ideal amount of light for reading or working without disturbing others.\n\n**Key Features:**\n• Smooth dimming control - adjust brightness to your preference\n• Flexible gooseneck design - direct light exactly where you need it\n• Warm white LED (3000K) - easy on the eyes for nighttime reading\n• Ultra-low power consumption - only 3W maximum\n• Touch-sensitive switch with memory function\n• Sleek black aluminum finish\n• Easy surface mount installation\n\n**Technical Specifications:**\n• Voltage: 12V DC\n• Power: 3W maximum\n• LED Color Temperature: 3000K (Warm White)\n• Brightness: Up to 300 lumens\n• Dimming Range: 10-100%\n• Gooseneck Length: 300mm\n• Base Dimensions: 60mm diameter\n• Material: Aluminum body, flexible silicone neck\n\n**Perfect For:**\n• Bedside reading in campervans\n• Bunk lighting in caravans\n• Chart tables on boats\n• Work areas and desks\n• Any 12V installation\n\n**What's Included:**\n• 12V LED reading light\n• Surface mounting base\n• Mounting screws\n• Installation instructions\n\n**Installation:**\nSimple surface mount installation. Just connect to your 12V system (positive and negative), mount the base, and enjoy perfect reading light.\n\nPickup available at Export Drive (Usually ready in 2-4 days).",
+    shortDescription: "Flexible 12V LED reading light with dimming control and memory function",
+    price: 80.00,
+    images: ["/brand/67.jpg"],
+    category: "Accessories",
+    subcategory: "Lighting",
+    tags: ["Lighting", "LED", "12V", "Reading Light", "Dimmable", "Campervan", "Caravan", "Flexible"],
+    features: [
+      "Smooth dimming control (10-100%)",
+      "Flexible gooseneck design",
+      "Warm white LED (3000K)",
+      "Ultra-low 3W power consumption",
+      "Touch-sensitive switch",
+      "Memory function - remembers last brightness",
+      "300 lumens maximum output",
+      "Sleek aluminum finish",
+      "Easy surface mount"
+    ],
+    specifications: {
+      "Voltage": "12V DC",
+      "Power": "3W maximum",
+      "LED Type": "Warm White LED",
+      "Color Temperature": "3000K",
+      "Brightness": "Up to 300 lumens",
+      "Dimming Range": "10-100%",
+      "Gooseneck Length": "300mm",
+      "Base Diameter": "60mm",
+      "Material": "Aluminum body, silicone neck",
+      "Switch Type": "Touch-sensitive",
+      "Memory": "Yes - remembers last setting",
+      "Mounting": "Surface mount",
+      "Cable Length": "1.5m"
+    },
+    dimensions: {
+      length: 30,
+      width: 6,
+      height: 6
+    },
+    weight: 0.4,
+    compatibility: ["12V systems", "Campervans", "Caravans", "Boats", "RVs", "4WD", "Marine applications"],
+    installationRequired: true,
+    warranty: "1 year",
+    assemblyTime: "15 minutes",
+    sku: "LED-READ-12V-001",
+    slug: "12v-dimmable-reading-light",
+    inStock: true,
+    stockQuantity: 35,
+    rating: 4.7,
+    reviewCount: 28,
+    badges: ["Dimmable", "Low Power", "Flexible Design"],
+    shipClass: "standard",
+    upsells: [],
+    isTroopyPack: false,
+    shippingInfo: {
+      freeShippingThreshold: 450,
+      freeShippingText: "Free Shipping on orders over $450*",
+      freeShippingDetails: "Free Shipping on orders over $450 *Excludes Bulky Items, Flat Packs and dangerous goods. We aim to dispatch your order within 24 hours. Standard delivery within 3-6 days. Add 2-3 days for rural areas. We automatically pick the most appropriate courier based on your total order. Express Post Available."
+    },
+    guaranteeInfo: {
+      title: "Unwind Guarantee",
+      details: "We guarantee products that are fit for purpose. Lifetime access to our customer support. Receive advice on installation and product tips anytime. Minimum 1 year warranty. Change of mind returns within 30 days (Unused and unopened products)* Terms and Conditions apply."
+    },
+    createdAt: new Date("2024-01-12"),
+    updatedAt: new Date("2024-10-13")
+  }
+];
+
 // Hardware Products
 export const hardwareProducts: ComponentProduct[] = [
   {
@@ -1119,6 +1259,7 @@ export const allAdditionalProducts: ComponentProduct[] = [
   ...waterPumpProducts,
   ...plumbingKitProducts,
   ...flooringProducts,
+  ...lightingProducts,
   ...hardwareProducts,
   {
     id: "cushion-set-troopy-flat-packs",

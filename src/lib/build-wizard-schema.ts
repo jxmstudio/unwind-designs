@@ -7,7 +7,9 @@ export const step1Schema = z.object({
   }),
   baseKit: z.enum(["wander", "roam", "premium", "custom"], {
     message: "Please select a base kit",
-  }).optional(),
+  }).optional().refine((val) => val !== "roam", {
+    message: "Roam Kit is coming soon and not available for selection yet. Please choose another kit.",
+  }),
 });
 
 // Step 2: Configuration Details
@@ -79,7 +81,7 @@ export type BuildWizardData = z.infer<typeof buildWizardSchema>;
 
 // URL params schema for pre-filling
 export const urlParamsSchema = z.object({
-  base: z.enum(["wander", "roam", "premium"]).optional(),
+  base: z.enum(["wander", "premium"]).optional(), // Removed "roam" - coming soon
   fridge: z.enum(["chest", "upright"]).optional(),
   finish: z.enum([
     "black-hex",

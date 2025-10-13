@@ -196,31 +196,40 @@ export function Step1ProjectType() {
                   return (
                     <m.div
                       key={kit.id}
-                      whileHover={isDisabled ? {} : { y: -2 }}
-                      whileTap={isDisabled ? {} : { scale: 0.98 }}
+                      whileHover={isDisabled || kit.comingSoon ? {} : { y: -2 }}
+                      whileTap={isDisabled || kit.comingSoon ? {} : { scale: 0.98 }}
                     >
                       <Card
-                        className={`cursor-pointer transition-all duration-300 hover:shadow-md relative ${
+                        className={`transition-all duration-300 relative ${
+                          kit.comingSoon 
+                            ? 'cursor-not-allowed opacity-60 bg-gray-50' 
+                            : 'cursor-pointer hover:shadow-md'
+                        } ${
                           isSelected 
                             ? 'ring-2 ring-brown-500 bg-brown-50 border-brown-300' 
-                            : kit.comingSoon ? 'hover:border-yellow-300' : 'hover:border-brown-300'
-                        } ${kit.comingSoon ? 'opacity-90' : ''}`}
-                        onClick={() => setValue("step1.baseKit", kit.id as 'wander' | 'roam' | 'premium' | 'custom', { shouldValidate: true })}
+                            : kit.comingSoon ? 'border-gray-300' : 'hover:border-brown-300'
+                        }`}
+                        onClick={() => !kit.comingSoon && setValue("step1.baseKit", kit.id as 'wander' | 'roam' | 'premium' | 'custom', { shouldValidate: true })}
                       >
                         <CardContent className="p-4 text-center">
-                          <Badge className={`mb-3 ${kit.color}`}>
+                          <Badge className={`mb-3 ${kit.comingSoon ? 'bg-yellow-100 text-yellow-800' : kit.color}`}>
                             {kit.subtitle}
                           </Badge>
-                          <h4 className="font-semibold text-textPrimary mb-1">
+                          <h4 className={`font-semibold mb-1 ${kit.comingSoon ? 'text-gray-500' : 'text-textPrimary'}`}>
                             {kit.title}
                           </h4>
-                          <p className="text-body-small text-brown-600 font-medium">
+                          <p className={`text-body-small font-medium ${kit.comingSoon ? 'text-gray-400' : 'text-brown-600'}`}>
                             {kit.price}
                           </p>
                           {kit.comingSoon && (
-                            <p className="text-xs text-yellow-600 mt-2 font-medium">
-                              Available for pre-order
-                            </p>
+                            <div className="mt-2">
+                              <p className="text-xs text-yellow-700 font-semibold">
+                                Coming Soon
+                              </p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                Not available for selection yet
+                              </p>
+                            </div>
                           )}
                         </CardContent>
                       </Card>

@@ -10,24 +10,25 @@ interface BrandLogoProps {
   priority?: boolean;
 }
 
-export function BrandLogo({ 
-  className = "", 
-  width = 120, 
-  height = 40, 
-  priority = false 
+export function BrandLogo({
+  className = "",
+  width = 100,
+  height = 35,
+  priority = false
 }: BrandLogoProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className={`inline-block ${className}`}>
+    <div className={`inline-flex items-center rounded-lg border border-brown-300 bg-white px-3 py-1.5 shadow-sm ${className}`}>
       <Image
-        src={imageError ? "/brand/logo.png" : "/brand/unwind_designs_logo.jpg"}
+        src={imageError ? "/brand/unwind_designs_logo.jpg" : "/brand/penis.jpg"}
         alt="Unwind Designs"
         width={width}
         height={height}
-        className="rounded-lg shadow-soft"
+        className="object-contain"
         style={{ height: 'auto' }}
         priority={priority}
+        quality={100}
         onError={() => setImageError(true)}
         aria-label="Unwind Designs"
       />

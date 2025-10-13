@@ -306,8 +306,8 @@ export const sidePanelProducts: ComponentProduct[] = [
   {
     id: "troopy-side-panels-storage",
     name: "Troopy Side Panels with added storage",
-    description: "Enhanced side panels featuring integrated storage compartments, perfect for organizing smaller items while maintaining the clean interior aesthetic.", // TODO: update description, media, pricing
-    shortDescription: "Side panels with integrated storage compartments",
+    description: "Transform your Troopcarrier interior with our premium side panels featuring integrated storage compartments.\n\nThese custom-designed panels replace your factory side panels and add valuable storage space while maintaining a sleek, professional finish. Perfect for organizing tools, recovery gear, and camping essentials.\n\n**Key Features:**\n• 3 reveals each side with storage boxes\n• Matching rear door panels included\n• Premium 6.5mm Black Hex on Birch plywood construction\n• All mounting hardware included (M5 nutserts, bolts, washers)\n• Factory-fit design for seamless integration\n• Optional bungee cord system for securing gear\n\n**What's Included:**\n- Left and right side panels with storage boxes\n- Matching rear door panels\n- Complete hardware kit\n- Installation instructions\n\n**Installation:**\nDIY-friendly installation in 3-4 hours. No permanent modifications required.\n\nPickup available at Export Drive (Usually ready in 2-4 days).",
+    shortDescription: "Premium side panels with integrated storage boxes for Troopcarrier",
     price: 865.00,
     originalPrice: 895.00,
     images: [
@@ -546,9 +546,9 @@ export const ventilationProducts: ComponentProduct[] = [
   {
     id: "troopy-utility-vent",
     name: "Troopcarrier Utility Vent - Ark Earth",
-    description: "Available now! - Limited quantity ready for immediate dispatch\n\nDiscover the ultimate in functionality and style with our new utility vents, meticulously handcrafted by Ark Earth Fabrication in Perth. Engineered for Troopcarriers and Landcruisers, these vents boast a factory look, concealing outlets seamlessly.\n\nKey Features:\n• Easy access to power, air, and water\n• Secure magnetic catch for reliable closure\n• Suitable for both passenger and driver sides\n• Stainless steel construction for enduring quality\n\nOptions:\n- All models are constructed from stainless steel\n\nBlack powder coated vent with fittings\n1x 1/2” Water Outlet\n1x 1/4” Air Outlet\n1x 3/8” Breather\n1x Anderson Plug\n\nBlack powder coated vent without fittings\nVent box only - no fittings provided so you can customise them to suit your requirements. Please note holes come pre drilled for the above size fittings.\n\nVersatile Installation:\nEasily install in minutes in any Landcruiser with a factory vent or in any other vehicle with a simple cutout wherever you need it. The utility vents come standard with 2x Nitto fittings and 1x Anderson plug. Perfect for all your air, water and power needs!\n\nFuture-Ready Integration:\nDesigned to complement our 75 & 78 Series 65L Troop Carrier water tanks. Get ready for a seamless blend of form and function.\n\nUpgrade your vehicle with this sleek addition. Secure your vent now and experience the perfect fusion of aesthetics and utility!",
+    description: "Available now! - Limited quantity ready for immediate dispatch\n\nDiscover the ultimate in functionality and style with our new utility vents, meticulously handcrafted by Ark Earth Fabrication in Perth. Engineered for Troopcarriers and Landcruisers, these vents boast a factory look, concealing outlets seamlessly.\n\nKey Features:\n• Easy access to power, air, and water\n• Secure magnetic catch for reliable closure\n• Suitable for both passenger and driver sides\n• Stainless steel construction for enduring quality\n\nOptions:\n- All models are constructed from stainless steel\n\nBlack powder coated vent with fittings\n1x 1/2\" Water Outlet\n1x 1/4\" Air Outlet\n1x 3/8\" Breather\n1x Anderson Plug\n\nBlack powder coated vent without fittings\nVent box only - no fittings provided so you can customise them to suit your requirements. Please note holes come pre drilled for the above size fittings.\n\nVersatile Installation:\nEasily install in minutes in any Landcruiser with a factory vent or in any other vehicle with a simple cutout wherever you need it. The utility vents come standard with 2x Nitto fittings and 1x Anderson plug. Perfect for all your air, water and power needs!\n\nFuture-Ready Integration:\nDesigned to complement our 75 & 78 Series 65L Troop Carrier water tanks. Get ready for a seamless blend of form and function.\n\nUpgrade your vehicle with this sleek addition. Secure your vent now and experience the perfect fusion of aesthetics and utility!",
     shortDescription: "Stainless utility vent with optional fittings (Troopy/Landcruiser)",
-    price: 360.00,
+    price: 320.00,
     images: [
       "/brand/troopcarrier-utility-vent-ark-earth-422540.jpg",
       "/brand/troopcarrier-utility-vent-ark-earth-518089.jpg",
@@ -559,12 +559,12 @@ export const ventilationProducts: ComponentProduct[] = [
     subcategory: "Utility Vents",
     tags: ["Ventilation", "Troopcarrier", "Utility Vent", "Ark Earth"],
     features: [
-      "Weather-resistant construction",
-      "Easy installation design",
-      "Durable materials",
-      "Professional finish",
-      "Troopcarrier specific fit",
-      "Long-lasting performance"
+      "Easy access to power, air, and water",
+      "Secure magnetic catch for reliable closure",
+      "Suitable for both passenger and driver sides",
+      "Stainless steel construction for enduring quality",
+      "Factory look - conceals outlets seamlessly",
+      "Easily install in minutes in any Landcruiser with a factory vent"
     ],
     specifications: {
       "Material": "Stainless steel (black powder coat)",
@@ -607,9 +607,29 @@ export const ventilationProducts: ComponentProduct[] = [
       {
         name: "Option",
         values: [
-          { value: "with-fittings", label: "With Fittings", available: true },
-          { value: "no-fittings", label: "No Fittings", available: true }
+          { value: "with-fittings", label: "With Fittings", available: true, price: 360.00 },
+          { value: "no-fittings", label: "No Fittings", available: true, price: 320.00 }
         ]
+      }
+    ],
+    variants: [
+      { 
+        id: "with-fittings", 
+        price: 360.00, 
+        sku: "VENT-001-WF", 
+        available: true, 
+        inStock: true,
+        stockQuantity: 25,
+        options: { Option: "With Fittings" } 
+      },
+      { 
+        id: "no-fittings", 
+        price: 320.00, 
+        sku: "VENT-001-NF", 
+        available: true, 
+        inStock: true,
+        stockQuantity: 25,
+        options: { Option: "No Fittings" } 
       }
     ],
     updatedAt: new Date("2024-09-30")
@@ -703,12 +723,12 @@ export const waterTankProducts: ComponentProduct[] = [
     subcategory: "Water Tanks",
     tags: ["Water Tank", "Stainless Steel", "62L", "Durable", "Professional"],
     features: [
-      "Stainless steel construction",
-      "62L capacity",
-      "Easy maintenance",
-      "Durable design",
-      "Professional grade",
-      "Long-lasting performance"
+      "62L or 53L Stainless steel tank, Electropolished for maximum corrosion resistance",
+      "Mounts are fixed to the tank (no straps)",
+      "Tank mounts to existing locations on the chassis",
+      "Easy and fast Installation with basic hand tools",
+      "Australian made and hand built by Ark Earth Fabrication",
+      "Tested on Australia's harshest tracks - built tough!"
     ],
     specifications: {
       "Material": "304 Stainless Steel (Electropolished)",
@@ -830,12 +850,12 @@ export const soundDeadeningProducts: ComponentProduct[] = [
     subcategory: "Mass Liners",
     tags: ["Sound Deadening", "Mass Liner", "Noise Reduction", "Professional"],
     features: [
-      "Effective noise reduction",
-      "Easy installation",
-      "Professional grade",
-      "Durable materials",
-      "Improved acoustics",
-      "Long-lasting performance"
+      "Heavy duty sound blocking - 12mm thick acoustic barrier",
+      "Water resistant closed cell foam construction",
+      "Removable and cuts easily with scissors and knife",
+      "Reduces heat transfer and provides thermal insulation",
+      "OEM product used in high-end luxury vehicles",
+      "Does not rot or deteriorate over time"
     ],
     specifications: {
       "Construction": "2mm Mass Loaded Vinyl + 10mm closed cell foam",

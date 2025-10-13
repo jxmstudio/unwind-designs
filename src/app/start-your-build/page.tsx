@@ -17,9 +17,9 @@ function LoadingSpinner() {
 
 export default function StartYourBuildPage() {
   return (
-    <div className="min-h-screen bg-cream-400">
+    <div className="min-h-screen bg-cream-400 flex flex-col">
       <Navigation />
-      <main className="pt-20">
+      <main className="pt-20 pb-24 relative z-10 flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* Page Header */}
           <div className="text-center mb-12">

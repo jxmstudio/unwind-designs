@@ -53,14 +53,14 @@ export function Step4Contact() {
         </m.div>
 
         <div className="max-w-2xl mx-auto">
-          <Card className="shadow-lg border-0">
-            <CardContent className="p-8">
+          <Card className="shadow-lg border-0 relative z-30">
+            <CardContent className="p-8 relative z-30">
               <m.div
                 variants={isDisabled ? {} : staggerContainer}
                 className="space-y-6"
               >
                 {/* Name Fields */}
-                <m.div variants={isDisabled ? {} : staggerItem}>
+                <m.div variants={isDisabled ? {} : staggerItem} className="relative z-0">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="firstName" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
@@ -71,7 +71,7 @@ export function Step4Contact() {
                         id="firstName"
                         {...register("step4.firstName")}
                         placeholder="Your first name"
-                        className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300"
+                        className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300 pointer-events-auto"
                       />
                       {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                       {errors.step4?.firstName && (
@@ -83,13 +83,14 @@ export function Step4Contact() {
                     </div>
                     <div>
                       <Label htmlFor="lastName" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
+                        <User className="w-4 h-4 mr-2 text-brown-500" />
                         Last Name
                       </Label>
                       <Input
                         id="lastName"
                         {...register("step4.lastName")}
                         placeholder="Your last name"
-                        className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300"
+                        className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300 pointer-events-auto"
                       />
                       {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                       {errors.step4?.lastName && (
@@ -103,7 +104,7 @@ export function Step4Contact() {
                 </m.div>
 
                 {/* Email */}
-                <m.div variants={isDisabled ? {} : staggerItem}>
+                <m.div variants={isDisabled ? {} : staggerItem} className="relative z-0">
                   <Label htmlFor="email" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <Mail className="w-4 h-4 mr-2 text-brown-500" />
                     Email Address
@@ -113,7 +114,7 @@ export function Step4Contact() {
                     type="email"
                     {...register("step4.email")}
                     placeholder="your.email@example.com"
-                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300"
+                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300 pointer-events-auto"
                   />
                   {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                   {errors.step4?.email && (
@@ -125,7 +126,7 @@ export function Step4Contact() {
                 </m.div>
 
                 {/* Phone */}
-                <m.div variants={isDisabled ? {} : staggerItem}>
+                <m.div variants={isDisabled ? {} : staggerItem} className="relative z-0">
                   <Label htmlFor="phone" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <Phone className="w-4 h-4 mr-2 text-brown-500" />
                     Phone Number
@@ -135,7 +136,7 @@ export function Step4Contact() {
                     type="tel"
                     {...register("step4.phone")}
                     placeholder="0412 345 678"
-                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300"
+                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300 pointer-events-auto"
                   />
                   {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                   {errors.step4?.phone && (
@@ -147,7 +148,7 @@ export function Step4Contact() {
                 </m.div>
 
                 {/* Location */}
-                <m.div variants={isDisabled ? {} : staggerItem}>
+                <m.div variants={isDisabled ? {} : staggerItem} className="relative z-0">
                   <Label htmlFor="location" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <MapPin className="w-4 h-4 mr-2 text-brown-500" />
                     Location
@@ -156,7 +157,7 @@ export function Step4Contact() {
                     id="location"
                     {...register("step4.location")}
                     placeholder="City, State (e.g., Melbourne, VIC)"
-                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300"
+                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300 pointer-events-auto"
                   />
                   {/* @ts-expect-error - Temporarily bypass strict typing for deployment */}
                   {errors.step4?.location && (
@@ -168,7 +169,7 @@ export function Step4Contact() {
                 </m.div>
 
                 {/* Message */}
-                <m.div variants={isDisabled ? {} : staggerItem}>
+                <m.div variants={isDisabled ? {} : staggerItem} className="relative z-0">
                   <Label htmlFor="message" className="flex items-center mb-2 text-body-small font-medium text-textPrimary">
                     <MessageSquare className="w-4 h-4 mr-2 text-brown-500" />
                     Additional Message (Optional)
@@ -178,12 +179,12 @@ export function Step4Contact() {
                     {...register("step4.message")}
                     rows={4}
                     placeholder="Tell us more about your project, any specific requirements, or questions you have..."
-                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300 resize-none"
+                    className="w-full px-4 py-3 border border-borderNeutral rounded-lg focus:ring-2 focus:ring-brown-500 focus:border-brown-500 transition-all duration-300 resize-none pointer-events-auto"
                   />
                 </m.div>
 
                 {/* Marketing Consent */}
-                <m.div variants={isDisabled ? {} : staggerItem}>
+                <m.div variants={isDisabled ? {} : staggerItem} className="relative z-0">
                   <div className="bg-brown-50 rounded-lg p-4 border border-brown-200">
                     <div className="flex items-start space-x-3">
                       <Checkbox
@@ -208,15 +209,15 @@ export function Step4Contact() {
                 </m.div>
 
                 {/* Privacy Notice */}
-                <m.div variants={isDisabled ? {} : staggerItem}>
+                <m.div variants={isDisabled ? {} : staggerItem} className="relative z-0">
                   <div className="text-caption text-textSecondary text-center p-4 bg-gray-50 rounded-lg">
                     <p>
                       By submitting this form, you agree to our{" "}
-                      <a href="/policies/privacy" className="text-brown-600 hover:text-brown-700 underline">
+                      <a href="/policies/privacy" className="text-brown-600 hover:text-brown-700 underline pointer-events-auto">
                         Privacy Policy
                       </a>{" "}
                       and{" "}
-                      <a href="/policies/terms" className="text-brown-600 hover:text-brown-700 underline">
+                      <a href="/policies/terms" className="text-brown-600 hover:text-brown-700 underline pointer-events-auto">
                         Terms of Service
                       </a>
                       . We&apos;ll contact you within 24 hours with a personalized quote.

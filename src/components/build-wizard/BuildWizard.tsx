@@ -80,7 +80,8 @@ export function BuildWizard() {
         form.setValue("step1.projectType", validatedParams.project);
       }
       
-      if (validatedParams.base && ['wander', 'roam', 'premium', 'custom'].includes(validatedParams.base)) {
+      // Only allow wander and premium from URL (roam is coming soon, custom not in URL params)
+      if (validatedParams.base && ['wander', 'premium'].includes(validatedParams.base)) {
         // @ts-expect-error - Temporarily bypass strict typing for deployment
         form.setValue("step1.baseKit", validatedParams.base);
       }
@@ -230,7 +231,7 @@ export function BuildWizard() {
           />
 
           {/* Step Content */}
-          <div className="mt-12 bg-white rounded-2xl shadow-lg border border-borderNeutral overflow-hidden">
+          <div className="mt-12 bg-white rounded-2xl shadow-lg border border-borderNeutral overflow-hidden relative z-20">
             <AnimatePresence mode="wait" custom={currentStep}>
               <m.div
                 key={currentStep}
@@ -243,7 +244,7 @@ export function BuildWizard() {
                   x: { type: "spring", stiffness: 300, damping: 30 },
                   opacity: { duration: 0.2 }
                 }}
-                className="min-h-[500px]"
+                className="min-h-[500px] relative z-20"
               >
                 {renderCurrentStep()}
               </m.div>

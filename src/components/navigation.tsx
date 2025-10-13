@@ -12,6 +12,7 @@ import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const { scrollY } = useScroll();
   const { state } = useCart();
   const { isDisabled } = useReducedMotionSafe();
@@ -43,6 +44,14 @@ export function Navigation() {
     setIsAboutDropdownOpen(false);
   };
 
+  const toggleShopDropdown = () => {
+    setIsShopDropdownOpen(!isShopDropdownOpen);
+  };
+
+  const closeShopDropdown = () => {
+    setIsShopDropdownOpen(false);
+  };
+
   return (
     <motion.header
       className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b border-borderNeutral/30"
@@ -55,7 +64,7 @@ export function Navigation() {
         <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center" onClick={closeMenu}>
-            <BrandLogo width={240} height={84} priority />
+            <BrandLogo width={160} height={56} priority />
           </Link>
 
           {/* Desktop Navigation */}
@@ -67,13 +76,87 @@ export function Navigation() {
               Flat Packs
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-500 group-hover:w-full transition-all duration-300" />
             </Link>
-            <Link
-              href="/shop"
-              className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body py-2 px-4 whitespace-nowrap inline-flex items-center"
-            >
-              Shop All Products
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-500 group-hover:w-full transition-all duration-300" />
-            </Link>
+            
+            {/* Shop Dropdown */}
+            <div className="relative">
+              <button
+                onClick={toggleShopDropdown}
+                onMouseEnter={() => setIsShopDropdownOpen(true)}
+                className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body flex items-center gap-1 py-2 px-4 whitespace-nowrap"
+              >
+                Shop
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isShopDropdownOpen ? 'rotate-180' : ''}`} />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent-500 group-hover:w-full transition-all duration-300" />
+              </button>
+              
+              {/* Shop Dropdown Menu */}
+              <motion.div
+                initial={false}
+                animate={isShopDropdownOpen ? "open" : "closed"}
+                variants={{
+                  open: { opacity: 1, y: 0, scale: 1 },
+                  closed: { opacity: 0, y: -10, scale: 0.95 }
+                }}
+                transition={{ duration: 0.2 }}
+                onMouseLeave={() => setIsShopDropdownOpen(false)}
+                className="absolute top-full left-0 mt-2 w-56 bg-cream-300 border border-borderNeutral rounded-xl shadow-medium overflow-hidden"
+                style={{ display: isShopDropdownOpen ? 'block' : 'none' }}
+              >
+                <div className="py-2">
+                  <Link
+                    href="/shop?category=plumbing"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
+                    onClick={closeShopDropdown}
+                  >
+                    Plumbing
+                  </Link>
+                  <Link
+                    href="/shop?category=electrical"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
+                    onClick={closeShopDropdown}
+                  >
+                    Electrical
+                  </Link>
+                  <Link
+                    href="/shop?category=ventilation"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
+                    onClick={closeShopDropdown}
+                  >
+                    Ventilation
+                  </Link>
+                  <Link
+                    href="/shop?category=water-systems"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
+                    onClick={closeShopDropdown}
+                  >
+                    Water Systems
+                  </Link>
+                  <Link
+                    href="/shop?category=sound-deadening"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
+                    onClick={closeShopDropdown}
+                  >
+                    Sound Deadening
+                  </Link>
+                  <Link
+                    href="/shop?category=accessories"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body"
+                    onClick={closeShopDropdown}
+                  >
+                    Accessories
+                  </Link>
+                  <div className="border-t border-borderNeutral my-2"></div>
+                  <Link
+                    href="/shop"
+                    className="block px-4 py-3 hover:text-accent-600 hover:bg-cream-400 transition-colors duration-200 text-body font-semibold"
+                    onClick={closeShopDropdown}
+                  >
+                    All Products
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+            
             <Link
               href="/start-your-build"
               className="hover:text-accent-600 font-medium transition-colors duration-200 relative group text-body py-2 px-4 whitespace-nowrap inline-flex items-center"
@@ -231,13 +314,63 @@ export function Navigation() {
             >
               Flat Packs
             </Link>
-            <Link
-              href="/shop"
-              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
-              onClick={closeMenu}
-            >
-              Shop All Products
-            </Link>
+            
+            {/* Mobile Shop Section */}
+            <div className="space-y-2">
+              <div className="px-4 py-2 text-body-small font-medium text-textSecondary uppercase tracking-wide">
+                Shop
+              </div>
+              <Link
+                href="/shop?category=plumbing"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
+                onClick={closeMenu}
+              >
+                Plumbing
+              </Link>
+              <Link
+                href="/shop?category=electrical"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
+                onClick={closeMenu}
+              >
+                Electrical
+              </Link>
+              <Link
+                href="/shop?category=ventilation"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
+                onClick={closeMenu}
+              >
+                Ventilation
+              </Link>
+              <Link
+                href="/shop?category=water-systems"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
+                onClick={closeMenu}
+              >
+                Water Systems
+              </Link>
+              <Link
+                href="/shop?category=sound-deadening"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
+                onClick={closeMenu}
+              >
+                Sound Deadening
+              </Link>
+              <Link
+                href="/shop?category=accessories"
+                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
+                onClick={closeMenu}
+              >
+                Accessories
+              </Link>
+              <Link
+                href="/shop"
+                className="block hover:text-accent-600 font-semibold transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
+                onClick={closeMenu}
+              >
+                All Products
+              </Link>
+            </div>
+            
             <Link
               href="/start-your-build"
               className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
