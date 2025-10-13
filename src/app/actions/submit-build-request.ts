@@ -4,6 +4,8 @@ import { Resend } from "resend";
 import { buildWizardSchema, type BuildWizardData } from "@/lib/build-wizard-schema";
 import { addToGoogleSheets, getCurrentTimestamp, type BuildRequestData } from "@/lib/google-sheets";
 
+// Server action for build wizard form submission
+
 // Only initialize Resend if API key is available
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
