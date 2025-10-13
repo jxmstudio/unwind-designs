@@ -101,14 +101,16 @@ export function validateCountry(country: string): { isValid: boolean; error?: st
   return { isValid: true };
 }
 
-export function validateItemName(name: string): { isValid: boolean; error?: string } {
+export function validateItemName(name: string): { isValid: boolean; error?: string; normalizedName?: string } {
   if (!name.trim()) {
     return { isValid: false, error: 'Item name is required' };
   }
+  // Auto-truncate instead of failing validation
+  const normalizedName = name.substring(0, 50);
   if (name.length > 50) {
-    return { isValid: false, error: 'Item name must be 50 characters or less' };
+    console.warn(`Item name truncated from ${name.length} to 50 characters: "${name}" -> "${normalizedName}"`);
   }
-  return { isValid: true };
+  return { isValid: true, normalizedName };
 }
 
 export function validateWeight(weight: number): { isValid: boolean; error?: string } {
@@ -195,6 +197,10 @@ export function validateBigPostFormData(data: BigPostFormData): {
       if (!nameValidation.isValid) {
         errors[`items.${index}.name`] = nameValidation.error!;
         isValid = false;
+      }
+      // Store normalized name for later use
+      if (nameValidation.normalizedName) {
+        item.name = nameValidation.normalizedName;
       }
       
       const weightValidation = validateWeight(item.weight);
