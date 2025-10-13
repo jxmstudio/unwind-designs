@@ -31,7 +31,7 @@ export const step2Schema = z.object({
   }),
   fridgeType: z.enum(["chest", "upright", "none"], {
     message: "Please select a fridge type",
-  }).optional(),
+  }).optional().nullable(),
   finish: z.enum([
     "plain-hardwood",
     "eucalyptus-black-hex", 
@@ -40,7 +40,7 @@ export const step2Schema = z.object({
     "white",
     "plain-birch",
     "premium"
-  ]).optional(),
+  ]).optional().nullable(),
   features: z.array(z.enum([
     "storage-drawers",
     "kitchen-setup", 
@@ -50,7 +50,7 @@ export const step2Schema = z.object({
     "lighting",
     "solar-panel",
     "inverter"
-  ])).default([]),
+  ])).optional().default([]),
 });
 
 // Step 3: Timeline & Budget

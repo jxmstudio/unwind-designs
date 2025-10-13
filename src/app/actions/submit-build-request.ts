@@ -9,12 +9,19 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 
 export async function submitBuildRequest(data: BuildWizardData) {
   try {
+    console.log("=== SUBMISSION ATTEMPT ===");
+    console.log("Data received:", JSON.stringify(data, null, 2));
+    
     // Validate the data
     let validatedData;
     try {
       validatedData = buildWizardSchema.parse(data);
+      console.log("✅ Validation passed");
     } catch (validationError) {
-      console.error("Validation error:", validationError);
+      console.error("❌ Validation error:", validationError);
+      if (validationError instanceof Error) {
+        console.error("Error details:", validationError.message);
+      }
       return {
         success: false,
         message: "Please check all form fields are filled correctly."

@@ -11,8 +11,12 @@ export async function submitContactForm(data: {
   message: string;
 }) {
   try {
+    console.log("=== CONTACT FORM SUBMISSION ===");
+    console.log("Data received:", JSON.stringify(data, null, 2));
+    
     // Validate required fields
     if (!data.name || !data.email || !data.message) {
+      console.error("❌ Missing required fields");
       return {
         success: false,
         message: "Please fill in all required fields."
@@ -22,11 +26,14 @@ export async function submitContactForm(data: {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {
+      console.error("❌ Invalid email format");
       return {
         success: false,
         message: "Please enter a valid email address."
       };
     }
+    
+    console.log("✅ Validation passed");
 
     // Send email using Resend
     if (process.env.RESEND_API_KEY) {
@@ -63,6 +70,7 @@ export async function submitContactForm(data: {
       console.log("✅ Google Sheets: Data saved successfully");
     }
 
+    console.log("✅ CONTACT FORM SUBMISSION COMPLETE");
     return { success: true, message: "Message sent successfully! We'll get back to you soon." };
     
   } catch (error) {

@@ -30,6 +30,7 @@ export function BuildWizard() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const { isDisabled } = useReducedMotionSafe();
 
@@ -103,11 +104,15 @@ export function BuildWizard() {
 
   const handleNext = async () => {
     let isValid = false;
+    setErrorMessage(null); // Clear any previous errors
     
     // Validate current step
     switch (currentStep) {
       case 1:
         isValid = await form.trigger(["step1.projectType", "step1.baseKit"]);
+        if (!isValid) {
+          setErrorMessage("Please complete all required fields in this step");
+        }
         break;
       case 2:
         isValid = await form.trigger([
@@ -116,6 +121,9 @@ export function BuildWizard() {
           "step2.finish", 
           "step2.features"
         ]);
+        if (!isValid) {
+          setErrorMessage("Please complete all required fields in this step");
+        }
         break;
       case 3:
         isValid = await form.trigger([
@@ -123,6 +131,9 @@ export function BuildWizard() {
           "step3.budget", 
           "step3.installationPreference"
         ]);
+        if (!isValid) {
+          setErrorMessage("Please complete all required fields in this step");
+        }
         break;
       case 4:
         isValid = await form.trigger([
@@ -132,11 +143,15 @@ export function BuildWizard() {
           "step4.phone",
           "step4.location"
         ]);
+        if (!isValid) {
+          setErrorMessage("Please complete all required fields in this step");
+        }
         break;
     }
 
     if (isValid && currentStep < 4) {
       setCurrentStep(prev => prev + 1);
+      setErrorMessage(null);
     } else if (isValid && currentStep === 4) {
       await handleSubmit();
     }
@@ -150,6 +165,7 @@ export function BuildWizard() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    setErrorMessage(null);
     
     try {
       const formData = form.getValues();
@@ -158,12 +174,15 @@ export function BuildWizard() {
       
       if (result.success) {
         setIsComplete(true);
+        setErrorMessage(null);
       } else {
-        // Show error message
+        // Show error message to user
+        setErrorMessage(result.message || "Submission failed. Please try again.");
         console.error("Submission failed:", result.message);
       }
     } catch (error) {
       console.error("Submit error:", error);
+      setErrorMessage("An unexpected error occurred. Please try again or contact us directly.");
     } finally {
       setIsSubmitting(false);
     }
@@ -250,6 +269,13 @@ export function BuildWizard() {
               </m.div>
             </AnimatePresence>
           </div>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800 text-sm font-medium">{errorMessage}</p>
+            </div>
+          )}
 
           {/* Navigation */}
           <WizardNavigation
