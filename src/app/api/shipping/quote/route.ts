@@ -111,52 +111,47 @@ export async function POST(request: NextRequest) {
         
         if (!validation.isValid) {
           console.error('BigPost form validation failed:', validation.errors);
-          return NextResponse.json({
-            success: false,
-            error: 'Invalid form data',
-            details: validation.errors,
-            fallbackUsed: true
-          }, { status: 400 });
-        }
-
-        // Format for BigPost API
-        const bigPostRequest = formatForBigPostAPI(validation.normalizedData);
-
-        console.log('BigPost API request:', bigPostRequest);
-
-        // Call BigPost API
-        console.log('Calling BigPost API with request:', JSON.stringify(bigPostRequest, null, 2));
-        const response = await bigPostAPI.getQuote(bigPostRequest);
-        console.log('BigPost API response:', JSON.stringify(response, null, 2));
-        
-        if (response.Success && response.Quotes && response.Quotes.length > 0) {
-          // Transform BigPost quotes to our format
-          const quotes = response.Quotes.map(quote => ({
-            service: quote.ServiceName || 'Standard Shipping',
-            price: quote.Price || 0,
-            deliveryDays: quote.EstimatedDeliveryDays || 3,
-            description: quote.Description || 'BigPost delivery',
-            carrier: quote.CarrierName || 'BigPost',
-            restrictions: quote.Restrictions || [],
-            source: 'bigpost' as const,
-            // Store additional BigPost data for booking
-            carrierId: quote.CarrierId,
-            serviceCode: quote.ServiceCode,
-            authorityToLeave: quote.AuthorityToLeave || false,
-            originalQuote: quote // Store full quote for booking
-          }));
-
-          console.log('BigPost quotes received:', quotes);
-
-          return NextResponse.json({
-            success: true,
-            quotes,
-            fallbackUsed: false,
-          });
+          console.log('Falling back to local calculator due to validation failure');
+          // Don't return error, fall through to fallback
         } else {
-          console.warn('BigPost API returned no quotes:', response.ErrorMessage);
-          console.log('Falling back to local calculator due to no quotes');
-          // Fall through to fallback
+          // Format for BigPost API
+          const bigPostRequest = formatForBigPostAPI(validation.normalizedData);
+
+          console.log('BigPost API request:', JSON.stringify(bigPostRequest, null, 2));
+
+          // Call BigPost API
+          const response = await bigPostAPI.getQuote(bigPostRequest);
+          console.log('BigPost API response:', JSON.stringify(response, null, 2));
+          
+          if (response.Success && response.Quotes && response.Quotes.length > 0) {
+            // Transform BigPost quotes to our format
+            const quotes = response.Quotes.map(quote => ({
+              service: quote.ServiceName || 'Standard Shipping',
+              price: quote.Price || 0,
+              deliveryDays: quote.EstimatedDeliveryDays || 3,
+              description: quote.Description || 'BigPost delivery',
+              carrier: quote.CarrierName || 'BigPost',
+              restrictions: quote.Restrictions || [],
+              source: 'bigpost' as const,
+              // Store additional BigPost data for booking
+              carrierId: quote.CarrierId,
+              serviceCode: quote.ServiceCode,
+              authorityToLeave: quote.AuthorityToLeave || false,
+              originalQuote: quote // Store full quote for booking
+            }));
+
+            console.log('BigPost quotes received:', quotes);
+
+            return NextResponse.json({
+              success: true,
+              quotes,
+              fallbackUsed: false,
+            });
+          } else {
+            console.warn('BigPost API returned no quotes:', response.ErrorMessage);
+            console.log('Falling back to local calculator due to no quotes');
+            // Fall through to fallback
+          }
         }
       } catch (error) {
         console.error('BigPost API error:', error);
