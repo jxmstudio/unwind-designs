@@ -69,7 +69,10 @@ export function WizardNavigation({
         >
           <Button
             type="button"
-            onClick={onNext}
+            onClick={(e) => {
+              e.preventDefault();
+              onNext();
+            }}
             disabled={isSubmitting}
             className="bg-brown-500 hover:bg-brown-600 text-white px-6 py-3 font-medium shadow-lg hover:shadow-xl transition-all duration-300"
           >

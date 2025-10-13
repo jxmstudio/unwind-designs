@@ -126,13 +126,18 @@ export function BuildWizard() {
         }
         break;
       case 3:
+        // Run RHF validation
         isValid = await form.trigger([
           "step3.timeline", 
           "step3.budget", 
           "step3.installationPreference"
         ]);
-        if (!isValid) {
-          setErrorMessage("Please complete all required fields in this step");
+        // Extra hard guard: ensure values exist before allowing progress
+        const step3Values = form.getValues().step3 as any;
+        const missing = !step3Values?.timeline || !step3Values?.budget || !step3Values?.installationPreference;
+        if (!isValid || missing) {
+          isValid = false;
+          setErrorMessage("Please select a Timeline, Budget, and Installation preference to continue");
         }
         break;
       case 4:
