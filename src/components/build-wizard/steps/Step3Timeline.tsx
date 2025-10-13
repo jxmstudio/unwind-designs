@@ -75,7 +75,7 @@ const installationOptions = [
 ];
 
 export function Step3Timeline() {
-  const { watch, setValue, formState: { errors } } = useFormContext();
+  const { watch, setValue, register, formState: { errors } } = useFormContext();
   const { isDisabled } = useReducedMotionSafe();
   
   const selectedTimeline = watch("step3.timeline");
@@ -109,6 +109,10 @@ export function Step3Timeline() {
         animate={isDisabled ? {} : "visible"}
         variants={isDisabled ? {} : staggerContainer}
       >
+        {/* Hidden inputs to register required fields with validation */}
+        <input type="hidden" {...register("step3.timeline", { required: "Please select your preferred timeline" })} />
+        <input type="hidden" {...register("step3.budget", { required: "Please select a budget range" })} />
+        <input type="hidden" {...register("step3.installationPreference", { required: "Please select an installation preference" })} />
         {/* Header */}
         <m.div variants={isDisabled ? {} : staggerItem} className="text-center mb-8">
           <h2 className="text-3xl font-bold text-textPrimary mb-3">
