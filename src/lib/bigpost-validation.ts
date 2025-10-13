@@ -79,7 +79,7 @@ export function validateState(state: string): { isValid: boolean; error?: string
   return { isValid: false, error: 'Please select a valid Australian state' };
 }
 
-export function validatePostcode(postcode: string): { isValid: boolean; error?: string } {
+export function validatePostcode(postcode: string): { isValid: boolean; error?: string; normalizedPostcode?: string } {
   if (!postcode.trim()) {
     return { isValid: false, error: 'Postcode is required' };
   }
@@ -243,20 +243,23 @@ export function validateBigPostFormData(data: BigPostFormData): {
 export function formatForBigPostAPI(normalizedData: any) {
   // Check if this needs pallet shipping (over 40kg)
   const needsPallet = normalizedData.items.some((item: any) => item.weight > 40);
+  
+  // JobType: 1=DEPOT, 2=DIRECT, 3=HOME_DELIVERY
+  // Use HOME_DELIVERY (3) for regular customers, DIRECT (2) for heavy items
+  const jobType = needsPallet ? 2 : 3;
 
   return {
-    JobType: needsPallet ? 2 : undefined, // Use pallet job type (2) for items over 40kg
-    BuyerIsBusiness: needsPallet, // Set as business for pallet deliveries
-    BuyerHasForklift: needsPallet, // Enable forklift for pallet deliveries
-    ReturnAuthorityToLeaveOptions: !needsPallet, // Disable for pallet deliveries
-    JobDate: new Date().toISOString(),
+    JobType: jobType,
+    BuyerIsBusiness: needsPallet, // Must be false for HOME_DELIVERY (JobType=3)
+    BuyerHasForklift: needsPallet, // Enable forklift for heavy deliveries
+    ReturnAuthorityToLeaveOptions: !needsPallet, // Enable for items 40kg or less
     PickupLocation: {
       Name: 'Unwind Designs',
-      Address: '123 Workshop St',
+      Address: 'Export Drive',
       AddressLineTwo: '',
       Locality: {
-        Suburb: 'Melbourne',
-        Postcode: '3000',
+        Suburb: 'Brooklyn',
+        Postcode: '3012',
         State: 'VIC'
       }
     },
@@ -265,24 +268,24 @@ export function formatForBigPostAPI(normalizedData: any) {
       Address: normalizedData.street.substring(0, 30),
       AddressLineTwo: '',
       Locality: {
-        Suburb: normalizedData.city,
+        Suburb: normalizedData.city.substring(0, 30),
         Postcode: normalizedData.postcode,
         State: normalizedData.state
       }
     },
     Items: normalizedData.items.map((item: any) => {
       // Check if this needs to be on a pallet (over 40kg)
-      const needsPallet = item.weight > 40;
+      const itemNeedsPallet = item.weight > 40;
       
       return {
-        ItemType: needsPallet ? 2 : 0, // Use pallet item type (2) for items over 40kg
-        Description: item.name,
+        ItemType: itemNeedsPallet ? 2 : 0, // 0=CARTON, 2=PALLET
+        Description: item.name.substring(0, 50),
         Quantity: item.quantity,
         Height: item.dimensions.height,
         Width: item.dimensions.width,
         Length: item.dimensions.length,
         Weight: item.weight,
-        Consolidatable: !needsPallet // Don't consolidate pallet items
+        Consolidatable: !itemNeedsPallet // Don't consolidate pallet items
       };
     })
   };

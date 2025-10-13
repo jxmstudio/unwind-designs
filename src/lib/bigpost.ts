@@ -121,6 +121,8 @@ class BigPostAPIClient {
 
           console.error(`BigPost API Error ${response.status}:`, {
             url: url,
+            method: method,
+            requestBody: body,
             status: response.status,
             statusText: response.statusText,
             headers: Object.fromEntries(response.headers.entries()),

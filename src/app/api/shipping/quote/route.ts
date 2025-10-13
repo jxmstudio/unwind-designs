@@ -125,9 +125,9 @@ export async function POST(request: NextRequest) {
         console.log('BigPost API request:', bigPostRequest);
 
         // Call BigPost API
-        console.log('Calling BigPost API...');
+        console.log('Calling BigPost API with request:', JSON.stringify(bigPostRequest, null, 2));
         const response = await bigPostAPI.getQuote(bigPostRequest);
-        console.log('BigPost API response:', response);
+        console.log('BigPost API response:', JSON.stringify(response, null, 2));
         
         if (response.Success && response.Quotes && response.Quotes.length > 0) {
           // Transform BigPost quotes to our format
