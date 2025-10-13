@@ -81,7 +81,11 @@ export function EverlockLatchesPage({ product }: EverlockLatchesPageProps) {
       price: variant.price,
       image: product.images[selectedImageIndex],
       category: product.category,
-      shortDescription: product.shortDescription || product.description
+      shortDescription: product.shortDescription || product.description,
+      // Include shipping data for accurate quotes
+      weight: product.weight || 1,
+      dimensions: product.dimensions,
+      shipClass: product.shipClass || 'standard'
     };
 
     addItem(cartItem);
@@ -102,7 +106,11 @@ export function EverlockLatchesPage({ product }: EverlockLatchesPageProps) {
         originalPrice: product.originalPrice,
         image: product.images[selectedImageIndex] || product.images[0] || '',
         category: product.category,
-        shortDescription: product.shortDescription
+        shortDescription: product.shortDescription,
+        // Include shipping data for accurate quotes
+        weight: product.weight || 1,
+        dimensions: product.dimensions,
+        shipClass: product.shipClass || 'standard'
       });
       
       console.log(`Added ${quantity} x ${product.name} (${selectedColorLabel}, ${selectedThicknessLabel}) to cart`);

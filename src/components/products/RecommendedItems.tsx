@@ -62,7 +62,11 @@ export function RecommendedItems({
           price: product.price,
           image: product.images[0] || "",
           category: product.category,
-          shortDescription: product.shortDescription
+          shortDescription: product.shortDescription,
+          // Include shipping data for accurate quotes
+          weight: product.weight || 1,
+          dimensions: product.dimensions,
+          shipClass: product.shipClass || 'standard'
         });
       }
     });
@@ -76,7 +80,11 @@ export function RecommendedItems({
       price: product.price,
       image: product.images[0] || "",
       category: product.category,
-      shortDescription: product.shortDescription
+      shortDescription: product.shortDescription,
+      // Include shipping data for accurate quotes
+      weight: product.weight || 1,
+      dimensions: product.dimensions,
+      shipClass: product.shipClass || 'standard'
     });
   };
 

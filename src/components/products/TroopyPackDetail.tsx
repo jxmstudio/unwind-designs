@@ -41,7 +41,11 @@ export function TroopyPackDetail({
         price: selectedVariant.price,
         image: selectedVariant.images[0] || '',
         category: selectedVariant.category,
-        shortDescription: selectedVariant.shortDescription
+        shortDescription: selectedVariant.shortDescription,
+        // Include shipping data for accurate quotes
+        weight: selectedVariant.weight || 1,
+        dimensions: selectedVariant.dimensions,
+        shipClass: selectedVariant.shipClass || 'standard'
       });
     }
   };

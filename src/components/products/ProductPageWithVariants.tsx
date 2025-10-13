@@ -28,7 +28,11 @@ export function ProductPageWithVariants({ product, children }: ProductPageWithVa
       price: variant.price,
       image: product.images?.[0] || '',
       category: product.category,
-      shortDescription: product.shortDescription || product.description
+      shortDescription: product.shortDescription || product.description,
+      // Include shipping data for accurate quotes
+      weight: product.weight || 1,
+      dimensions: product.dimensions,
+      shipClass: product.shipClass || 'standard'
     };
 
     addItem(cartItem);

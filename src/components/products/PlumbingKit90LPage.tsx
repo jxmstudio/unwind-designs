@@ -52,7 +52,11 @@ export function PlumbingKit90LPage({ product }: PlumbingKit90LPageProps) {
       price: variant.price,
       image: product.images[selectedImageIndex],
       category: product.category,
-      shortDescription: product.shortDescription
+      shortDescription: product.shortDescription,
+      // Include shipping data for accurate quotes
+      weight: product.weight || 1,
+      dimensions: product.dimensions,
+      shipClass: product.shipClass || 'standard'
     };
 
     addItem(cartItem);

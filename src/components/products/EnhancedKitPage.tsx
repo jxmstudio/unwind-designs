@@ -67,7 +67,12 @@ export function EnhancedKitPage({
         name: selectedVariant.name,
         price: selectedVariant.price,
         image: selectedVariant.images[0] || '',
-        category: selectedVariant.category
+        category: selectedVariant.category,
+        shortDescription: selectedVariant.shortDescription,
+        // Include shipping data for accurate quotes
+        weight: selectedVariant.weight || 1,
+        dimensions: selectedVariant.dimensions,
+        shipClass: selectedVariant.shipClass || 'standard'
       });
     }
   };

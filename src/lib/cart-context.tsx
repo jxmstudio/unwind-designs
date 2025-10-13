@@ -341,6 +341,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         items: cartItems,
         totalValue: state.total,
       });
+      console.log('Cart items with weights:', cartItems.map(item => ({
+        name: item.name,
+        weight: item.weight,
+        quantity: item.quantity,
+        totalWeight: item.weight * item.quantity
+      })));
 
       // Convert to BigPost API format
       const bigPostRequest = {
