@@ -286,8 +286,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         id: item.id,
         name: item.name,
         quantity: item.quantity,
-        weight: item.weight || 1, // Use actual product weight
-        dimensions: item.dimensions || { length: 30, width: 20, height: 10 }, // Use actual dimensions
+        weight: item.weight || 1, // Use actual product weight (120kg for flat packs)
+        dimensions: item.dimensions ? {
+          // Convert millimeters to centimeters for BigPost API
+          length: Math.min(item.dimensions.length / 10, 200),
+          width: Math.min(item.dimensions.width / 10, 200),
+          height: Math.min(item.dimensions.height / 10, 200)
+        } : { length: 30, width: 20, height: 10 }, // Use actual dimensions
         shipClass: item.shipClass || 'standard' as const,
         price: item.price,
       }));
@@ -300,7 +305,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       // Convert to BigPost API format
       const bigPostRequest = {
-        JobType: 2, // DIRECT (single integer, not array)
+        JobType: undefined, // Let BigPost return quotes for all job types
         BuyerIsBusiness: false,
         BuyerHasForklift: false,
         ReturnAuthorityToLeaveOptions: true,
@@ -338,12 +343,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }))
       };
 
-      const response = await fetch('/api/bigpost/get-quote', {
+      const response = await fetch('/api/shipping/quote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bigPostRequest),
+        body: JSON.stringify({
+          deliveryAddress: shippingAddress,
+          items: cartItems,
+          totalValue: state.total,
+        }),
       });
 
       if (!response.ok) {

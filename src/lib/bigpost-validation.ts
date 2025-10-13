@@ -241,11 +241,14 @@ export function validateBigPostFormData(data: BigPostFormData): {
 
 // Helper function to format data for BigPost API
 export function formatForBigPostAPI(normalizedData: any) {
+  // Check if this needs pallet shipping (over 40kg)
+  const needsPallet = normalizedData.items.some((item: any) => item.weight > 40);
+
   return {
-    JobType: 2, // Direct delivery
-    BuyerIsBusiness: false,
-    BuyerHasForklift: false,
-    ReturnAuthorityToLeaveOptions: true,
+    JobType: needsPallet ? 2 : undefined, // Use pallet job type (2) for items over 40kg
+    BuyerIsBusiness: needsPallet, // Set as business for pallet deliveries
+    BuyerHasForklift: needsPallet, // Enable forklift for pallet deliveries
+    ReturnAuthorityToLeaveOptions: !needsPallet, // Disable for pallet deliveries
     JobDate: new Date().toISOString(),
     PickupLocation: {
       Name: 'Unwind Designs',
@@ -267,15 +270,20 @@ export function formatForBigPostAPI(normalizedData: any) {
         State: normalizedData.state
       }
     },
-    Items: normalizedData.items.map((item: any) => ({
-      ItemType: 0, // Carton
-      Description: item.name,
-      Quantity: item.quantity,
-      Height: item.dimensions.height,
-      Width: item.dimensions.width,
-      Length: item.dimensions.length,
-      Weight: item.weight,
-      Consolidatable: true
-    }))
+    Items: normalizedData.items.map((item: any) => {
+      // Check if this needs to be on a pallet (over 40kg)
+      const needsPallet = item.weight > 40;
+      
+      return {
+        ItemType: needsPallet ? 2 : 0, // Use pallet item type (2) for items over 40kg
+        Description: item.name,
+        Quantity: item.quantity,
+        Height: item.dimensions.height,
+        Width: item.dimensions.width,
+        Length: item.dimensions.length,
+        Weight: item.weight,
+        Consolidatable: !needsPallet // Don't consolidate pallet items
+      };
+    })
   };
 }
