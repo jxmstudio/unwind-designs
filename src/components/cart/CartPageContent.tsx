@@ -401,29 +401,68 @@ export function CartPageContent() {
               {state.shipping.quotes.length > 0 && (
                 <div className="space-y-3">
                   <h3 className="font-semibold text-textPrimary">Select Shipping Method:</h3>
-                  {state.shipping.quotes.map((quote, index) => (
-                    <div
-                      key={index}
-                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                        state.shipping.selectedQuote === quote
-                          ? 'border-brown-500 bg-brown-50'
-                          : 'border-borderNeutral hover:border-brown-300'
-                      }`}
-                      onClick={() => selectShippingQuote(quote)}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <div className="font-medium text-textPrimary">{quote.service}</div>
-                          <div className="text-sm text-textSecondary">
-                            {quote.deliveryDays} business days • {quote.carrier || 'Standard carrier'}
+                  {state.shipping.quotes.map((quote, index) => {
+                    // Determine badges
+                    const isCheapest = index === 0;
+                    const isFastest = quote.deliveryDays === Math.min(...state.shipping.quotes.map(q => q.deliveryDays));
+                    const isLeaveSafe = quote.description?.toLowerCase().includes('leave safe');
+                    
+                    return (
+                      <div
+                        key={index}
+                        className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                          state.shipping.selectedQuote === quote
+                            ? 'border-brown-500 bg-brown-50 shadow-md'
+                            : 'border-borderNeutral hover:border-brown-300 hover:shadow-sm'
+                        }`}
+                        onClick={() => selectShippingQuote(quote)}
+                      >
+                        <div className="flex justify-between items-start gap-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <div className="font-medium text-textPrimary">{quote.service}</div>
+                              {isCheapest && (
+                                <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                                  Cheapest
+                                </span>
+                              )}
+                              {isFastest && !isCheapest && (
+                                <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
+                                  Fastest
+                                </span>
+                              )}
+                              {isLeaveSafe && (
+                                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full">
+                                  Leave Safe
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-sm text-textSecondary">
+                              {quote.deliveryDays} business day{quote.deliveryDays !== 1 ? 's' : ''} • {quote.carrier || 'Standard carrier'}
+                            </div>
+                            {isLeaveSafe && (
+                              <div className="text-xs text-green-600 mt-1">
+                                ✓ No signature required - can be left at door
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-brown-500">
+                              ${quote.price.toFixed(2)}
+                            </div>
+                            {isCheapest && (
+                              <div className="text-xs text-green-600 font-medium">
+                                Best price
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <div className="text-lg font-semibold text-brown-500">
-                          ${quote.price.toFixed(2)}
-                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
+                  <div className="text-xs text-textSecondary bg-blue-50 p-3 rounded-lg border border-blue-200">
+                    💡 <strong>Tip:</strong> "Leave Safe" options are cheaper because the package can be left at your door without a signature.
+                  </div>
                 </div>
               )}
 

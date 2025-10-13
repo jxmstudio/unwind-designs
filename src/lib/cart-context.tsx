@@ -267,6 +267,45 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'SET_SHIPPING_ADDRESS', payload: address });
   };
 
+  // Helper function to process and filter shipping quotes
+  const processShippingQuotes = (quotes: ShippingQuote[]): ShippingQuote[] => {
+    // Identify "Leave Safe" options (typically cheaper, no signature required)
+    const leaveSafeQuotes = quotes.filter(q => 
+      q.description?.toLowerCase().includes('leave safe') ||
+      q.description?.toLowerCase().includes('leave authority') ||
+      q.service?.toLowerCase().includes('leave safe')
+    );
+    
+    // Identify signature required options
+    const signatureQuotes = quotes.filter(q => 
+      !leaveSafeQuotes.includes(q) &&
+      (q.description?.toLowerCase().includes('signature') ||
+       !q.description?.toLowerCase().includes('leave safe'))
+    );
+    
+    // Sort both groups by price (cheapest first)
+    leaveSafeQuotes.sort((a, b) => a.price - b.price);
+    signatureQuotes.sort((a, b) => a.price - b.price);
+    
+    // Take best options from each category
+    const bestLeaveSafe = leaveSafeQuotes.slice(0, 3); // Top 3 "Leave Safe" options
+    const bestSignature = signatureQuotes.slice(0, 2); // Top 2 signature options
+    
+    // Combine and return (Leave Safe first since they're cheaper)
+    const finalQuotes = [...bestLeaveSafe, ...bestSignature];
+    
+    // If we don't have enough quotes, fill with remaining options
+    if (finalQuotes.length < 5) {
+      const remaining = quotes
+        .filter(q => !finalQuotes.includes(q))
+        .sort((a, b) => a.price - b.price)
+        .slice(0, 5 - finalQuotes.length);
+      finalQuotes.push(...remaining);
+    }
+    
+    return finalQuotes.slice(0, 6); // Max 6 options
+  };
+
   const getShippingQuotes = async (address?: ShippingState['address']) => {
     const shippingAddress = address || state.shipping.address;
     
@@ -364,7 +403,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       if (data.success && data.quotes && data.quotes.length > 0) {
         // Convert BigPost quotes to our format
-        const shippingQuotes: ShippingQuote[] = data.quotes.map((quote: any) => ({
+        const allQuotes: ShippingQuote[] = data.quotes.map((quote: any) => ({
           service: quote.ServiceCode || quote.ServiceName || 'Shipping',
           price: quote.Price || quote.Total || quote.price || 0,
           deliveryDays: quote.EstimatedDeliveryDays || quote.deliveryDays || 5,
@@ -373,14 +412,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           source: data.fallback ? 'fallback' : 'bigpost'
         }));
         
-        console.log('Mapped shipping quotes:', shippingQuotes);
+        console.log('All shipping quotes:', allQuotes);
         
-        dispatch({ type: 'SET_SHIPPING_QUOTES', payload: shippingQuotes });
-        // Auto-select the first quote
-        if (shippingQuotes.length > 0) {
-          dispatch({ type: 'SELECT_SHIPPING_QUOTE', payload: shippingQuotes[0] });
+        // Filter and sort quotes to show only the best options
+        const processedQuotes = processShippingQuotes(allQuotes);
+        console.log('Processed shipping quotes:', processedQuotes);
+        
+        dispatch({ type: 'SET_SHIPPING_QUOTES', payload: processedQuotes });
+        // Auto-select the cheapest quote
+        if (processedQuotes.length > 0) {
+          dispatch({ type: 'SELECT_SHIPPING_QUOTE', payload: processedQuotes[0] });
         }
-        return shippingQuotes;
+        return processedQuotes;
       } else {
         console.warn('No shipping quotes available:', data);
         dispatch({ type: 'SET_SHIPPING_ERROR', payload: data.error || 'No shipping quotes available' });
