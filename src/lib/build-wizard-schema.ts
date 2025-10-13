@@ -7,9 +7,21 @@ export const step1Schema = z.object({
   }),
   baseKit: z.enum(["wander", "roam", "premium", "custom"], {
     message: "Please select a base kit",
-  }).optional().refine((val) => val !== "roam", {
-    message: "Roam Kit is coming soon and not available for selection yet. Please choose another kit.",
-  }),
+  }).optional(),
+}).refine((data) => {
+  // Only validate baseKit for flat-pack projects
+  if (data.projectType === "flat-pack") {
+    if (!data.baseKit) {
+      return false; // baseKit is required for flat-pack
+    }
+    if (data.baseKit === "roam") {
+      return false; // roam is not available yet
+    }
+  }
+  return true;
+}, {
+  message: "Please select a valid base kit for your flat pack project",
+  path: ["baseKit"],
 });
 
 // Step 2: Configuration Details

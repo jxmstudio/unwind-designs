@@ -141,7 +141,7 @@ export function Step3Timeline() {
                         ? 'ring-2 ring-brown-500 bg-brown-50' 
                         : 'hover:border-brown-300'
                     }`}
-                    onClick={() => setValue("step3.timeline", timeline.id as 'asap' | '1-3-months' | '3-6-months' | 'flexible', { shouldValidate: true })}
+                    onClick={() => setValue("step3.timeline", timeline.id as 'asap' | '1-month' | '2-3-months' | '3-6-months' | 'flexible', { shouldValidate: true })}
                   >
                     <CardContent className="p-4 text-center">
                       <div className="flex flex-col items-center">
@@ -194,7 +194,7 @@ export function Step3Timeline() {
                         ? 'ring-2 ring-brown-500 bg-brown-50' 
                         : 'hover:border-brown-300'
                     }`}
-                    onClick={() => setValue("step3.budget", budget.id as 'under-10k' | '10k-20k' | '20k-35k' | 'over-35k', { shouldValidate: true })}
+                    onClick={() => setValue("step3.budget", budget.id as 'under-5k' | '5k-10k' | '10k-20k' | '20k-plus' | 'discuss', { shouldValidate: true })}
                   >
                     <CardContent className="p-5">
                       <div className="flex items-start justify-between mb-2">
@@ -252,7 +252,7 @@ export function Step3Timeline() {
                         ? 'ring-2 ring-brown-500 bg-brown-50' 
                         : 'hover:border-brown-300'
                     }`}
-                    onClick={() => setValue("step3.installationPreference", installation.id as 'self-install' | 'partial-help' | 'full-service', { shouldValidate: true })}
+                    onClick={() => setValue("step3.installationPreference", installation.id as 'diy' | 'professional' | 'partial-help', { shouldValidate: true })}
                   >
                     <CardContent className="p-5">
                       <div className="flex items-center justify-between mb-3">
