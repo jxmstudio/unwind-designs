@@ -188,6 +188,7 @@ export function Navigation() {
                 transition={{ duration: 0.2 }}
                 onMouseLeave={() => setIsAboutDropdownOpen(false)}
                 className="absolute top-full left-0 mt-2 w-48 bg-cream-300 border border-borderNeutral rounded-xl shadow-medium overflow-hidden"
+                style={{ display: isAboutDropdownOpen ? 'block' : 'none' }}
               >
                 <div className="py-2">
                   <Link
