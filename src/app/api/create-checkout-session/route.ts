@@ -122,17 +122,20 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    console.error('Error creating checkout session:', error);
-    console.error('Error details:', {
-      message: errorMessage,
-      type: error instanceof Error ? error.constructor.name : typeof error,
-      stack: error instanceof Error ? error.stack : undefined
-    });
+    console.error('=== ERROR CREATING CHECKOUT SESSION ===');
+    console.error('Error:', error);
+    console.error('Error message:', errorMessage);
+    console.error('Error type:', error instanceof Error ? error.constructor.name : typeof error);
+    console.error('Error stack:', error instanceof Error ? error.stack : undefined);
+    console.error('Request body that caused error:', body);
+    console.error('==========================================');
+    
     return NextResponse.json(
       { 
         error: 'Failed to create checkout session',
         details: errorMessage,
-        type: error instanceof Error ? error.constructor.name : typeof error
+        type: error instanceof Error ? error.constructor.name : typeof error,
+        message: 'Check server logs for details'
       },
       { status: 500 }
     );

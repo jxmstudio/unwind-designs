@@ -412,11 +412,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           source: data.fallback ? 'fallback' : 'bigpost'
         }));
         
-        console.log('All shipping quotes:', allQuotes);
+        console.log('=== All shipping quotes received ===', allQuotes.length);
+        console.log(allQuotes);
         
         // Filter and sort quotes to show only the best options
         const processedQuotes = processShippingQuotes(allQuotes);
-        console.log('Processed shipping quotes:', processedQuotes);
+        console.log('=== Processed shipping quotes (filtered) ===', processedQuotes.length);
+        console.log(processedQuotes);
         
         dispatch({ type: 'SET_SHIPPING_QUOTES', payload: processedQuotes });
         // Auto-select the cheapest quote
