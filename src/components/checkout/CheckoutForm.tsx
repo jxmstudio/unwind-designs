@@ -335,49 +335,48 @@ export function CheckoutForm() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="city" className="text-body-small font-semibold">Suburb *</Label>
-                      <SuburbAutocomplete
-                        state={formData.state ? (formData.state as any) : undefined}
+                      <Input
+                        id="city"
                         value={formData.city}
-                        onChange={(value) => handleInputChange('city', value)}
-                        onSuburbSelect={(suburb) => {
-                          setFormData(prev => ({
-                            ...prev,
-                            city: suburb.Suburb,
-                            state: suburb.State,
-                            postcode: suburb.Postcode
-                          }));
-                        }}
-                        placeholder="Start typing suburb name..."
+                        onChange={(e) => handleInputChange('city', e.target.value)}
+                        required
+                        placeholder="Enter suburb name (e.g., Ropes Crossing, South Brisbane)"
+                        maxLength={30}
                       />
                       <p className="text-xs text-gray-500">
-                        Type to search all Australian suburbs
+                        Enter your suburb name ({formData.city.length}/30)
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="state" className="text-body-small font-semibold">State</Label>
-                      <Input
+                      <Label htmlFor="state" className="text-body-small font-semibold">State *</Label>
+                      <select
                         id="state"
                         value={formData.state}
-                        disabled
-                        className="bg-gray-100"
-                        placeholder="Auto-filled from suburb"
-                      />
-                      <p className="text-xs text-gray-500">
-                        Auto-populated from suburb selection
-                      </p>
+                        onChange={(e) => handleInputChange('state', e.target.value)}
+                        required
+                        className="w-full px-4 py-3 bg-surface-50 border border-borderNeutral rounded-xl text-textPrimary focus:outline-none focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 transition-all duration-200"
+                      >
+                        <option value="">Select state</option>
+                        <option value="NSW">NSW</option>
+                        <option value="VIC">VIC</option>
+                        <option value="QLD">QLD</option>
+                        <option value="SA">SA</option>
+                        <option value="WA">WA</option>
+                        <option value="TAS">TAS</option>
+                        <option value="NT">NT</option>
+                        <option value="ACT">ACT</option>
+                      </select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="postcode" className="text-body-small font-semibold">Postcode</Label>
+                      <Label htmlFor="postcode" className="text-body-small font-semibold">Postcode *</Label>
                       <Input
                         id="postcode"
                         value={formData.postcode}
-                        disabled
-                        className="bg-gray-100"
-                        placeholder="Auto-filled from suburb"
+                        onChange={(e) => handleInputChange('postcode', e.target.value)}
+                        required
+                        placeholder="Enter postcode"
+                        maxLength={4}
                       />
-                      <p className="text-xs text-gray-500">
-                        Auto-populated from suburb selection
-                      </p>
                     </div>
                   </div>
                   <div className="space-y-2">

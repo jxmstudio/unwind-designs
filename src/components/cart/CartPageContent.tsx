@@ -308,49 +308,47 @@ export function CartPageContent() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="city">Suburb</Label>
-                  <SuburbAutocomplete
-                    state={shippingAddressForm.state ? (shippingAddressForm.state as any) : undefined}
+                  <Input
+                    id="city"
                     value={shippingAddressForm.city || ''}
-                    onChange={(value) => setShippingAddressForm(prev => ({ ...prev, city: value }))}
-                    onSuburbSelect={(suburb) => {
-                      setShippingAddressForm(prev => ({
-                        ...prev,
-                        city: suburb.Suburb,
-                        state: suburb.State,
-                        postcode: suburb.Postcode
-                      }));
-                    }}
-                    placeholder="Start typing suburb name..."
+                    onChange={(e) => setShippingAddressForm(prev => ({ ...prev, city: e.target.value }))}
+                    placeholder="Enter suburb name (e.g., Ropes Crossing, South Brisbane)"
+                    maxLength={30}
                   />
                   <p className="text-xs text-gray-500">
-                    Type to search all Australian suburbs
+                    Enter your suburb name ({shippingAddressForm?.city?.length || 0}/30)
                   </p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="state">State</Label>
-                  <Input
-                    id="state"
+                  <Select 
                     value={shippingAddressForm?.state || ''}
-                    disabled
-                    className="bg-gray-100"
-                    placeholder="Auto-filled from suburb"
-                  />
-                  <p className="text-xs text-gray-500">
-                    Auto-populated from suburb selection
-                  </p>
+                    onValueChange={(value) => setShippingAddressForm(prev => ({ ...prev, state: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="NSW">NSW</SelectItem>
+                      <SelectItem value="VIC">VIC</SelectItem>
+                      <SelectItem value="QLD">QLD</SelectItem>
+                      <SelectItem value="SA">SA</SelectItem>
+                      <SelectItem value="WA">WA</SelectItem>
+                      <SelectItem value="TAS">TAS</SelectItem>
+                      <SelectItem value="NT">NT</SelectItem>
+                      <SelectItem value="ACT">ACT</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postcode">Postcode</Label>
                   <Input
                     id="postcode"
                     value={shippingAddressForm?.postcode || ''}
-                    disabled
-                    className="bg-gray-100"
-                    placeholder="Auto-filled from suburb"
+                    onChange={(e) => setShippingAddressForm(prev => ({ ...prev, postcode: e.target.value }))}
+                    placeholder="Enter postcode"
+                    maxLength={4}
                   />
-                  <p className="text-xs text-gray-500">
-                    Auto-populated from suburb selection
-                  </p>
                 </div>
               </div>
               
