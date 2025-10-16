@@ -350,6 +350,26 @@ export function Navigation() {
               </div>
             </div>
 
+            {/* Mobile Cart Button */}
+            <div className="px-4 pb-2">
+              <Link href="/cart" onClick={closeMenu}>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 font-medium text-base relative flex items-center justify-center gap-2 min-h-[44px]"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  Cart
+                  {state.itemCount > 0 && (
+                    <span 
+                      className="ml-2 px-2 py-0.5 bg-error-500 text-white text-sm rounded-full font-semibold"
+                    >
+                      {state.itemCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
+            </div>
+
             <Link
               href="/flat-packs"
               className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3.5 px-6 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
@@ -512,26 +532,6 @@ export function Navigation() {
             >
               Contact
             </Link>
-
-            {/* Mobile Cart Button */}
-            <div className="px-4 pt-2">
-              <Link href="/cart" onClick={closeMenu}>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 font-medium text-base relative flex items-center justify-center gap-2 min-h-[44px]"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                  Cart
-                  {state.itemCount > 0 && (
-                    <span 
-                      className="ml-2 px-2 py-0.5 bg-error-500 text-white text-sm rounded-full font-semibold"
-                    >
-                      {state.itemCount}
-                    </span>
-                  )}
-                </Button>
-              </Link>
-            </div>
           </div>
         </motion.div>
       </nav>
