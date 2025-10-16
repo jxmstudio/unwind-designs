@@ -90,6 +90,8 @@ export async function POST(request: NextRequest) {
       }
     });
     
+    let fallbackReason: string | undefined;
+    
     if (bigPostEnabled && hasApiKey) {
       try {
         // Validate and format data for BigPost API
@@ -116,6 +118,7 @@ export async function POST(request: NextRequest) {
         if (!validation.isValid) {
           console.error('BigPost form validation failed:', validation.errors);
           console.log('Falling back to local calculator due to validation failure');
+          fallbackReason = `Validation failed: ${JSON.stringify(validation.errors)}`;
           // Don't return error, fall through to fallback
         } else {
           // Format for BigPost API
@@ -154,16 +157,19 @@ export async function POST(request: NextRequest) {
           } else {
             console.warn('BigPost API returned no quotes:', response.ErrorMessage);
             console.log('Falling back to local calculator due to no quotes');
+            fallbackReason = `BigPost API returned no quotes: ${response.ErrorMessage || 'Unknown error'}`;
             // Fall through to fallback
           }
         }
       } catch (error) {
         console.error('BigPost API error:', error);
         console.log('Falling back to local calculator due to API error');
+        fallbackReason = `BigPost API error: ${error instanceof Error ? error.message : String(error)}`;
         // Fall through to fallback
       }
     } else {
       console.log('BigPost not enabled or no API key - using fallback');
+      fallbackReason = 'BigPost not enabled or API key missing';
     }
 
       // Fallback to local shipping calculator
@@ -195,6 +201,7 @@ export async function POST(request: NextRequest) {
         success: true,
         quotes: finalQuotes,
         fallbackUsed: true,
+        fallbackReason,
       });
 
   } catch (error) {
