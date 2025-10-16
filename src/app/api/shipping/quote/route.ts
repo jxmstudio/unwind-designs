@@ -67,7 +67,11 @@ export async function POST(request: NextRequest) {
 
     const { deliveryAddress, items, totalValue } = validationResult.data;
 
-    console.log('Shipping quote request:', { deliveryAddress, items, totalValue });
+    console.log('[API DEBUG] === Shipping Quote Request ===');
+    console.log('[API DEBUG] Delivery Address:', JSON.stringify(deliveryAddress, null, 2));
+    console.log('[API DEBUG] Delivery State:', deliveryAddress.state);
+    console.log('[API DEBUG] Items Count:', items.length);
+    console.log('[API DEBUG] Total Value:', totalValue);
 
     // Check if Big Post integration is enabled
     const bigPostEnabled = getFeatureFlag('FEATURE_BIG_POST_SHIPPING');

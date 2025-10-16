@@ -336,12 +336,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         price: item.price,
       }));
 
-      console.log('Requesting shipping quotes for:', {
-        deliveryAddress: shippingAddress,
-        items: cartItems,
-        totalValue: state.total,
-      });
-      console.log('Cart items with weights:', cartItems.map(item => ({
+      console.log('[CART DEBUG] === Requesting Shipping Quotes ===');
+      console.log('[CART DEBUG] Delivery Address:', JSON.stringify(shippingAddress, null, 2));
+      console.log('[CART DEBUG] Delivery State:', shippingAddress.state);
+      console.log('[CART DEBUG] Items:', cartItems.length);
+      console.log('[CART DEBUG] Total Value:', state.total);
+      console.log('[CART DEBUG] Cart items with weights:', cartItems.map(item => ({
         name: item.name,
         weight: item.weight,
         quantity: item.quantity,

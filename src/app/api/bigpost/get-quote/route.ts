@@ -9,13 +9,20 @@ import { bigPostAPI, handleBigPostError } from '@/lib/bigpost';
 function calculateFallbackShippingRates(requestData: any) {
   const { PickupLocation, BuyerLocation, Items } = requestData;
   
+  console.log('[SHIPPING DEBUG] === Fallback Calculation Started ===');
+  console.log('[SHIPPING DEBUG] PickupLocation:', JSON.stringify(PickupLocation, null, 2));
+  console.log('[SHIPPING DEBUG] BuyerLocation:', JSON.stringify(BuyerLocation, null, 2));
+  
   // Calculate total weight and dimensions
   const totalWeight = Items.reduce((sum: number, item: any) => sum + (item.Weight * item.Quantity), 0);
   const totalVolume = Items.reduce((sum: number, item: any) => sum + (item.Height * item.Width * item.Length * item.Quantity), 0);
   
   // Calculate distance-based pricing (simplified)
-  const pickupState = PickupLocation?.Locality?.State || 'VIC';
-  const deliveryState = BuyerLocation?.Locality?.State || 'NSW';
+  const pickupState = (PickupLocation?.Locality?.State || 'VIC').toUpperCase();
+  const deliveryState = (BuyerLocation?.Locality?.State || BuyerLocation?.State || 'VIC').toUpperCase();
+  
+  console.log(`[SHIPPING DEBUG] Calculating shipping FROM: ${pickupState} TO: ${deliveryState}`);
+  console.log(`[SHIPPING DEBUG] Total Weight: ${totalWeight}kg, Total Volume: ${totalVolume}cm³`);
   
   // Base rates by state distance (improved for heavy items)
   const stateRates = {
@@ -60,6 +67,13 @@ function calculateFallbackShippingRates(requestData: any) {
   // Delivery time estimates
   const standardDays = isSameState ? 2 : (isInterstate ? 4 : 3);
   const expressDays = isSameState ? 1 : 2;
+  
+  console.log(`[SHIPPING DEBUG] === Rate Calculation ===`);
+  console.log(`[SHIPPING DEBUG] Same State: ${isSameState}, Interstate: ${isInterstate}`);
+  console.log(`[SHIPPING DEBUG] Base Standard: $${baseStandard}, Base Express: $${baseExpress}`);
+  console.log(`[SHIPPING DEBUG] Weight Multiplier: ${weightMultiplier}x, Volume Multiplier: ${volumeMultiplier}x`);
+  console.log(`[SHIPPING DEBUG] Final Standard: $${standardPrice}, Final Express: $${expressPrice}`);
+  console.log(`[SHIPPING DEBUG] Delivery Days - Standard: ${standardDays}, Express: ${expressDays}`);
   
   return [
     {
