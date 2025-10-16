@@ -336,7 +336,7 @@ export function CheckoutForm() {
                     <div className="space-y-2">
                       <Label htmlFor="city" className="text-body-small font-semibold">Suburb *</Label>
                       <SuburbAutocomplete
-                        state={formData.state as any}
+                        state={formData.state ? (formData.state as any) : undefined}
                         value={formData.city}
                         onChange={(value) => handleInputChange('city', value)}
                         onSuburbSelect={(suburb) => {
@@ -350,7 +350,7 @@ export function CheckoutForm() {
                         placeholder="Start typing suburb name..."
                       />
                       <p className="text-xs text-gray-500">
-                        Select from dropdown or type manually ({formData.city.length}/30)
+                        Type to search all Australian suburbs
                       </p>
                     </div>
                     <div className="space-y-2">
