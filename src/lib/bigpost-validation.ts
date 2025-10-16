@@ -49,10 +49,10 @@ export function validateStreetAddress(street: string): { isValid: boolean; error
 
 export function validateCity(city: string): { isValid: boolean; error?: string } {
   if (!city.trim()) {
-    return { isValid: false, error: 'City is required' };
+    return { isValid: false, error: 'Suburb is required' };
   }
   if (city.length > 30) {
-    return { isValid: false, error: 'City must be 30 characters or less' };
+    return { isValid: false, error: 'Suburb must be 30 characters or less' };
   }
   return { isValid: true };
 }

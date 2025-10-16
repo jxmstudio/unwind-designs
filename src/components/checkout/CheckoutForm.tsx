@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, CreditCard, User, MapPin, Shield, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { useAddressAutocomplete } from "@/hooks/useAddressAutocomplete";
+import { SuburbAutocomplete } from "@/components/checkout/SuburbAutocomplete";
 
 interface CheckoutFormData {
   // Customer Information
@@ -333,49 +334,23 @@ export function CheckoutForm() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="city" className="text-body-small font-semibold">City/Suburb *</Label>
-                      <div className="relative">
-                        <Input
-                          id="city"
-                          value={suburbAutocomplete.query}
-                          onChange={(e) => suburbAutocomplete.setQuery(e.target.value)}
-                          required
-                          placeholder="Start typing suburb name..."
-                          maxLength={30}
-                        />
-                        
-                        {/* Autocomplete dropdown */}
-                        {suburbAutocomplete.results.length > 0 && (
-                          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
-                            {suburbAutocomplete.results.map((result, index) => (
-                              <div
-                                key={`${result.value}-${index}`}
-                                className="px-3 py-2 cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0"
-                                onClick={() => {
-                                  setFormData(prev => ({
-                                    ...prev,
-                                    city: result.suburb,
-                                    state: result.state,
-                                    postcode: result.postcode
-                                  }));
-                                  suburbAutocomplete.clearResults();
-                                }}
-                              >
-                                <div className="font-medium">{result.label}</div>
-                                <div className="text-sm text-gray-500">{result.description}</div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        
-                        {suburbAutocomplete.isLoading && (
-                          <div className="absolute right-3 top-3">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
-                          </div>
-                        )}
-                      </div>
+                      <Label htmlFor="city" className="text-body-small font-semibold">Suburb *</Label>
+                      <SuburbAutocomplete
+                        state={formData.state as any}
+                        value={formData.city}
+                        onChange={(value) => handleInputChange('city', value)}
+                        onSuburbSelect={(suburb) => {
+                          setFormData(prev => ({
+                            ...prev,
+                            city: suburb.Suburb,
+                            state: suburb.State,
+                            postcode: suburb.Postcode
+                          }));
+                        }}
+                        placeholder="Start typing suburb name..."
+                      />
                       <p className="text-xs text-gray-500">
-                        {formData.city.length}/30 characters
+                        Select from dropdown or type manually ({formData.city.length}/30)
                       </p>
                     </div>
                     <div className="space-y-2">
