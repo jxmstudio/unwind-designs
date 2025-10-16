@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
+  const [isMobileShopOpen, setIsMobileShopOpen] = useState(false);
+  const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
   const { scrollY } = useScroll();
   const { state } = useCart();
   const { isDisabled } = useReducedMotionSafe();
@@ -28,12 +30,28 @@ export function Navigation() {
     ["0 0 0 rgba(0,0,0,0)", "0 4px 20px rgba(92, 70, 48, 0.15)"]
   );
 
+  // Body scroll lock effect
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+    setIsMobileShopOpen(false);
+    setIsMobileAboutOpen(false);
   };
 
   const toggleAboutDropdown = () => {
@@ -50,6 +68,14 @@ export function Navigation() {
 
   const closeShopDropdown = () => {
     setIsShopDropdownOpen(false);
+  };
+
+  const toggleMobileShop = () => {
+    setIsMobileShopOpen(!isMobileShopOpen);
+  };
+
+  const toggleMobileAbout = () => {
+    setIsMobileAboutOpen(!isMobileAboutOpen);
   };
 
   return (
@@ -306,129 +332,206 @@ export function Navigation() {
             duration: isDisabled ? 0 : 0.3, 
             ease: "easeInOut" 
           }}
+          style={{ overflow: "hidden" }}
         >
-          <div className="py-6 space-y-2 border-t border-borderNeutral bg-surface-50/80 backdrop-blur-sm">
+          <div 
+            className="py-6 space-y-3 border-t border-borderNeutral bg-surface-50/80 backdrop-blur-sm max-h-[calc(100vh-80px)] overflow-y-auto"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
+            {/* Mobile Search */}
+            <div className="px-4 pb-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-textSecondary" />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full pl-10 pr-4 py-3 bg-surface-50 border border-borderNeutral rounded-xl text-textPrimary placeholder:text-textSecondary/60 focus:outline-none focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 transition-all duration-200 shadow-soft text-base"
+                />
+              </div>
+            </div>
+
             <Link
               href="/flat-packs"
-              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
+              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3.5 px-6 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
               onClick={closeMenu}
             >
               Flat Packs
             </Link>
             
-            {/* Mobile Shop Section */}
-            <div className="space-y-2">
-              <div className="px-4 py-2 text-body-small font-medium text-textSecondary uppercase tracking-wide">
-                Shop
-              </div>
-              <Link
-                href="/shop?category=plumbing"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
+            {/* Mobile Shop Dropdown */}
+            <div className="space-y-1">
+              <button
+                onClick={toggleMobileShop}
+                className="w-full flex items-center justify-between hover:text-accent-600 font-medium transition-colors duration-200 py-3.5 px-6 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
               >
-                Plumbing
-              </Link>
-              <Link
-                href="/shop?category=electrical"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
+                <span>Shop</span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform duration-200 ${isMobileShopOpen ? 'rotate-180' : ''}`} 
+                />
+              </button>
+              
+              <motion.div
+                initial={false}
+                animate={isMobileShopOpen ? "open" : "closed"}
+                variants={{
+                  open: { height: "auto", opacity: 1 },
+                  closed: { height: 0, opacity: 0 }
+                }}
+                transition={{ duration: 0.2 }}
+                style={{ overflow: "hidden" }}
               >
-                Electrical
-              </Link>
-              <Link
-                href="/shop?category=ventilation"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                Ventilation
-              </Link>
-              <Link
-                href="/shop?category=water-systems"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                Water Systems
-              </Link>
-              <Link
-                href="/shop?category=sound-deadening"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                Sound Deadening
-              </Link>
-              <Link
-                href="/shop?category=accessories"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                Accessories
-              </Link>
-              <Link
-                href="/shop"
-                className="block hover:text-accent-600 font-semibold transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                All Products
-              </Link>
+                <div className="py-2 space-y-1 bg-surface-100/50 rounded-lg mx-2">
+                  <Link
+                    href="/shop?category=plumbing"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Plumbing
+                  </Link>
+                  <Link
+                    href="/shop?category=electrical"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Electrical
+                  </Link>
+                  <Link
+                    href="/shop?category=ventilation"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Ventilation
+                  </Link>
+                  <Link
+                    href="/shop?category=water-systems"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Water Systems
+                  </Link>
+                  <Link
+                    href="/shop?category=sound-deadening"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Sound Deadening
+                  </Link>
+                  <Link
+                    href="/shop?category=accessories"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Accessories
+                  </Link>
+                  <div className="border-t border-borderNeutral my-2 mx-4"></div>
+                  <Link
+                    href="/shop"
+                    className="block hover:text-accent-600 font-semibold transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    All Products
+                  </Link>
+                </div>
+              </motion.div>
             </div>
             
             <Link
               href="/start-your-build"
-              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
+              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3.5 px-6 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
               onClick={closeMenu}
             >
               Start Your Build
             </Link>
             
-            {/* Mobile About Section */}
-            <div className="space-y-2">
-              <div className="px-4 py-2 text-body-small font-medium text-textSecondary uppercase tracking-wide">
-                About
-              </div>
-              <Link
-                href="/about"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
+            {/* Mobile About Dropdown */}
+            <div className="space-y-1">
+              <button
+                onClick={toggleMobileAbout}
+                className="w-full flex items-center justify-between hover:text-accent-600 font-medium transition-colors duration-200 py-3.5 px-6 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
               >
-                About Us
-              </Link>
-              <Link
-                href="/policies/returns"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
+                <span>About</span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform duration-200 ${isMobileAboutOpen ? 'rotate-180' : ''}`} 
+                />
+              </button>
+              
+              <motion.div
+                initial={false}
+                animate={isMobileAboutOpen ? "open" : "closed"}
+                variants={{
+                  open: { height: "auto", opacity: 1 },
+                  closed: { height: 0, opacity: 0 }
+                }}
+                transition={{ duration: 0.2 }}
+                style={{ overflow: "hidden" }}
               >
-                Return Policy
-              </Link>
-              <Link
-                href="/policies/terms"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/policies/privacy"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/policies/shipping"
-                className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body"
-                onClick={closeMenu}
-              >
-                Shipping Policy
-              </Link>
+                <div className="py-2 space-y-1 bg-surface-100/50 rounded-lg mx-2">
+                  <Link
+                    href="/about"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    About Us
+                  </Link>
+                  <Link
+                    href="/policies/returns"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Return Policy
+                  </Link>
+                  <Link
+                    href="/policies/terms"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Terms of Service
+                  </Link>
+                  <Link
+                    href="/policies/privacy"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Privacy Policy
+                  </Link>
+                  <Link
+                    href="/policies/shipping"
+                    className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-8 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
+                    onClick={closeMenu}
+                  >
+                    Shipping Policy
+                  </Link>
+                </div>
+              </motion.div>
             </div>
             
             <Link
               href="/contact"
-              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3 px-6 rounded-lg hover:bg-surface-100 text-body"
+              className="block hover:text-accent-600 font-medium transition-colors duration-200 py-3.5 px-6 rounded-lg hover:bg-surface-100 text-body active:bg-surface-200"
               onClick={closeMenu}
             >
               Contact
             </Link>
+
+            {/* Mobile Cart Button */}
+            <div className="px-4 pt-2">
+              <Link href="/cart" onClick={closeMenu}>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-2 border-accent-500 text-accent-600 hover:bg-accent-500 hover:text-white px-4 py-3 rounded-xl transition-all duration-200 font-medium text-base relative flex items-center justify-center gap-2 min-h-[44px]"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  Cart
+                  {state.itemCount > 0 && (
+                    <span 
+                      className="ml-2 px-2 py-0.5 bg-error-500 text-white text-sm rounded-full font-semibold"
+                    >
+                      {state.itemCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
+            </div>
           </div>
         </motion.div>
       </nav>
